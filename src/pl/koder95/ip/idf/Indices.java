@@ -55,6 +55,7 @@ public enum Indices {
     
     private int load(String line) {
         int id = loaded.size();
+        if (id == 0) id = 1;
         RealIndex r = RealIndex.create(id, line);
         if (loaded.add(r)) {
             acts.create(r);

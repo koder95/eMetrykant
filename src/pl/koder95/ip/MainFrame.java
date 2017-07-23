@@ -17,6 +17,8 @@ import static pl.koder95.ip.Main.OPTION_ZM;
  */
 public class MainFrame extends javax.swing.JFrame {
 
+    private static final long serialVersionUID = -5330474306601981277L;
+
     /**
      * Creates new form MainFrame
      */
