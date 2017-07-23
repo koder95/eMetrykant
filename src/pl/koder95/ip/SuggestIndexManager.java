@@ -95,9 +95,9 @@ public class SuggestIndexManager {
     
     public String[] getSuggestions() {
         final ArrayList<String> sugg = new ArrayList<>();
-        for (Index i: loaded) {
+        loaded.stream().forEach((i) -> {
             sugg.add(i.toString());
-        }
+        });
         return sugg.toArray(new String[sugg.size()]);
     }
     
@@ -106,11 +106,16 @@ public class SuggestIndexManager {
         String txt = src.getText();
         System.out.println("txt=" + txt);
         int i = 0;
+        newWord();
         for (; i < txt.length(); i++) {
             if (txt.charAt(i) == ' ') newWord();
-            else setIfDifferent(i, txt.charAt(i));
+            else {
+                if (i < getSelectedWord().length())
+                    setIfDifferent(i, txt.charAt(i));
+                else add(txt.charAt(i));
+            }
         }
-        remove(i);
+        clear();
     }
     
     public static void main(String[] args) {
