@@ -1,32 +1,23 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Ten utwór jest dostępny na licencji
+ * Creative Commons BY-NC-SA 4.0 Międzynarodowe.
+ * Aby zapoznać się z tekstem licencji wejdź na stronę
+ * http://creativecommons.org/licenses/by-nc-sa/4.0/.
  */
 package pl.koder95.ip;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Arrays;
-import java.util.function.Consumer;
 import javax.swing.JTextField;
 import javax.swing.event.CaretEvent;
-import static pl.koder95.ip.Main.BUNDLE;
-import static pl.koder95.ip.Main.CSV_DEFAULT_CHARSET;
-import static pl.koder95.ip.Main.DATA_DIR;
-import static pl.koder95.ip.Main.READ_CSV_ERR_MESSAGE;
-import static pl.koder95.ip.Main.READ_CSV_ERR_TITLE;
-import static pl.koder95.ip.Main.showErrorMessage;
 import pl.koder95.ip.idf.Index;
+import pl.koder95.ip.idf.Indices;
 
 /**
  *
- * @author Kamil
+ * @author Kamil Jan Mularski [@koder95]
+ * @version %I%, %G%
  */
 public class SuggestIndexManager {
     private static final String[] FILENAMES = {
@@ -98,23 +89,7 @@ public class SuggestIndexManager {
     }
     
     public static Index[] load(int option) {
-        final ArrayList<Index> loaded = new ArrayList<>();
-        File csv = new File(DATA_DIR, FILENAMES[option]);
-        try (BufferedReader reader = new BufferedReader(
-                new InputStreamReader(new FileInputStream(csv), CSV_DEFAULT_CHARSET)
-        )) {
-            int id = 0;
-            while (reader.ready()) {
-                Index i = Index.create(++id, reader.readLine());
-                if (i != null) {
-                    loaded.add(i);
-                }
-            }
-        } catch (FileNotFoundException ex) {
-            showErrorMessage(null, READ_CSV_ERR_MESSAGE, READ_CSV_ERR_TITLE, true);
-        } catch (IOException ex) {
-            showErrorMessage(null, BUNDLE.getString("ERR_EX_IO"), BUNDLE.getString("ERR_EX_IO_TITLE"), true);
-        }
+        final List<Index> loaded = Indices.values()[option].getLoaded();
         return loaded.toArray(new Index[loaded.size()]);
     }
     

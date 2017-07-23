@@ -1,16 +1,8 @@
 /*
- * Wszystkie prawa autorskie zastrzeżone dla Kamil Jan Mularski [@koder95]. 2017
- * Ten program jest darmowym oprogramowaniem, jeżeli użytkownik spełnia warunki:
- * 1. Przyjął chrzest święty w parafii katolickiej.
- * 2. Posiada zezwolenie proboszcza parafii, której dotyczą księgi metrykalne.
- * 3. Uzyska potwierdzenie od twórcy oprogramowania, że może z niego korzystać.
- * Licencja upoważnia do tworzenia nieograniczonej liczby kopii, ale każdy
- * użytkownik programu musi spełniać powyższe warunki. Potwierdzeniem
- * od twórcy oprogramowania jest specjalny kod, który przypisany jest
- * do metryki chrztu użytkownika. Bardziej szczegółowe informacje o licencji
- * można uzyskać pisząc na adres: kammul@outlook.com.
- * Powinieneś posiadać kopię pełnej wersji licencji.
- * Uzyskuje się ją razem z potwierdzeniem od twórcy oprogramowania.
+ * Ten utwór jest dostępny na licencji
+ * Creative Commons BY-NC-SA 4.0 Międzynarodowe.
+ * Aby zapoznać się z tekstem licencji wejdź na stronę
+ * http://creativecommons.org/licenses/by-nc-sa/4.0/.
  */
 package pl.koder95.ip;
 
@@ -27,7 +19,8 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 /**
  *
- * @author Kamil
+ * @author Kamil Jan Mularski [@koder95]
+ * @version %I%, %G%
  */
 public class Main {
     public static final ResourceBundle BUNDLE = ResourceBundle.getBundle("pl/koder95/ip/strings");

@@ -1,7 +1,8 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Ten utwór jest dostępny na licencji
+ * Creative Commons BY-NC-SA 4.0 Międzynarodowe.
+ * Aby zapoznać się z tekstem licencji wejdź na stronę
+ * http://creativecommons.org/licenses/by-nc-sa/4.0/.
  */
 package pl.koder95.ip;
 
@@ -23,7 +24,8 @@ import pl.koder95.tools.Eliminator;
 
 /**
  *
- * @author Kamil
+ * @author Kamil Jan Mularski [@koder95]
+ * @version %I%, %G%
  */
 public class IndexBrowserMediator implements KeyListener {
     private IndexBrowser browser;
@@ -80,8 +82,9 @@ public class IndexBrowserMediator implements KeyListener {
     
     public void setIndex(Index i) {
         infoPanel.setIndex(i);
-        apn = browser.getActManager().create(i.AN.getYear(),
-                browser.getActManager().indexOf(i.AN.getYear(), i.AN.getSign()));
+        apn = browser.getActManager().create(i.getActNumber().getYear(),
+                browser.getActManager().indexOf(i.getActNumber().getYear(),
+                        i.getActNumber().getSign()));
         
     }
 
@@ -127,7 +130,8 @@ public class IndexBrowserMediator implements KeyListener {
         searchingPanel.getSearchButton().setEnabled(actSearching);
         if (actSearching) {
             DefaultComboBoxModel<Integer> model = new DefaultComboBoxModel<>();
-            int minYear = firstIndex.AN.getYear(), maxYear = lastIndex.AN.getYear();
+            int minYear = firstIndex.getActNumber().getYear(),
+                    maxYear = lastIndex.getActNumber().getYear();
             for (int i = maxYear; i >= minYear; i--) {
                 if (browser.isYear(i)) model.addElement(i);
             }
@@ -151,10 +155,11 @@ public class IndexBrowserMediator implements KeyListener {
 
     public void loadActComboBoxModel() {
         Index[] years = browser.find((Integer) searchingPanel.getYearCombo().getSelectedItem());
-        Arrays.sort(years, (Index o1, Index o2) -> o1.AN.compareTo(o2.AN));
+        Arrays.sort(years, (Index o1, Index o2)
+                -> o1.getActNumber().compareTo(o2.getActNumber()));
         DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>();
         for (Index i: years) {
-            model.addElement(i.AN.getSign());
+            model.addElement(i.getActNumber().getSign());
         }
         searchingPanel.getActCombo().setModel(model);
     }
@@ -208,8 +213,10 @@ public class IndexBrowserMediator implements KeyListener {
     
     public void updateFooter() {
         footerPanel.getTitle().setText(browser.getTitle());
-        footerPanel.getMin().setText(firstIndex.AN.getSign() + "/" + firstIndex.AN.getYear());
-        footerPanel.getMax().setText(lastIndex.AN.getSign() + "/" + lastIndex.AN.getYear());
+        footerPanel.getMin().setText(firstIndex.getActNumber().getSign()
+                + "/" + firstIndex.getActNumber().getYear());
+        footerPanel.getMax().setText(lastIndex.getActNumber().getSign()
+                + "/" + lastIndex.getActNumber().getYear());
     }
     
     public void locateSuggestScroll() {

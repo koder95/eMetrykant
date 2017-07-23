@@ -1,7 +1,8 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Ten utwór jest dostępny na licencji
+ * Creative Commons BY-NC-SA 4.0 Międzynarodowe.
+ * Aby zapoznać się z tekstem licencji wejdź na stronę
+ * http://creativecommons.org/licenses/by-nc-sa/4.0/.
  */
 package pl.koder95.ip;
 
@@ -15,9 +16,12 @@ import pl.koder95.ip.idf.Index;
 
 /**
  *
- * @author Kamil
+ * @author Kamil Jan Mularski [@koder95]
+ * @version %I%, %G%
  */
 public class IndexInfoPanel extends JPanel {
+
+    private static final long serialVersionUID = 3889281569274752554L;
 
     public IndexInfoPanel() {
         super.setBorder(BorderFactory.createTitledBorder(""));
@@ -93,7 +97,8 @@ public class IndexInfoPanel extends JPanel {
     
     public void setIndex(Index i) {
         if (i != null) {
-            setIndex(i.getData()[0], i.getData()[1], i.AN.getSign(), ""+i.AN.getYear());
+            setIndex(i.getData()[0], i.getData()[1], i.getActNumber().getSign(),
+                    ""+i.getActNumber().getYear());
             return;
         }
         resetIndex();

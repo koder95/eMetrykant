@@ -33,7 +33,7 @@ public class ActManager {
     }
     
     public void create(Index i) {
-        if (i != null) create(i.AN);
+        if (i != null) create(i.getActNumber());
     }
     
     public void create(ActNumber an) {

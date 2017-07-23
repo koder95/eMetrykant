@@ -1,11 +1,11 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Ten utwór jest dostępny na licencji
+ * Creative Commons BY-NC-SA 4.0 Międzynarodowe.
+ * Aby zapoznać się z tekstem licencji wejdź na stronę
+ * http://creativecommons.org/licenses/by-nc-sa/4.0/.
  */
 package pl.koder95.ip.idf;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import pl.koder95.ip.ObjectNotFoundException;
@@ -13,21 +13,25 @@ import pl.koder95.tools.Eliminator;
 
 /**
  *
- * @author Kamil
+ * @author Kamil Jan Mularski [@koder95]
+ * @version %I%, %G%
  */
 public class IndexBrowser {
     
-    private final HashMap<Integer, HashMap<String, Index>> loaded = new HashMap<>();
+    private final HashMap<Integer, HashMap<String, Index>> loaded
+            = new HashMap<>();
 
     public IndexBrowser() {
     }
     
     public void load(Index[] array) {
         for (Index i: array) {
-            HashMap<String, Index> indices = loaded.containsKey(i.AN.getYear())?
-                    loaded.get(i.AN.getYear()) : new HashMap<>();
-            indices.put(i.AN.getSign(), i);
-            if (!loaded.containsKey(i.AN.getYear())) loaded.put(i.AN.getYear(), indices);
+            HashMap<String, Index> indices
+                  = loaded.containsKey(i.getActNumber().getYear())?
+                    loaded.get(i.getActNumber().getYear()) : new HashMap<>();
+            indices.put(i.getActNumber().getSign(), i);
+            if (!loaded.containsKey(i.getActNumber().getYear()))
+                loaded.put(i.getActNumber().getYear(), indices);
         }
     }
     
