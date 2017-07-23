@@ -1,19 +1,16 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Ten utwór jest dostępny na licencji
+ * Creative Commons BY-NC-SA 4.0 Międzynarodowe.
+ * Aby zapoznać się z tekstem licencji wejdź na stronę
+ * http://creativecommons.org/licenses/by-nc-sa/4.0/.
  */
 package pl.koder95.ip;
 
 import java.awt.Insets;
 import java.awt.event.KeyEvent;
-import static java.awt.event.KeyEvent.VK_LEFT;
-import static java.awt.event.KeyEvent.VK_RIGHT;
-import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.regex.Matcher;
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JLayeredPane;
@@ -23,14 +20,16 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.text.BadLocationException;
-import static pl.koder95.ip.Main.DIGITS_STRING_PATTERN;
 import pl.koder95.ip.idf.Index;
 
 /**
  *
- * @author Kamil
+ * @author Kamil Jan Mularski [@koder95]
+ * @version %I%, %G%
  */
 public class IndexBrowserFrame extends javax.swing.JFrame {
+
+    private static final long serialVersionUID = -2027617319030960915L;
     
     private final IndexBrowserMediator mediator = new IndexBrowserMediator();
     private final IndexBrowser indices;
@@ -40,7 +39,7 @@ public class IndexBrowserFrame extends javax.swing.JFrame {
         this.indices = indices;
         super.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         super.setIconImage(Main.FAVICON);
-        super.setTitle(this.indices.getTitle());
+        super.setTitle(this.indices.getIndices().getTitle());
         super.setMinimumSize(new java.awt.Dimension(384, 365));
         super.setResizable(false);
         super.addKeyListener(mediator);
@@ -80,7 +79,7 @@ public class IndexBrowserFrame extends javax.swing.JFrame {
         mediator.resetIndex();
         mediator.updateFooter();
         
-        this.indices.sortByData();
+        this.indices.getIndices().sortByData();
     }
 
     public IndexBrowserFrame(int option) {

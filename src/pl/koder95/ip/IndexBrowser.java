@@ -23,15 +23,8 @@ import pl.koder95.ip.idf.Indices;
  * @version %I%, %G%
  */
 public class IndexBrowser {
-    private static final String[] FILENAMES = {
-        "Indeks ochrzczonych.csv", //NOI18N
-        "Indeks bierzmowanych.csv", //NOI18N
-        "Indeks zmarłych.csv" //NOI18N
-    };
+    
     private final Indices indices;
-    private final String fileName;
-    private final String title;
-    private final ActManager actManager = new ActManager();
 
     public IndexBrowser() {
         this(0);
@@ -39,24 +32,10 @@ public class IndexBrowser {
 
     public IndexBrowser(int option) {
         indices = Indices.values()[option];
-        File csv = new File(DATA_DIR, FILENAMES[option]);
-        fileName = csv.getName();
-        title = fileName.substring(0, fileName.length()-4);
-        
-        try (BufferedReader reader = new BufferedReader(
-                new InputStreamReader(new FileInputStream(csv), CSV_DEFAULT_CHARSET)
-        )) {
-            while (reader.ready()) {
-                int id = indices.load(reader.readLine());
-                if (id > 0) {
-                    actManager.create(indices.get(id));
-                }
-            }
-        } catch (FileNotFoundException ex) {
-            showErrorMessage(null, READ_CSV_ERR_MESSAGE, READ_CSV_ERR_TITLE, true);
-        } catch (IOException ex) {
-            showErrorMessage(null, BUNDLE.getString("ERR_EX_IO"), BUNDLE.getString("ERR_EX_IO_TITLE"), true);
-        }
+    }
+
+    public Indices getIndices() {
+        return indices;
     }
     
     public Index find(String lastName, String name, String act, int year)
@@ -154,29 +133,8 @@ public class IndexBrowser {
         return get(0);
     }
     
-    public void sortByData() {
-        indices.getLoaded().sort((Index o1, Index o2) -> o1.compareTo(o2));
-    }
-    
-    public void sortByAN() {
-        indices.getLoaded().sort((Index o1, Index o2)
-                -> o1.getActNumber().compareTo(o2.getActNumber()));
-    }
-
-    public String getFileName() {
-        return fileName;
-    }
-    
     public boolean isYear(int year) {
         return indices.getLoaded().stream().anyMatch((i)
                 -> (i.getActNumber().getYear() == year));
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public ActManager getActManager() {
-        return actManager;
     }
 }

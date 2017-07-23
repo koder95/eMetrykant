@@ -82,8 +82,8 @@ public class IndexBrowserMediator implements KeyListener {
     
     public void setIndex(Index i) {
         infoPanel.setIndex(i);
-        apn = browser.getActManager().create(i.getActNumber().getYear(),
-                browser.getActManager().indexOf(i.getActNumber().getYear(),
+        apn = browser.getIndices().getActManager().create(i.getActNumber().getYear(),
+                browser.getIndices().getActManager().indexOf(i.getActNumber().getYear(),
                         i.getActNumber().getSign()));
         
     }
@@ -101,7 +101,7 @@ public class IndexBrowserMediator implements KeyListener {
         int year = apn.getCurrentYear();
         if (actI == 0) year = apn.getNextYear();
         try {
-            setIndex(browser.find(year, browser.getActManager().get(year, actI)));
+            setIndex(browser.find(year, browser.getIndices().getActManager().get(year, actI)));
         } catch (ObjectNotFoundException ex) {
             JOptionPane.showMessageDialog(null,
                 "Wystąpił błąd, ponieważ nie znaleziono indeksu.\n\n"
@@ -115,7 +115,7 @@ public class IndexBrowserMediator implements KeyListener {
         int year = apn.getCurrentYear();
         if (actI == browser.getLoaded().length) year = apn.getPrevYear();
         try {
-            setIndex(browser.find(year, browser.getActManager().get(year, actI)));
+            setIndex(browser.find(year, browser.getIndices().getActManager().get(year, actI)));
         } catch (ObjectNotFoundException ex) {
             JOptionPane.showMessageDialog(null,
                 "Wystąpił błąd, ponieważ nie znaleziono indeksu.\n\n"
@@ -198,7 +198,7 @@ public class IndexBrowserMediator implements KeyListener {
     }
 
     public String getTitle() {
-        return browser.getTitle();
+        return browser.getIndices().getTitle();
     }
 
     public Index getFirstIndex() {
@@ -212,7 +212,7 @@ public class IndexBrowserMediator implements KeyListener {
     }
     
     public void updateFooter() {
-        footerPanel.getTitle().setText(browser.getTitle());
+        footerPanel.getTitle().setText(browser.getIndices().getTitle());
         footerPanel.getMin().setText(firstIndex.getActNumber().getSign()
                 + "/" + firstIndex.getActNumber().getYear());
         footerPanel.getMax().setText(lastIndex.getActNumber().getSign()
