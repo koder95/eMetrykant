@@ -13,6 +13,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import pl.koder95.ip.ActManager;
 import static pl.koder95.ip.Main.BUNDLE;
@@ -62,15 +64,18 @@ public enum Indices {
     }
     
     public void load() {
+        loaded = new LinkedList<>();
         try (BufferedReader reader
                 = new BufferedReader(new InputStreamReader(new FileInputStream(
                         new File(DATA_DIR, fileName)), CSV_DEFAULT_CHARSET))) {
             while (reader.ready()) load(reader.readLine());
         } catch (FileNotFoundException ex) {
-            showErrorMessage(null, READ_CSV_ERR_MESSAGE, READ_CSV_ERR_TITLE, true);
+            showErrorMessage(READ_CSV_ERR_MESSAGE, READ_CSV_ERR_TITLE, true);
         } catch (IOException ex) {
-            showErrorMessage(null, BUNDLE.getString("ERR_EX_IO"), BUNDLE.getString("ERR_EX_IO_TITLE"), true);
+            showErrorMessage(BUNDLE.getString("ERR_EX_IO"),
+                    BUNDLE.getString("ERR_EX_IO_TITLE"), true);
         }
+        loaded = new ArrayList<>(loaded);
     }
 
     public String getFileName() {
