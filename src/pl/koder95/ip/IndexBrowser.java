@@ -6,15 +6,8 @@
  */
 package pl.koder95.ip;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import pl.koder95.ip.idf.Index;
-import static pl.koder95.ip.Main.*;
 import pl.koder95.ip.idf.Indices;
 
 /**
@@ -32,6 +25,7 @@ public class IndexBrowser {
 
     public IndexBrowser(int option) {
         indices = Indices.values()[option];
+        indices.load();
     }
 
     public Indices getIndices() {
