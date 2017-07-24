@@ -4,7 +4,6 @@
  * Aby zapoznać się z tekstem licencji wejdź na stronę
  * http://creativecommons.org/licenses/by-nc-sa/4.0/.
  */
-
 package pl.koder95.ip.idf;
 
 import java.io.BufferedReader;
@@ -38,11 +37,11 @@ public enum Indices {
     
     private List<RealIndex> loaded;
     private final ActManager acts = new ActManager();
-    private final String fileName, title;
+    private final String fileName, name;
 
     private Indices(String fileName) {
         this.fileName = fileName;
-        title = fileName.substring(0, fileName.length()-4);
+        name = fileName.substring(0, fileName.length()-4);
     }
     
     public Index get(int id) {
@@ -90,8 +89,8 @@ public enum Indices {
         return fileName;
     }
 
-    public String getTitle() {
-        return title;
+    public String getName() {
+        return name;
     }
 
     public ActManager getActManager() {

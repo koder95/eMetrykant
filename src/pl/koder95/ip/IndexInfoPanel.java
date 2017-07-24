@@ -52,10 +52,15 @@ public class IndexInfoPanel extends JPanel {
                 .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        l.linkSize(SwingConstants.VERTICAL, new Component[] {yearInfo.getValue(), yearInfo.getLabel()});
-        l.linkSize(SwingConstants.VERTICAL, new Component[] {actNumberInfo.getValue(), actNumberInfo.getLabel()});
-        l.linkSize(SwingConstants.VERTICAL, new Component[] {nameInfo.getValue(), nameInfo.getLabel()});
-        l.linkSize(SwingConstants.VERTICAL, new Component[] {lastNameInfo.getValue(), lastNameInfo.getLabel()});
+        linkSize(l, yearInfo);
+        linkSize(l,actNumberInfo);
+        linkSize(l, nameInfo);
+        linkSize(l, lastNameInfo);
+    }
+    
+    public final void linkSize(GroupLayout l, IndexInfo i) {
+        l.linkSize(SwingConstants.VERTICAL,
+                new Component[] {i.getValue(), i.getLabel()});
     }
     
     private GroupLayout.SequentialGroup createHG(GroupLayout l, IndexInfo i) {
@@ -67,7 +72,8 @@ public class IndexInfoPanel extends JPanel {
     
     private GroupLayout.ParallelGroup createVG(GroupLayout l, IndexInfo i) {
         return l.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                    .addComponent(i.getLabel(), GroupLayout.PREFERRED_SIZE, 15, GroupLayout.PREFERRED_SIZE)
+                    .addComponent(i.getLabel(), GroupLayout.PREFERRED_SIZE, 15,
+                            GroupLayout.PREFERRED_SIZE)
                     .addComponent(i.getValue());
     }
 

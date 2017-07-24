@@ -57,10 +57,15 @@ public class Main {
     }
 
     /**
-     * @param args the command line arguments
+     * Tworzy nowy obiekt {@link pl.koder95.ip.SystemTray SystemTray} i wywołuje
+     * metodę {@link pl.koder95.ip.SystemTray#start() start()}.
+     * 
+     * @param args może być <code>null</code>;
+     * <i style="color:red;">ignorowany</i>
      */
     public static void main(String[] args) {
-        MainFrame.main(args);
+        SystemTray tray = new SystemTray();
+        tray.start();
     }
     
     public static int showErrorMessage(java.awt.Component parentComponent,

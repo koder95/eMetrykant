@@ -20,12 +20,6 @@ import pl.koder95.ip.idf.Indices;
  * @version %I%, %G%
  */
 public class SuggestIndexManager {
-    private static final String[] FILENAMES = {
-        "Indeks ochrzczonych.csv", //NOI18N
-        "Indeks bierzmowanych.csv", //NOI18N
-        "Indeks zmarłych.csv" //NOI18N
-    };
-    
     private final ArrayList<Index> loaded = new ArrayList<>();
     private final ArrayList<String> words = new ArrayList<>();
     private int selectedIndex = -1;

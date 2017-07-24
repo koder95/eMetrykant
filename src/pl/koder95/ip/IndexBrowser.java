@@ -24,8 +24,12 @@ public class IndexBrowser {
     }
 
     public IndexBrowser(int option) {
-        indices = Indices.values()[option];
-        indices.load();
+        this(Indices.values()[option]);
+    }
+
+    public IndexBrowser(Indices indices) {
+        this.indices = indices;
+        this.indices.load();
     }
 
     public Indices getIndices() {

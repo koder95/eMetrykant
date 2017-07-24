@@ -21,6 +21,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.text.BadLocationException;
 import pl.koder95.ip.idf.Index;
+import pl.koder95.ip.idf.Indices;
 
 /**
  *
@@ -39,7 +40,7 @@ public class IndexBrowserFrame extends javax.swing.JFrame {
         this.indices = indices;
         super.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         super.setIconImage(Main.FAVICON);
-        super.setTitle(this.indices.getIndices().getTitle());
+        super.setTitle(this.indices.getIndices().getName());
         super.setMinimumSize(new java.awt.Dimension(384, 365));
         super.setResizable(false);
         super.addKeyListener(mediator);
@@ -74,7 +75,6 @@ public class IndexBrowserFrame extends javax.swing.JFrame {
         mediator.registerPrevButton(prev);
         mediator.registerSearchingPanel(searchingPanel);
         mediator.registerSuggestList(suggestList);
-        mediator.registerSuggestPanel(suggestPanel);
         mediator.registerSuggestScroll(suggestScroll);
         mediator.resetIndex();
         mediator.updateFooter();
@@ -82,6 +82,10 @@ public class IndexBrowserFrame extends javax.swing.JFrame {
 
     public IndexBrowserFrame(int option) {
         this(new IndexBrowser(option));
+    }
+
+    public IndexBrowserFrame(Indices indices) {
+        this(new IndexBrowser(indices));
     }
 
     public IndexBrowserFrame() {

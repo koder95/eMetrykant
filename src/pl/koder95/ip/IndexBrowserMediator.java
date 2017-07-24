@@ -16,11 +16,9 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.event.CaretEvent;
 import pl.koder95.ip.idf.Index;
-import pl.koder95.tools.Eliminator;
 
 /**
  *
@@ -35,10 +33,8 @@ public class IndexBrowserMediator implements KeyListener {
     private JButton next;
     private JButton prev;
     private JList<String> suggestList;
-    private JPanel suggestPanel;
     private JScrollPane suggestScroll;
     private Index firstIndex, lastIndex;
-    private Eliminator<Index> suggestIndexManager;
 
     public void registerBrowser(IndexBrowser browser) {
         this.browser = browser;
@@ -70,10 +66,6 @@ public class IndexBrowserMediator implements KeyListener {
 
     public void registerSuggestList(JList<String> suggestList) {
         this.suggestList = suggestList;
-    }
-
-    public void registerSuggestPanel(JPanel suggestPanel) {
-        this.suggestPanel = suggestPanel;
     }
 
     public void registerSuggestScroll(JScrollPane suggestScroll) {
@@ -200,7 +192,7 @@ public class IndexBrowserMediator implements KeyListener {
     }
 
     public String getTitle() {
-        return browser.getIndices().getTitle();
+        return browser.getIndices().getName();
     }
 
     public Index getFirstIndex() {
@@ -214,7 +206,7 @@ public class IndexBrowserMediator implements KeyListener {
     }
     
     public void updateFooter() {
-        footerPanel.getTitle().setText(browser.getIndices().getTitle());
+        footerPanel.getTitle().setText(browser.getIndices().getName());
         footerPanel.getMin().setText(firstIndex.getActNumber().getSign()
                 + "/" + firstIndex.getActNumber().getYear());
         footerPanel.getMax().setText(lastIndex.getActNumber().getSign()
@@ -254,34 +246,6 @@ public class IndexBrowserMediator implements KeyListener {
     @Override
     public void keyReleased(KeyEvent e) {
         // do nothing
-    }
-    
-    private void initSIM() {
-        suggestIndexManager = new Eliminator<>(browser.getLoaded());
-    }
-    
-    private void acceptChar(int index, char c) {
-        suggestIndexManager.addFilter((i)->{
-            boolean cch = false;
-            for (String data: i.getData()) {
-                if (data.length() <= index) continue;
-                if (data.charAt(index) == c) {
-                    System.out.print("DATA ACCEPT ");
-                    System.out.println(data);
-                    cch = true;
-                }
-            }
-            return !cch;
-        });
-    }
-    
-    private void updateSuggestList() {
-        Object[] indices = suggestIndexManager.getResult();
-        String[] listData = new String[indices.length];
-        for (int i = 0; i < indices.length; i++) {
-            listData[i] = indices[i].toString();
-        }
-        suggestList.setListData(listData);
     }
     
     //private int lastCaretDot = -1;
