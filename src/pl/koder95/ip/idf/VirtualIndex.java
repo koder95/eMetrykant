@@ -35,6 +35,6 @@ class VirtualIndex extends Index {
     }
     
     public RealIndex getRealIndex() {
-        return (RealIndex) indices.get(ID);
+        return indices.getReal(ID);
     }
 }

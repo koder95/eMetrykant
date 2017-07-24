@@ -44,6 +44,10 @@ class RealIndex extends Index {
         return ID + ": " + AN + " " + Arrays.deepToString(data);
     }
     
+    public VirtualIndex toVirtualIndex(Indices indices) {
+        return new VirtualIndex(ID, indices);
+    }
+    
     public static RealIndex create(int id, String line) {
         ArrayList<String> dataL = new ArrayList<>();
         dataL.addAll(Arrays.asList(line.split(";")));

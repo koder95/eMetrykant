@@ -78,8 +78,6 @@ public class IndexBrowserFrame extends javax.swing.JFrame {
         mediator.registerSuggestScroll(suggestScroll);
         mediator.resetIndex();
         mediator.updateFooter();
-        
-        this.indices.getIndices().sortByData();
     }
 
     public IndexBrowserFrame(int option) {

@@ -36,7 +36,7 @@ public enum Indices {
     LIBER_MATRIMONIORUM("Indeks zaślubionych.csv"),
     LIBER_DEFUNCTORUM("Indeks zmarłych.csv");
     
-    private List<Index> loaded;
+    private List<RealIndex> loaded;
     private final ActManager acts = new ActManager();
     private final String fileName, title;
 
@@ -46,11 +46,18 @@ public enum Indices {
     }
     
     public Index get(int id) {
+        return getReal(id).toVirtualIndex(this);
+    }
+    
+    RealIndex getReal(int id) {
         return loaded.get(id-1);
     }
 
     public List<Index> getLoaded() {
-        return loaded;
+        List<Index> virtual = new LinkedList<>();
+        loaded.stream().forEach((ri)
+                -> virtual.add(new VirtualIndex(ri.ID, this)));
+        return virtual;
     }
     
     private int load(String line) {
@@ -89,14 +96,5 @@ public enum Indices {
 
     public ActManager getActManager() {
         return acts;
-    }
-    
-    public void sortByData() {
-        loaded.sort((Index o1, Index o2) -> o1.compareTo(o2));
-    }
-    
-    public void sortByActNumber() {
-        loaded.sort((Index o1, Index o2)
-                -> o1.getActNumber().compareTo(o2.getActNumber()));
     }
 }

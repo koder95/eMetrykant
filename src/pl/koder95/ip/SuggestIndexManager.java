@@ -30,8 +30,16 @@ public class SuggestIndexManager {
     private final ArrayList<String> words = new ArrayList<>();
     private int selectedIndex = -1;
     
+    public void add(List<Index> indices) {
+        loaded.addAll(indices);
+    }
+    
     public void add(Index[] indices) {
-        loaded.addAll(Arrays.asList(indices));
+        add(Arrays.asList(indices));
+    }
+    
+    public void add(Indices indices) {
+        add(indices.getLoaded());
     }
     
     public void newWord() { words.add(""); selectedIndex++; }
@@ -69,6 +77,8 @@ public class SuggestIndexManager {
     }
     
     public void setIfDifferent(int index, char c) {
+        System.out.println("selectedWord=" + getSelectedWord());
+        System.out.println("index=" + index);
         if (getSelectedWord().charAt(index) != c) set(index, c);
     }
     
@@ -88,9 +98,13 @@ public class SuggestIndexManager {
         loaded.clear();
     }
     
-    public static Index[] load(int option) {
-        final List<Index> loaded = Indices.values()[option].getLoaded();
-        return loaded.toArray(new Index[loaded.size()]);
+    public void sortByData() {
+        loaded.sort((Index o1, Index o2) -> o1.compareTo(o2));
+    }
+    
+    public void sortByActNumber() {
+        loaded.sort((Index o1, Index o2)
+                -> o1.getActNumber().compareTo(o2.getActNumber()));
     }
     
     public String[] getSuggestions() {
@@ -105,22 +119,29 @@ public class SuggestIndexManager {
         JTextField src = (JTextField) e.getSource();
         String txt = src.getText();
         System.out.println("txt=" + txt);
-        int i = 0;
+        int i = 0, j = 0;
         newWord();
-        for (; i < txt.length(); i++) {
-            if (txt.charAt(i) == ' ') newWord();
+        if (txt.isEmpty()) {
+            clear();
+            return;
+        }
+        for (; i < txt.length(); i++, j++) {
+            if (txt.charAt(i) == ' ') {
+                j = 0;
+                newWord();
+            }
             else {
                 if (i < getSelectedWord().length())
-                    setIfDifferent(i, txt.charAt(i));
+                    setIfDifferent(j, txt.charAt(i));
                 else add(txt.charAt(i));
             }
         }
-        clear();
     }
     
     public static void main(String[] args) {
+        Indices.values()[0].load();
         SuggestIndexManager sim = new SuggestIndexManager();
-        sim.add(load(0));
+        sim.add(Indices.LIBER_BAPTIZATORUM);
         sim.newWord();
         sim.add('D');
         sim.add('o');

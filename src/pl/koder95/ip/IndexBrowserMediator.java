@@ -44,6 +44,8 @@ public class IndexBrowserMediator implements KeyListener {
         this.browser = browser;
         firstIndex = browser.getFirst();
         lastIndex = browser.getLast();
+        sim.add(browser.getIndices());
+        sim.sortByData();
     }
 
     public void registerFooterPanel(IndexFooterPanel footerPanel) {
@@ -225,13 +227,17 @@ public class IndexBrowserMediator implements KeyListener {
     
     private Rectangle calcBoundsSuggestScroll() {
         int x = searchingPanel.getSearchField().getX(),
-                y = searchingPanel.getSearchField().getY()+searchingPanel.getSearchField().getHeight()-3,
+                y = searchingPanel.getSearchField().getY()
+                    + searchingPanel.getSearchField().getHeight()-3,
                 w = searchingPanel.getSearchField().getWidth();
-        int height = suggestList.getCellBounds(0,0).height*suggestList.getModel().getSize()+5;
-        if (height > suggestList.getCellBounds(0,0).height*8+5) {
-            height = suggestList.getCellBounds(0,0).height*8+5;
-        }
-        return new Rectangle(x+searchingPanel.getX(),y+searchingPanel.getY(),w,height);
+        
+        int cellH = suggestList.getFixedCellHeight();
+        if (cellH == 0) cellH = 10;
+        int h = cellH*suggestList.getModel().getSize()+5;
+        int maxH = cellH*8+5;
+        if (h > maxH) h = maxH;
+        
+        return new Rectangle(x+searchingPanel.getX(),y+searchingPanel.getY(),w,h);
     }
 
     @Override
@@ -279,7 +285,7 @@ public class IndexBrowserMediator implements KeyListener {
     }
     
     //private int lastCaretDot = -1;
-    private SuggestIndexManager sim = new SuggestIndexManager();
+    private final SuggestIndexManager sim = new SuggestIndexManager();
     public void caretService(CaretEvent e) {
         /*
         int dot = e.getDot();
@@ -301,5 +307,11 @@ public class IndexBrowserMediator implements KeyListener {
         lastCaretDot = dot;
         */
         sim.serviceEvent(e);
+        String[] suggestions = sim.getSuggestions();
+        System.out.println("suggestions.length=" + suggestions.length);
+        suggestList.setListData(suggestions);
+        sim.clear();
+        locateSuggestScroll();
+        suggestScroll.setVisible(true);
     }
 }

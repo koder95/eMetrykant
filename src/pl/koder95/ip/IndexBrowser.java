@@ -112,11 +112,11 @@ public class IndexBrowser {
     }
     
     public Index get(int index) {
-        return indices.getLoaded().get(index);
+        return indices.get(index+1);
     }
     
     public int indexOf(Index index) {
-        return indices.getLoaded().indexOf(index);
+        return index.ID-1;
     }
     
     public Index getFirst() {
