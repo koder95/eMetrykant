@@ -26,7 +26,8 @@ import pl.koder95.ip.idf.Indices;
 /**
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version %I%, %G%
+ * @version 0.0.146, 2017-08-02
+ * @since 0.0.136
  */
 public class IndexBrowserFrame extends javax.swing.JFrame {
 
@@ -81,15 +82,15 @@ public class IndexBrowserFrame extends javax.swing.JFrame {
     }
 
     public IndexBrowserFrame(int option) {
-        this(new IndexBrowser(option));
+        this(new IndexSearcher(option));
     }
 
     public IndexBrowserFrame(Indices indices) {
-        this(new IndexBrowser(indices));
+        this(new IndexSearcher(indices));
     }
 
     public IndexBrowserFrame() {
-        this(new IndexBrowser());
+        this(new IndexSearcher());
     }
 
     private void initComponents() {

@@ -13,7 +13,8 @@ import pl.koder95.ip.idf.Index;
 /**
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version %I%, %G%
+ * @version 0.0.146, 2017-08-02
+ * @since 0.0.145
  */
 class DataSearchStrategy extends SearchStrategy {
 
@@ -23,7 +24,20 @@ class DataSearchStrategy extends SearchStrategy {
 
     @Override
     public LinkedList<Index> searchFor(Index[] list) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (query == null || query.getData().length == 0)
+            return new LinkedList<>();
+        
+        LinkedList<Index> result = new LinkedList<>();
+        String[] qData = query.getData();
+        for (Index element: list) {
+            boolean add = false;
+            for (int i = 0; i < element.getData().length; i++) {
+                if (i >= qData.length) break;
+                if (!element.getData(i).startsWith(qData[i])) add = true;
+            }
+            if (add) result.add(element);
+        }
+        return result;
     }
 
 }

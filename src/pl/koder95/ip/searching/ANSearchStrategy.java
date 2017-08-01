@@ -8,12 +8,14 @@
 package pl.koder95.ip.searching;
 
 import java.util.LinkedList;
+import pl.koder95.ip.idf.ActNumber;
 import pl.koder95.ip.idf.Index;
 
 /**
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version %I%, %G%
+ * @version 0.0.146, 2017-08-02
+ * @since 0.0.145
  */
 class ANSearchStrategy extends SearchStrategy {
 
@@ -23,7 +25,15 @@ class ANSearchStrategy extends SearchStrategy {
 
     @Override
     public LinkedList<Index> searchFor(Index[] list) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (query == null || query.getActNumber() == null)
+            return new LinkedList<>();
+        
+        LinkedList<Index> result = new LinkedList<>();
+        ActNumber an = query.getActNumber();
+        for (Index i: list) {
+            if (i.getActNumber().compareTo(an) == 0) result.add(i);
+        }
+        return result;
     }
 
 }

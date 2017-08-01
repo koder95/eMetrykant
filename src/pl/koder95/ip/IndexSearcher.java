@@ -15,7 +15,8 @@ import pl.koder95.ip.searching.SearchQuery;
 /**
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version %I%, %G%
+ * @version 0.0.146, 2017-08-02
+ * @since 0.0.145
  */
 public class IndexSearcher extends IndexBrowser {
     

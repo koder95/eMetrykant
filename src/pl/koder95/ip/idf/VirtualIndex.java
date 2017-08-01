@@ -9,7 +9,8 @@ package pl.koder95.ip.idf;
 /**
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version %I%, %G%
+ * @version 0.0.146, 2017-08-02
+ * @since 0.0.138
  */
 class VirtualIndex extends Index {
     private final Indices indices;

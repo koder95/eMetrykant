@@ -13,7 +13,8 @@ import pl.koder95.ip.idf.Index;
 /**
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version %I%, %G%
+ * @version 0.0.146, 2017-08-02
+ * @since 0.0.145
  */
 class IDSearchStrategy extends SearchStrategy {
 
@@ -23,7 +24,16 @@ class IDSearchStrategy extends SearchStrategy {
 
     @Override
     public LinkedList<Index> searchFor(Index[] list) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (query == null || query.getID() < 1) return new LinkedList<>();
+        
+        for (Index i: list) {
+            if (i.ID == query.getID()) {
+                LinkedList<Index> result = new LinkedList<>();
+                result.add(i);
+                return result;
+            }
+        }
+        return new LinkedList<>();
     }
 
 }

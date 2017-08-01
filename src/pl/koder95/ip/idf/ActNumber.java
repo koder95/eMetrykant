@@ -1,18 +1,20 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Ten utwór jest dostępny na licencji
+ * Creative Commons BY-NC-SA 4.0 Międzynarodowe.
+ * Aby zapoznać się z tekstem licencji wejdź na stronę
+ * http://creativecommons.org/licenses/by-nc-sa/4.0/.
  */
 package pl.koder95.ip.idf;
 
-import java.text.Collator;
 import java.util.regex.Matcher;
 import pl.koder95.ip.Main;
 import static pl.koder95.ip.Main.DIGITS_STRING_PATTERN;
 
 /**
  *
- * @author Kamil
+ * @author Kamil Jan Mularski [@koder95]
+ * @version 0.0.146, 2017-08-02
+ * @since 0.0.136
  */
 public class ActNumber implements Comparable<ActNumber> {
     private final String sign;
@@ -51,6 +53,22 @@ public class ActNumber implements Comparable<ActNumber> {
             String remainder1 = sign.substring(digit1.end(1)+1);
             String remainder2 = sign.substring(digit2.end(1)+1);
             return Main.DEFAULT_COLLATOR.compare(remainder1, remainder2);
+        }
+    }
+    
+    public static ActNumber parseActNumber(String s) {
+        if (!s.contains("/")) return null;
+        
+        int slash = s.indexOf("/");
+        if (slash == 0 || slash == s.length()-1) return null;
+        
+        String sign = s.substring(0, slash);
+        String yearS = s.substring(slash+1);
+        try {
+            int year = Integer.parseInt(yearS);
+            return new ActNumber(sign, year);
+        } catch (NumberFormatException ex) {
+            return null;
         }
     }
 }

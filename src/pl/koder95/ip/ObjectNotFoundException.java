@@ -1,7 +1,8 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Ten utwór jest dostępny na licencji
+ * Creative Commons BY-NC-SA 4.0 Międzynarodowe.
+ * Aby zapoznać się z tekstem licencji wejdź na stronę
+ * http://creativecommons.org/licenses/by-nc-sa/4.0/.
  */
 package pl.koder95.ip;
 
@@ -9,9 +10,13 @@ import java.util.Arrays;
 
 /**
  *
- * @author Kamil
+ * @author Kamil Jan Mularski [@koder95]
+ * @version 0.0.146, 2017-08-02
+ * @since 0.0.136
  */
 public class ObjectNotFoundException extends Exception {
+
+    private static final long serialVersionUID = 6482530271503764049L;
 
     /**
      * Creates a new instance of <code>ObjectNotFoundException</code> without

@@ -20,7 +20,8 @@ import javax.swing.UnsupportedLookAndFeelException;
 /**
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version %I%, %G%
+ * @version 0.0.146, 2017-08-02
+ * @since 0.0.0
  */
 public class Main {
     public static final ResourceBundle BUNDLE

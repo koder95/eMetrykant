@@ -23,7 +23,8 @@ import pl.koder95.ip.idf.Index;
 /**
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version %I%, %G%
+ * @version 0.0.146, 2017-08-02
+ * @since 0.0.136
  */
 public class IndexBrowserMediator implements KeyListener {
     private IndexBrowser browser;
