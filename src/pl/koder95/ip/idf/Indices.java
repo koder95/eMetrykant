@@ -28,7 +28,7 @@ import pl.koder95.ip.gui.MarriageIndexInfoPanel;
 /**
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.0.147, 2017-08-08
+ * @version 0.0.149, 2017-08-08
  * @since 0.0.138
  */
 public enum Indices {
@@ -65,8 +65,7 @@ public enum Indices {
     }
     
     private int load(String line) {
-        int id = loaded.size();
-        if (id == 0) id = 1;
+        int id = loaded.size()+1;
         RealIndex r = RealIndex.create(id, line);
         if (r == null) return -1;
         if (loaded.add(r)) {
