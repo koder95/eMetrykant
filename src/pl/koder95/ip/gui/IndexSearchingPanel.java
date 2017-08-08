@@ -4,7 +4,7 @@
  * Aby zapoznać się z tekstem licencji wejdź na stronę
  * http://creativecommons.org/licenses/by-nc-sa/4.0/.
  */
-package pl.koder95.ip;
+package pl.koder95.ip.gui;
 
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
@@ -17,8 +17,8 @@ import javax.swing.JTextField;
 /**
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.0.146, 2017-08-02
- * @since 0.0.136
+ * @version 0.0.147, 2017-08-08
+ * @since 0.0.147
  */
 public class IndexSearchingPanel extends JPanel {
 
@@ -40,6 +40,7 @@ public class IndexSearchingPanel extends JPanel {
                 mediator.searchKeyPressed(evt.getKeyCode());
             }
         });
+        searchField.addActionListener((e)-> mediator.search());
         yearCombo.addActionListener((e) -> mediator.loadActComboBoxModel());
         
         GroupLayout l = new GroupLayout(this);

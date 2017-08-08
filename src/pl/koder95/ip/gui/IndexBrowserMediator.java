@@ -4,9 +4,10 @@
  * Aby zapoznać się z tekstem licencji wejdź na stronę
  * http://creativecommons.org/licenses/by-nc-sa/4.0/.
  */
-package pl.koder95.ip;
+package pl.koder95.ip.gui;
 
 import java.awt.Rectangle;
+import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import static java.awt.event.KeyEvent.VK_LEFT;
 import static java.awt.event.KeyEvent.VK_RIGHT;
@@ -15,19 +16,20 @@ import java.util.Arrays;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JList;
-import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.event.CaretEvent;
+import pl.koder95.ip.ActManager;
+import pl.koder95.ip.SuggestIndexManager;
 import pl.koder95.ip.idf.Index;
 
 /**
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.0.146, 2017-08-02
- * @since 0.0.136
+ * @version 0.0.147, 2017-08-08
+ * @since 0.0.147
  */
 public class IndexBrowserMediator implements KeyListener {
-    private IndexBrowser browser;
+    private IndexSearcher searcher;
     private IndexFooterPanel footerPanel;
     private IndexInfoPanel infoPanel;
     private IndexSearchingPanel searchingPanel;
@@ -36,12 +38,14 @@ public class IndexBrowserMediator implements KeyListener {
     private JList<String> suggestList;
     private JScrollPane suggestScroll;
     private Index firstIndex, lastIndex;
+    private ActManager.ActPrevNext apn;
+    private final SuggestIndexManager sim = new SuggestIndexManager();
 
-    public void registerBrowser(IndexBrowser browser) {
-        this.browser = browser;
-        firstIndex = browser.getFirst();
-        lastIndex = browser.getLast();
-        sim.add(browser.getIndices());
+    public void registerSearcher(IndexSearcher searcher) {
+        this.searcher = searcher;
+        firstIndex = searcher.getFirst();
+        lastIndex = searcher.getLast();
+        sim.add(searcher.getIndices());
         sim.sortByData();
     }
 
@@ -72,15 +76,16 @@ public class IndexBrowserMediator implements KeyListener {
     public void registerSuggestScroll(JScrollPane suggestScroll) {
         this.suggestScroll = suggestScroll;
     }
-
-    private ActManager.ActPrevNext apn;
     
     public void setIndex(Index i) {
-        infoPanel.setIndex(i);
-        apn = browser.getIndices().getActManager().create(i.getActNumber().getYear(),
-                browser.getIndices().getActManager().indexOf(i.getActNumber().getYear(),
-                        i.getActNumber().getSign()));
-        
+        if (i == null) Toolkit.getDefaultToolkit().beep();
+        else {
+            infoPanel.setIndex(i);
+            ActManager actM = searcher.getActManager();
+            int index = actM.indexOf(i.getActNumber().getYear(),
+                    i.getActNumber().getSign());
+            apn = actM.create(i.getActNumber().getYear(), index);
+        }
     }
 
     public ActManager.ActPrevNext getAPN() {
@@ -95,28 +100,20 @@ public class IndexBrowserMediator implements KeyListener {
         int actI = apn.getNextIndex();
         int year = apn.getCurrentYear();
         if (actI == 0) year = apn.getNextYear();
-        try {
-            setIndex(browser.find(year, browser.getIndices().getActManager().get(year, actI)));
-        } catch (ObjectNotFoundException ex) {
-            JOptionPane.showMessageDialog(null,
-                "Wystąpił błąd, ponieważ nie znaleziono indeksu.\n\n"
-                        + "Błąd typu:\n\t" + ex,
-                "Nie znaleziono indeksu", JOptionPane.ERROR_MESSAGE);
-        }
+        
+        Index[] result = searcher.find(year,
+                searcher.getActManager().get(year, actI));
+        setIndex(result[0]);
     }
     
     public void prevIndex() {
         int actI = apn.getPrevIndex();
         int year = apn.getCurrentYear();
-        if (actI == browser.getLoaded().length) year = apn.getPrevYear();
-        try {
-            setIndex(browser.find(year, browser.getIndices().getActManager().get(year, actI)));
-        } catch (ObjectNotFoundException ex) {
-            JOptionPane.showMessageDialog(null,
-                "Wystąpił błąd, ponieważ nie znaleziono indeksu.\n\n"
-                        + "Błąd typu:\n\t" + ex,
-                "Nie znaleziono indeksu", JOptionPane.ERROR_MESSAGE);
-        }
+        if (actI == searcher.getLoaded().size()) year = apn.getPrevYear();
+        
+        Index[] result = searcher.find(year,
+                searcher.getActManager().get(year, actI));
+        setIndex(result[0]);
     }
     
     public void setActSearchingEnable(boolean actSearching) {
@@ -128,7 +125,7 @@ public class IndexBrowserMediator implements KeyListener {
             int minYear = firstIndex.getActNumber().getYear(),
                     maxYear = lastIndex.getActNumber().getYear();
             for (int i = maxYear; i >= minYear; i--) {
-                if (browser.isYear(i)) model.addElement(i);
+                if (searcher.isYear(i)) model.addElement(i);
             }
             searchingPanel.getYearCombo().setModel(model);
             loadActComboBoxModel();
@@ -149,7 +146,7 @@ public class IndexBrowserMediator implements KeyListener {
     }
 
     public void loadActComboBoxModel() {
-        Index[] years = browser.find((Integer) searchingPanel.getYearCombo().getSelectedItem());
+        Index[] years = searcher.find((Integer) searchingPanel.getYearCombo().getSelectedItem());
         Arrays.sort(years, (Index o1, Index o2)
                 -> o1.getActNumber().compareTo(o2.getActNumber()));
         DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>();
@@ -166,15 +163,19 @@ public class IndexBrowserMediator implements KeyListener {
     }
 
     public void search() {
-        try {
-            setForm(browser.find((Integer) searchingPanel.getYearCombo().getSelectedItem(),
-                    (String) searchingPanel.getActCombo().getSelectedItem()));
-        } catch (ObjectNotFoundException ex) {
-            JOptionPane.showMessageDialog(null,
-                "Wystąpił błąd, ponieważ nie znaleziono indeksu.\n\n"
-                        + "Błąd typu:\n\t" + ex,
-                "Nie znaleziono indeksu", JOptionPane.ERROR_MESSAGE);
+        Index[] result;
+        if (isActSearchingEnable()) {
+            result = searcher.find(
+                (Integer) searchingPanel.getYearCombo().getSelectedItem(),
+                    (String) searchingPanel.getActCombo().getSelectedItem()
+            );
+            System.out.println("result=" + Arrays.toString(result));
+        } else {
+            result = searcher.find(searchingPanel.getSearchField().getText());
+            System.out.println("result=" + Arrays.toString(result));
         }
+        if (result != null) setForm(searcher.selectOne(result));
+        else Toolkit.getDefaultToolkit().beep();
     }
 
     public void searchKeyPressed(int keyCode) {
@@ -193,7 +194,7 @@ public class IndexBrowserMediator implements KeyListener {
     }
 
     public String getTitle() {
-        return browser.getIndices().getName();
+        return searcher.getIndices().getName();
     }
 
     public Index getFirstIndex() {
@@ -207,7 +208,7 @@ public class IndexBrowserMediator implements KeyListener {
     }
     
     public void updateFooter() {
-        footerPanel.getTitle().setText(browser.getIndices().getName());
+        footerPanel.getTitle().setText(searcher.getIndices().getName());
         footerPanel.getMin().setText(firstIndex.getActNumber().getSign()
                 + "/" + firstIndex.getActNumber().getYear());
         footerPanel.getMax().setText(lastIndex.getActNumber().getSign()
@@ -250,7 +251,6 @@ public class IndexBrowserMediator implements KeyListener {
     }
     
     //private int lastCaretDot = -1;
-    private final SuggestIndexManager sim = new SuggestIndexManager();
     public void caretService(CaretEvent e) {
         /*
         int dot = e.getDot();

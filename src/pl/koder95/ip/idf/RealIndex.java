@@ -12,7 +12,7 @@ import java.util.Arrays;
 /**
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.0.146, 2017-08-02
+ * @version 0.0.147, 2017-08-08
  * @since 0.0.138
  */
 class RealIndex extends Index {
@@ -50,8 +50,11 @@ class RealIndex extends Index {
     }
     
     public static RealIndex create(int id, String line) {
+        if (line.isEmpty()) return null;
+        if (line.startsWith(";")) return null;
         ArrayList<String> dataL = new ArrayList<>();
         dataL.addAll(Arrays.asList(line.split(";")));
+        
         int year = Integer.parseInt(dataL.remove(dataL.size()-1));
         String sign = dataL.remove(dataL.size()-1);
         String[] data = dataL.toArray(new String[dataL.size()]);

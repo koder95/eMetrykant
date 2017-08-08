@@ -6,14 +6,15 @@
  */
 package pl.koder95.ip.searching;
 
+import java.util.Arrays;
 import java.util.LinkedList;
-import pl.koder95.ip.idf.ActNumber;
+import java.util.List;
 import pl.koder95.ip.idf.Index;
 
 /**
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.0.146, 2017-08-02
+ * @version 0.0.147, 2017-08-08
  * @since 0.0.145
  */
 class AutoSearchStrategy extends SearchStrategy {
@@ -21,97 +22,46 @@ class AutoSearchStrategy extends SearchStrategy {
     private final ANSearchStrategy an;
     private final DataSearchStrategy data;
     private final IDSearchStrategy id;
+    private final YearSearchStrategy year;
 
-    public AutoSearchStrategy(SearchQuery query) {
+    public AutoSearchStrategy(AbstractSearchQuery query) {
         super(query);
         an = new ANSearchStrategy(query);
         data = new DataSearchStrategy(query);
         id = new IDSearchStrategy(query);
+        year = new YearSearchStrategy(query);
     }
 
     @Override
-    public LinkedList<Index> searchFor(Index[] list) {
+    public LinkedList<Index> searchFor(List<Index> list) {
         if (query == null) return new LinkedList<>();
-        int id = query.getID();
-        ActNumber lookingFor = query.getActNumber();
+        setQuery(query);
+        
+        if (query.getID() > 0) return this.id.searchFor(list);
+        if (query.getActNumber() != null) return this.an.searchFor(list);
+        
         String[] data = query.getData();
-        boolean hasID = id > 0;
-        boolean hasAN = lookingFor != null;
-        boolean hasData = data != null && data.length != 0;
-        
-        LinkedList<Index> resultA = new LinkedList<>();
-        if (hasData) {
-            for (Index l: list) {
-                boolean add = false;
-                for (int i = 0; i < l.getData().length; i++) {
-                    if (i < data.length) {
-                        if (l.getData(i).startsWith(data[i])) {
-                            add = true;
-                            break;
-                        }
-                    }
-                }
-                if (add) resultA.add(l);
-            }
+        int year = query.getYear();
+        System.out.println("data=" + Arrays.toString(data));
+        System.out.println("year=" + year);
+        if (data != null && data.length != 0) {
+            LinkedList<Index> listL;
+            
+            if (year > 0) listL = this.year.searchFor(list);
+            else return this.data.searchFor(list);
+            
+            return this.data.searchFor(listL);
         }
-        
-        LinkedList<Index> resultB = new LinkedList<>();
-        if (hasAN) {
-            for (Index i: list) {
-                if (lookingFor.equals(i.getActNumber())) resultB.add(i);
-            }
-        }
-        
-        LinkedList<Index> resultC = new LinkedList<>();
-        if (hasID) {
-            for (Index i: list) {
-                if (i.ID == id) resultC.add(i);
-            }
-        }
-        
-        if (hasData) {
-            if (hasAN) {
-                if (hasID) {
-                    LinkedList<Index> remove = new LinkedList<>(resultA);
-                    remove.removeAll(resultB);
-                    remove.removeAll(resultC);
-                    resultB.clear();
-                    resultC.clear();
-                    resultA.removeAll(remove);
-                    return resultA;
-                } else {
-                    LinkedList<Index> remove = new LinkedList<>(resultA);
-                    remove.removeAll(resultB);
-                    resultB.clear();
-                    resultA.removeAll(remove);
-                    return resultA;
-                }
-            } else {
-                if (hasID) {
-                    LinkedList<Index> remove = new LinkedList<>(resultA);
-                    remove.removeAll(resultC);
-                    resultC.clear();
-                    resultA.removeAll(remove);
-                    return resultA;
-                } else {
-                    Index[] result = resultA.toArray(new Index[resultA.size()]);
-                    resultA.clear();
-                    return resultA;
-                }
-            }
-        } else {
-            if (hasAN) {
-                if (hasID) {
-                    LinkedList<Index> remove = new LinkedList<>(resultB);
-                    remove.removeAll(resultC);
-                    resultC.clear();
-                    resultB.removeAll(remove);
-                    return resultB;
-                } else return resultB;
-            } else {
-                if (hasID) return resultC;
-                else return new LinkedList<>();
-            }
-        }
+        if (year > 0) return this.year.searchFor(list);
+        return new LinkedList<>();
+    }
+
+    @Override
+    public void setQuery(AbstractSearchQuery query) {
+        this.query = query;
+        an.query = query;
+        data.query = query;
+        id.query = query;
+        year.query = query;
     }
 }

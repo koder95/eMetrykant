@@ -8,22 +8,23 @@
 package pl.koder95.ip.searching;
 
 import java.util.LinkedList;
+import java.util.List;
 import pl.koder95.ip.idf.Index;
 
 /**
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.0.146, 2017-08-02
+ * @version 0.0.147, 2017-08-08
  * @since 0.0.145
  */
 class DataSearchStrategy extends SearchStrategy {
 
-    DataSearchStrategy(SearchQuery query) {
+    DataSearchStrategy(AbstractSearchQuery query) {
         super(query);
     }
 
     @Override
-    public LinkedList<Index> searchFor(Index[] list) {
+    public LinkedList<Index> searchFor(List<Index> list) {
         if (query == null || query.getData().length == 0)
             return new LinkedList<>();
         
@@ -33,7 +34,7 @@ class DataSearchStrategy extends SearchStrategy {
             boolean add = false;
             for (int i = 0; i < element.getData().length; i++) {
                 if (i >= qData.length) break;
-                if (!element.getData(i).startsWith(qData[i])) add = true;
+                if (element.getData(i).startsWith(qData[i])) add = true;
             }
             if (add) result.add(element);
         }

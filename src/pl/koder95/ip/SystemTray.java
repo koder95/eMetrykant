@@ -12,11 +12,12 @@ import java.awt.MenuItem;
 import java.awt.PopupMenu;
 import java.awt.TrayIcon;
 import pl.koder95.ip.idf.Indices;
+import pl.koder95.ip.gui.IndexBrowserFrame;
 
 /**
  * Klasa zarządza ikoną zasobnika systemu.
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.0.146, 2017-08-02
+ * @version 0.0.147, 2017-08-08
  * @since 0.0.145
  */
 public class SystemTray {
@@ -32,7 +33,7 @@ public class SystemTray {
      * zamykanie.
      */
     public void start() {
-        image = Main.FAVICON;
+        image = Main.FAVICON16;
         title = "Indeksy parafialne";
         popup = new PopupMenu("Indeksy parafialne");
         

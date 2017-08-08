@@ -22,27 +22,31 @@ import static pl.koder95.ip.Main.DATA_DIR;
 import static pl.koder95.ip.Main.READ_CSV_ERR_MESSAGE;
 import static pl.koder95.ip.Main.READ_CSV_ERR_TITLE;
 import static pl.koder95.ip.Main.showErrorMessage;
+import pl.koder95.ip.gui.IndexInfoPanel;
+import pl.koder95.ip.gui.MarriageIndexInfoPanel;
 
 /**
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.0.146, 2017-08-02
+ * @version 0.0.147, 2017-08-08
  * @since 0.0.138
  */
 public enum Indices {
 
-    LIBER_BAPTIZATORUM("Indeks ochrzczonych.csv"),
-    LIBER_CONFIRMATORUM("Indeks bierzmowanych.csv"),
-    LIBER_MATRIMONIORUM("Indeks zaślubionych.csv"),
-    LIBER_DEFUNCTORUM("Indeks zmarłych.csv");
+    LIBER_BAPTIZATORUM("Indeks ochrzczonych.csv", new IndexInfoPanel()),
+    LIBER_CONFIRMATORUM("Indeks bierzmowanych.csv", new IndexInfoPanel()),
+    LIBER_MATRIMONIORUM("Indeks zaślubionych.csv",new MarriageIndexInfoPanel()),
+    LIBER_DEFUNCTORUM("Indeks zmarłych.csv", new IndexInfoPanel());
     
     private List<RealIndex> loaded;
     private final ActManager acts = new ActManager();
     private final String fileName, name;
+    private final IndexInfoPanel infoPanel;
 
-    private Indices(String fileName) {
+    private Indices(String fileName, IndexInfoPanel info) {
         this.fileName = fileName;
         name = fileName.substring(0, fileName.length()-4);
+        infoPanel = info;
     }
     
     public Index get(int id) {
@@ -64,6 +68,7 @@ public enum Indices {
         int id = loaded.size();
         if (id == 0) id = 1;
         RealIndex r = RealIndex.create(id, line);
+        if (r == null) return -1;
         if (loaded.add(r)) {
             acts.create(r);
             return id;
@@ -96,5 +101,21 @@ public enum Indices {
 
     public ActManager getActManager() {
         return acts;
+    }
+    
+    public int size() {
+        return loaded.size();
+    }
+    
+    public Index getFirst() {
+        return get(size());
+    }
+    
+    public Index getLast() {
+        return get(1);
+    }
+
+    public IndexInfoPanel getInfoPanel() {
+        return infoPanel;
     }
 }

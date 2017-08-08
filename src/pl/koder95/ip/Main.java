@@ -20,7 +20,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 /**
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.0.146, 2017-08-02
+ * @version 0.0.147, 2017-08-08
  * @since 0.0.0
  */
 public class Main {
@@ -37,8 +37,13 @@ public class Main {
     public static final Charset CSV_DEFAULT_CHARSET = CSV_NEW_CHARSET;
     public static final Collator DEFAULT_COLLATOR
             = Collator.getInstance(POLISH); //NOI18N
-    public static final Image FAVICON = Toolkit.getDefaultToolkit().createImage(
-            ClassLoader.getSystemResource("pl/koder95/ip/favicon.png"));
+    private static final String FAV_PATH_START = "pl/koder95/ip/favicon";
+    public static final Image FAVICON = Toolkit.getDefaultToolkit()
+           .createImage(ClassLoader.getSystemResource(FAV_PATH_START + ".png"));
+    public static final Image FAVICON16 = Toolkit.getDefaultToolkit()
+         .createImage(ClassLoader.getSystemResource(FAV_PATH_START + "16.png"));
+    public static final Image FAVICON24 = Toolkit.getDefaultToolkit()
+         .createImage(ClassLoader.getSystemResource(FAV_PATH_START + "24.png"));
     public static final Object READ_CSV_ERR_MESSAGE
             = BUNDLE.getString("ERR_IMPORTANT_FILE_NOT_FOUND");
     public static final String READ_CSV_ERR_TITLE

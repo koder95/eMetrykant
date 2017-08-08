@@ -8,21 +8,26 @@
 package pl.koder95.ip.searching;
 
 import java.util.LinkedList;
+import java.util.List;
 import pl.koder95.ip.idf.Index;
 
 /**
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.0.146, 2017-08-02
+ * @version 0.0.147, 2017-08-08
  * @since 0.0.145
  */
 abstract class SearchStrategy {
     
-    SearchQuery query;
+    AbstractSearchQuery query;
 
-    public SearchStrategy(SearchQuery query) {
+    public SearchStrategy(AbstractSearchQuery query) {
         this.query = query;
     }
 
-    public abstract LinkedList<Index> searchFor(Index[] list);
+    public abstract LinkedList<Index> searchFor(List<Index> list);
+
+    public void setQuery(AbstractSearchQuery query) {
+        this.query = query;
+    }
 }

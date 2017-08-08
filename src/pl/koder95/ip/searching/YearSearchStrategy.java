@@ -15,26 +15,29 @@ import pl.koder95.ip.idf.Index;
  *
  * @author Kamil Jan Mularski [@koder95]
  * @version 0.0.147, 2017-08-08
- * @since 0.0.145
+ * @since 0.0.147
  */
-class IDSearchStrategy extends SearchStrategy {
+class YearSearchStrategy extends SearchStrategy {
 
-    IDSearchStrategy(AbstractSearchQuery query) {
+    YearSearchStrategy(AbstractSearchQuery query) {
         super(query);
     }
 
     @Override
     public LinkedList<Index> searchFor(List<Index> list) {
-        if (query == null || query.getID() < 1) return new LinkedList<>();
+        if (query == null || query.getYear() < 0) {
+            System.out.println("query.getYear()=" + query.getYear());
+            return new LinkedList<>();
+        }
         
+            System.out.println("query.getYear()=" + query.getYear());
+        LinkedList<Index> result = new LinkedList<>();
         for (Index i: list) {
-            if (i.ID == query.getID()) {
-                LinkedList<Index> result = new LinkedList<>();
+            if (i.getActNumber().getYear() == query.getYear()) {
                 result.add(i);
-                return result;
             }
         }
-        return new LinkedList<>();
+        return result;
     }
 
 }

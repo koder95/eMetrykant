@@ -4,7 +4,7 @@
  * Aby zapoznać się z tekstem licencji wejdź na stronę
  * http://creativecommons.org/licenses/by-nc-sa/4.0/.
  */
-package pl.koder95.ip;
+package pl.koder95.ip.gui;
 
 import java.awt.GridLayout;
 import javax.swing.BorderFactory;
@@ -16,8 +16,8 @@ import pl.koder95.ip.idf.Index;
 /**
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.0.146, 2017-08-02
- * @since 0.0.145
+ * @version 0.0.147, 2017-08-08
+ * @since 0.0.147
  */
 public class MarriageIndexInfoPanel extends IndexInfoPanel {
 
@@ -59,7 +59,6 @@ public class MarriageIndexInfoPanel extends IndexInfoPanel {
                 )
                 .addContainerGap()
         );
-        System.out.println("MAN was inited.");
         
         woman = new JPanel();
         GroupLayout lay1 = new GroupLayout(woman);
@@ -93,7 +92,6 @@ public class MarriageIndexInfoPanel extends IndexInfoPanel {
                 )
                 .addContainerGap()
         );
-        System.out.println("WOMAN was inited.");
         
         people = new JPanel(new GridLayout(1, 2));
         people.add(man);
@@ -142,54 +140,11 @@ public class MarriageIndexInfoPanel extends IndexInfoPanel {
                     .addComponent(i.getLabel(), GroupLayout.PREFERRED_SIZE, 15, GroupLayout.PREFERRED_SIZE)
                     .addComponent(i.getValue());
     }
-    
-    private GroupLayout.ParallelGroup createVG(GroupLayout l, IndexInfo i0, IndexInfo i1) {
-        return l.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                    .addComponent(i0.getLabel(), GroupLayout.PREFERRED_SIZE, 15, GroupLayout.PREFERRED_SIZE)
-                    .addComponent(i0.getValue())
-                    .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(i1.getLabel(), GroupLayout.PREFERRED_SIZE, 15, GroupLayout.PREFERRED_SIZE)
-                    .addComponent(i1.getValue());
-    }
-    
-    private JPanel createPersonInfo(IndexInfo lastName, IndexInfo name) {
-        JPanel p = new JPanel();
-        GroupLayout l = new GroupLayout(p);
-        p.setLayout(l);
-        l.setHorizontalGroup(l.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(l.createParallelGroup()
-                    .addGroup(l.createSequentialGroup()
-                        .addComponent(lastName.getLabel())
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(lastName.getValue())
-                    )
-                    .addGroup(l.createSequentialGroup()
-                        .addComponent(name.getLabel())
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(name.getValue())
-                    )
-                )
-                .addContainerGap()
-        );
-        l.setVerticalGroup(l.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(l.createParallelGroup()
-                        .addComponent(lastName.getLabel())
-                        .addComponent(lastName.getValue())
-                )
-                .addGap(20)
-                .addGroup(l.createParallelGroup()
-                        .addComponent(name.getLabel())
-                        .addComponent(name.getValue())
-                )
-                .addContainerGap()
-        );
-        return p;
-    }
 
-    private void setIndex(String maleLastName, String maleName,
+    private void setIndex(int id, String maleLastName, String maleName,
             String femaleLastName, String femaleName, String act, String year) {
+        if (id > 0) super.setBorder(BorderFactory.createTitledBorder("#" + id));
+        else super.setBorder(BorderFactory.createTitledBorder(""));
         getActNumberInfo().getValue().setText(act);
         getLastNameInfo().getValue().setText(maleLastName);
         getNameInfo().getValue().setText(maleName);
@@ -201,7 +156,7 @@ public class MarriageIndexInfoPanel extends IndexInfoPanel {
     @Override
     public void setIndex(Index i) {
         if (i != null) {
-            setIndex(i.getData()[0], i.getData()[1], i.getData()[2],
+            setIndex(i.ID, i.getData()[0], i.getData()[1], i.getData()[2],
                     i.getData()[3], i.getActNumber().getSign(),
                     "" + i.getActNumber().getYear());
             return;
@@ -211,7 +166,7 @@ public class MarriageIndexInfoPanel extends IndexInfoPanel {
 
     @Override
     public void resetIndex() {
-        setIndex("-", "-", "-", "-", "-", "-");
+        setIndex(0, "-", "-", "-", "-", "-", "-");
     }
 
     // Variables declaration - do not modify

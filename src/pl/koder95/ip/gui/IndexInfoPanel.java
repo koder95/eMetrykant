@@ -4,7 +4,7 @@
  * Aby zapoznać się z tekstem licencji wejdź na stronę
  * http://creativecommons.org/licenses/by-nc-sa/4.0/.
  */
-package pl.koder95.ip;
+package pl.koder95.ip.gui;
 
 import java.awt.Component;
 import javax.swing.BorderFactory;
@@ -17,8 +17,8 @@ import pl.koder95.ip.idf.Index;
 /**
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.0.146, 2017-08-02
- * @since 0.0.136
+ * @version 0.0.147, 2017-08-08
+ * @since 0.0.147
  */
 public class IndexInfoPanel extends JPanel {
 
@@ -94,8 +94,10 @@ public class IndexInfoPanel extends JPanel {
         return yearInfo;
     }
     
-    private void setIndex(String lastName, String name,
+    private void setIndex(int id, String lastName, String name,
             String act, String year) {
+        if (id > 0) super.setBorder(BorderFactory.createTitledBorder("#" + id));
+        else super.setBorder(BorderFactory.createTitledBorder(""));
         actNumberInfo.getValue().setText(act);
         lastNameInfo.getValue().setText(lastName);
         nameInfo.getValue().setText(name);
@@ -104,15 +106,15 @@ public class IndexInfoPanel extends JPanel {
     
     public void setIndex(Index i) {
         if (i != null) {
-            setIndex(i.getData()[0], i.getData()[1], i.getActNumber().getSign(),
-                    ""+i.getActNumber().getYear());
+            setIndex(i.ID, i.getData()[0], i.getData()[1],
+                    i.getActNumber().getSign(), ""+i.getActNumber().getYear());
             return;
         }
         resetIndex();
     }
 
     public void resetIndex() {
-        setIndex("-", "-", "-", "-");
+        setIndex(0, "-", "-", "-", "-");
     }
 
     // Variables declaration - do not modify
