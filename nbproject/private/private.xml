@@ -2,24 +2,6 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group>
-            <file>file:/C:/Users/Kamil/OneDrive/JAVA/Indeksy%20parafialne/src/pl/koder95/ip/searching/AutoSearchStrategy.java</file>
-            <file>file:/C:/Users/Kamil/OneDrive/JAVA/Indeksy%20parafialne/src/pl/koder95/tools/observer/Observable.java</file>
-            <file>file:/C:/Users/Kamil/OneDrive/JAVA/Indeksy%20parafialne/src/pl/koder95/ip/searching/SearchContext.java</file>
-            <file>file:/C:/Users/Kamil/OneDrive/JAVA/Indeksy%20parafialne/src/pl/koder95/ip/gui/IndexSearcher.java</file>
-            <file>file:/C:/Users/Kamil/OneDrive/JAVA/Indeksy%20parafialne/src/pl/koder95/ip/searching/FilterSearchStrategy.java</file>
-            <file>file:/C:/Users/Kamil/OneDrive/JAVA/Indeksy%20parafialne/src/pl/koder95/ip/idf/Indices.java</file>
-            <file>file:/C:/Users/Kamil/OneDrive/JAVA/Indeksy%20parafialne/src/pl/koder95/ip/gui/IndexBrowserMediator.java</file>
-            <file>file:/C:/Users/Kamil/OneDrive/JAVA/Indeksy%20parafialne/src/pl/koder95/ip/idf/ActNumber.java</file>
-            <file>file:/C:/Users/Kamil/OneDrive/JAVA/Indeksy%20parafialne/src/pl/koder95/ip/searching/SearchFilter.java</file>
-            <file>file:/C:/Users/Kamil/OneDrive/JAVA/Indeksy%20parafialne/src/pl/koder95/ip/gui/IndexFooterPanel.java</file>
-            <file>file:/C:/Users/Kamil/OneDrive/JAVA/Indeksy%20parafialne/src/pl/koder95/ip/searching/SearchQuery.java</file>
-            <file>file:/C:/Users/Kamil/OneDrive/JAVA/Indeksy%20parafialne/src/pl/koder95/tools/observer/Observer.java</file>
-            <file>file:/C:/Users/Kamil/OneDrive/JAVA/Indeksy%20parafialne/src/pl/koder95/ip/gui/IndexSearchingPanel.java</file>
-            <file>file:/C:/Users/Kamil/OneDrive/JAVA/Indeksy%20parafialne/src/pl/koder95/ip/searching/ANSearchStrategy.java</file>
-            <file>file:/C:/Users/Kamil/OneDrive/JAVA/Indeksy%20parafialne/src/pl/koder95/ip/searching/YearSearchStrategy.java</file>
-            <file>file:/C:/Users/Kamil/OneDrive/JAVA/Indeksy%20parafialne/src/pl/koder95/ip/SuggestIndexListModel.java</file>
-            <file>file:/C:/Users/Kamil/OneDrive/JAVA/Indeksy%20parafialne/src/pl/koder95/ip/gui/IndexBrowserFrame.java</file>
-        </group>
+        <group/>
     </open-files>
 </project-private>
