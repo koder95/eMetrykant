@@ -1,1 +1,1 @@
-Dane zosta�y wygenerowane.
+﻿Dane zostały wygenerowane.
