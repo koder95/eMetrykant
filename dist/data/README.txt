@@ -1,0 +1,1 @@
+Dane zosta³y wygenerowane.
