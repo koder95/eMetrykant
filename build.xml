@@ -7,8 +7,8 @@
 <!-- the Compile on Save feature is turned off for the project. -->
 <!-- You can turn off the Compile on Save (or Deploy on Save) setting -->
 <!-- in the project's Project Properties dialog box.-->
-<project name="Indeksy_parafialne" default="default" basedir=".">
-    <description>Builds, tests, and runs the project Indeksy parafialne.</description>
+<project name="eMetrykant" default="default" basedir=".">
+    <description>Builds, tests, and runs the project eMetrykant.</description>
     <import file="nbproject/build-impl.xml"/>
     <!--
 
@@ -33,7 +33,7 @@
     (Targets beginning with '-' are not intended to be called on their own.)
 
     Example of inserting an obfuscator after compilation could look like this:
-
+    
         <target name="-post-compile">
             <obfuscate>
                 <fileset dir="${build.classes.dir}"/>
@@ -58,7 +58,7 @@
 
     An example of overriding the target for project execution could look like this:
 
-        <target name="run" depends="Indeksy_parafialne-impl.jar">
+        <target name="run" depends="eMetrykant-impl.jar">
             <exec dir="bin" executable="launcher.exe">
                 <arg file="${dist.jar}"/>
             </exec>
