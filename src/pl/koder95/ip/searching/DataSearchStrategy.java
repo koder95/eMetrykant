@@ -14,7 +14,7 @@ import pl.koder95.ip.idf.Index;
 /**
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.0.147, 2017-08-08
+ * @version 0.0.150, 2017-08-10
  * @since 0.0.145
  */
 class DataSearchStrategy extends SearchStrategy {
@@ -32,9 +32,12 @@ class DataSearchStrategy extends SearchStrategy {
         String[] qData = query.getData();
         for (Index element: list) {
             boolean add = false;
-            for (int i = 0; i < element.getData().length; i++) {
-                if (i >= qData.length) break;
-                if (element.getData(i).startsWith(qData[i])) add = true;
+            for (int i = 0; i < qData.length; i++) {
+                for (int d = i; d < element.getData().length; d+=2) {
+                    String dataE = element.getData(d);
+                    String dataQ = qData[i];
+                    if (dataE.startsWith(dataQ)) add = true;
+                }
             }
             if (add) result.add(element);
         }

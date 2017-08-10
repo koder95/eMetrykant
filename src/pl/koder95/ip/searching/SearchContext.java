@@ -15,7 +15,7 @@ import pl.koder95.ip.idf.Index;
 /**
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.0.147, 2017-08-08
+ * @version 0.0.150, 2017-08-10
  * @since 0.0.145
  */
 public class SearchContext {
@@ -31,21 +31,14 @@ public class SearchContext {
         System.out.println("searching...");
         LinkedList<Index> search = strategy.searchFor(loaded);
         Index[] array = search.toArray(new Index[search.size()]);
+        for (Index i: array) {
+            if (i == null) search.remove(i);
+        }
+        array = search.toArray(new Index[search.size()]);
         search.clear();
         System.out.println("searching done");
         System.out.println(java.util.Arrays.toString(array));
         return array;
-    }
-
-    public Index searchOne(List<Index> loaded) {
-        System.out.println("Strategy: " + strategy);
-        System.out.println("searching...");
-        LinkedList<Index> search = strategy.searchFor(loaded);
-        Index one = select(search);
-        search.clear();
-        System.out.println("searching done");
-        System.out.println(one);
-        return one;
     }
     
     public Index select(LinkedList<Index> searchResult) {
@@ -81,8 +74,10 @@ public class SearchContext {
         double similarity = 1d;
         for (int ii = 0; ii < strategy.query.getData().length; ii++) {
             String data0 = strategy.query.getData(ii);
-            String data1 = i.getData(ii);
-            similarity*= similarity(data0, data1);
+            for (int d = ii; d < i.getData().length; d+=2) {
+                String data1 = i.getData(d);
+                similarity*= similarity(data0, data1);
+            }
         }
         return similarity;
     }

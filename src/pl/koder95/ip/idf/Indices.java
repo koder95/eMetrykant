@@ -15,7 +15,6 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import pl.koder95.ip.ActManager;
 import static pl.koder95.ip.Main.BUNDLE;
 import static pl.koder95.ip.Main.CSV_DEFAULT_CHARSET;
 import static pl.koder95.ip.Main.DATA_DIR;
@@ -28,18 +27,17 @@ import pl.koder95.ip.gui.MarriageIndexInfoPanel;
 /**
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.0.149, 2017-08-08
+ * @version 0.0.150, 2017-08-10
  * @since 0.0.138
  */
 public enum Indices {
 
-    LIBER_BAPTIZATORUM("Indeks ochrzczonych.csv", new IndexInfoPanel()),
-    LIBER_CONFIRMATORUM("Indeks bierzmowanych.csv", new IndexInfoPanel()),
-    LIBER_MATRIMONIORUM("Indeks zaślubionych.csv",new MarriageIndexInfoPanel()),
-    LIBER_DEFUNCTORUM("Indeks zmarłych.csv", new IndexInfoPanel());
+    LIBER_BAPTIZATORUM("Księga ochrzczonych.csv", new IndexInfoPanel()),
+    LIBER_CONFIRMATORUM("Księga bierzmowanych.csv", new IndexInfoPanel()),
+    LIBER_MATRIMONIORUM("Księga zaślubionych.csv",new MarriageIndexInfoPanel()),
+    LIBER_DEFUNCTORUM("Księga zmarłych.csv", new IndexInfoPanel());
     
     private List<RealIndex> loaded;
-    private final ActManager acts = new ActManager();
     private final String fileName, name;
     private final IndexInfoPanel infoPanel;
 
@@ -68,10 +66,7 @@ public enum Indices {
         int id = loaded.size()+1;
         RealIndex r = RealIndex.create(id, line);
         if (r == null) return -1;
-        if (loaded.add(r)) {
-            acts.create(r);
-            return id;
-        }
+        if (loaded.add(r)) return id;
         return -1;
     }
     
@@ -96,10 +91,6 @@ public enum Indices {
 
     public String getName() {
         return name;
-    }
-
-    public ActManager getActManager() {
-        return acts;
     }
     
     public int size() {

@@ -18,14 +18,13 @@ import javax.swing.JButton;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
 import javax.swing.event.CaretEvent;
-import pl.koder95.ip.ActManager;
 import pl.koder95.ip.SuggestIndexManager;
 import pl.koder95.ip.idf.Index;
 
 /**
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.0.147, 2017-08-08
+ * @version 0.0.150, 2017-08-10
  * @since 0.0.147
  */
 public class IndexBrowserMediator implements KeyListener {
@@ -38,7 +37,6 @@ public class IndexBrowserMediator implements KeyListener {
     private JList<String> suggestList;
     private JScrollPane suggestScroll;
     private Index firstIndex, lastIndex;
-    private ActManager.ActPrevNext apn;
     private final SuggestIndexManager sim = new SuggestIndexManager();
 
     public void registerSearcher(IndexSearcher searcher) {
@@ -81,15 +79,7 @@ public class IndexBrowserMediator implements KeyListener {
         if (i == null) Toolkit.getDefaultToolkit().beep();
         else {
             infoPanel.setIndex(i);
-            ActManager actM = searcher.getActManager();
-            int index = actM.indexOf(i.getActNumber().getYear(),
-                    i.getActNumber().getSign());
-            apn = actM.create(i.getActNumber().getYear(), index);
         }
-    }
-
-    public ActManager.ActPrevNext getAPN() {
-        return apn;
     }
 
     public void resetIndex() {
@@ -97,23 +87,11 @@ public class IndexBrowserMediator implements KeyListener {
     }
     
     public void nextIndex() {
-        int actI = apn.getNextIndex();
-        int year = apn.getCurrentYear();
-        if (actI == 0) year = apn.getNextYear();
-        
-        Index[] result = searcher.find(year,
-                searcher.getActManager().get(year, actI));
-        setIndex(result[0]);
+        setIndex(searcher.get(infoPanel.getIndexID()+1));
     }
     
     public void prevIndex() {
-        int actI = apn.getPrevIndex();
-        int year = apn.getCurrentYear();
-        if (actI == searcher.getLoaded().size()) year = apn.getPrevYear();
-        
-        Index[] result = searcher.find(year,
-                searcher.getActManager().get(year, actI));
-        setIndex(result[0]);
+        setIndex(searcher.get(infoPanel.getIndexID()-1));
     }
     
     public void setActSearchingEnable(boolean actSearching) {

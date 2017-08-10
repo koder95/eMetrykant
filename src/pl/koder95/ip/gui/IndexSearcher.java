@@ -7,7 +7,6 @@
 package pl.koder95.ip.gui;
 
 import java.util.List;
-import pl.koder95.ip.ActManager;
 import pl.koder95.ip.idf.ActNumber;
 import pl.koder95.ip.idf.Index;
 import pl.koder95.ip.idf.Indices;
@@ -18,7 +17,7 @@ import pl.koder95.ip.searching.SearchQuery;
 /**
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.0.147, 2017-08-08
+ * @version 0.0.150, 2017-08-10
  * @since 0.0.147
  */
 public class IndexSearcher {
@@ -47,8 +46,8 @@ public class IndexSearcher {
       return indices.getLoaded();
     }
     
-    public Index get(int index) {
-        return indices.get(index+1);
+    public Index get(int id) {
+        return indices.get(id);
     }
     
     public int indexOf(Index index) {
@@ -66,10 +65,6 @@ public class IndexSearcher {
     
     public Index getLast() {
         return indices.getLast();
-    }
-    
-    public ActManager getActManager() {
-        return indices.getActManager();
     }
 
     public Index[] find(AbstractSearchQuery query) {

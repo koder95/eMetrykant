@@ -13,7 +13,7 @@ import pl.koder95.ip.Main;
 /**
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.0.146, 2017-08-02
+ * @version 0.0.150, 2017-08-10
  * @since 0.0.136
  */
 public abstract class Index implements Comparable<Index> {

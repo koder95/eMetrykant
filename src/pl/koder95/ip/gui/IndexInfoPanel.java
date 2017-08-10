@@ -12,12 +12,13 @@ import javax.swing.GroupLayout;
 import javax.swing.JPanel;
 import javax.swing.LayoutStyle;
 import javax.swing.SwingConstants;
+import javax.swing.border.TitledBorder;
 import pl.koder95.ip.idf.Index;
 
 /**
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.0.147, 2017-08-08
+ * @version 0.0.150, 2017-08-10
  * @since 0.0.147
  */
 public class IndexInfoPanel extends JPanel {
@@ -94,10 +95,22 @@ public class IndexInfoPanel extends JPanel {
         return yearInfo;
     }
     
-    private void setIndex(int id, String lastName, String name,
-            String act, String year) {
+    private void setIndexID(int id) {
         if (id > 0) super.setBorder(BorderFactory.createTitledBorder("#" + id));
         else super.setBorder(BorderFactory.createTitledBorder(""));
+    }
+    
+    public int getIndexID() {
+        String idS = ((TitledBorder) super.getBorder()).getTitle();
+        if (idS.isEmpty()) return -1;
+        try {
+            return Integer.parseInt(idS.substring(1));
+        } catch (NumberFormatException ex) { return -1; }
+    }
+    
+    private void setIndex(long id, String lastName, String name,
+            String act, String year) {
+        setIndexID(id);
         actNumberInfo.getValue().setText(act);
         lastNameInfo.getValue().setText(lastName);
         nameInfo.getValue().setText(name);
