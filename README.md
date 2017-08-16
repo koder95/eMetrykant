@@ -1,4 +1,4 @@
-# eMetrykant
+# eMetrykant ![churchoval32](https://user-images.githubusercontent.com/9617256/29318380-09eff3be-81d0-11e7-91df-2b651c8eba94.png) ![eme32](https://user-images.githubusercontent.com/9617256/29318628-3f54a94a-81d1-11e7-9fdb-92d5d1631a10.png)
 Program do odczytywania i przeszukiwania bazy danych dot. metryk parafialnych.
 
 ## Faza buildów
@@ -14,3 +14,9 @@ Build 2 dostarcza przykładowe dane, które należy wypakować w tym samym miejs
 - _pl.koder95.ip.idf_ = _**pl.koder95.emt.idf**_
 - _pl.koder95.ip.searching_ = _**pl.koder95.emt.searching**_
 Zmiana weszła jako wersja 0.0.200 (pominięto 50 numerów).
+
+Kolejna zmiana nazw dokonała się wraz z wersją 0.0.201, która zmieniła nazwy pakietów:
+- _pl.koder95.emt_ = _**pl.koder95.eme**_
+- _pl.koder95.emt.gui_ = _**pl.koder95.eme.gui**_
+- _pl.koder95.emt.idf_ = _**pl.koder95.eme.idf**_
+- _pl.koder95.emt.searching_ = _**pl.koder95.eme.searching**_
