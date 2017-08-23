@@ -26,12 +26,11 @@ import java.util.ResourceBundle;
 import java.util.regex.Pattern;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
-import pl.koder95.eme.gui.GUIMediator;
 
 /**
  * Klasa uruchamiająca i inicjalizująca podstawowe elementy aplikacji.
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.0.201, 2017-08-15
+ * @version 0.0.202, 2017-08-23
  * @since 0.0.201
  */
 public class Main {
@@ -39,7 +38,7 @@ public class Main {
      * Domyślny pakiet językowy.
      */
     public static final ResourceBundle BUNDLE
-            = ResourceBundle.getBundle("pl/koder95/emt/strings");
+            = ResourceBundle.getBundle("pl/koder95/eme/strings");
     /**
      * Używana stała dla Polski.
      */
@@ -63,7 +62,7 @@ public class Main {
      */
     public static final Collator DEFAULT_COLLATOR
             = Collator.getInstance(POLISH); //NOI18N
-    private static final String FAV_PATH_START = "pl/koder95/emt/favicon";
+    private static final String FAV_PATH_START = "pl/koder95/eme/favicon";
     /**
      * Ikona dla okienek.
      */

@@ -25,7 +25,7 @@ import pl.koder95.eme.idf.Index;
  * czy zawiera dane, które zaczynają się jak odpowiadające im dane w kwerendzie.
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.0.201, 2017-08-16
+ * @version 0.0.202, 2017-08-23
  * @since 0.0.201
  */
 class DataSearchStrategy extends SearchStrategy {
@@ -41,17 +41,17 @@ class DataSearchStrategy extends SearchStrategy {
         
         LinkedList<Index> result = new LinkedList<>();
         String[] qData = query.getData();
-        for (Index element: list) {
+        list.stream().forEach((element) -> {
             boolean add = false;
             for (int i = 0; i < qData.length; i++) {
                 for (int d = i; d < element.getData().length; d+=2) {
-                    String dataE = element.getData(d);
+                    String dataE = element.getData(d).toUpperCase();
                     String dataQ = qData[i];
                     if (dataE.startsWith(dataQ)) add = true;
                 }
             }
             if (add) result.add(element);
-        }
+        });
         return result;
     }
 

@@ -44,7 +44,7 @@ import pl.koder95.eme.idf.Index;
  * </ol>
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.0.201, 2017-08-16
+ * @version 0.0.202, 2017-08-23
  * @since 0.0.201
  */
 public class SearchContext {
@@ -58,14 +58,17 @@ public class SearchContext {
     public void setQuery(AbstractSearchQuery query) {
         strategy.query = query;
     }
+    
+    private void constantQuery() {
+        setQuery(ConstantSearchQuery.toConstant(strategy.query));
+    }
 
     /**
      * @param loaded lista indeksów, które mają zostać przeszukane
      * @return wynik wyszukiwania
      */
     public Index[] search(List<Index> loaded) {
-        System.out.println("Strategy: " + strategy);
-        System.out.println("searching...");
+        constantQuery();
         LinkedList<Index> search = strategy.searchFor(loaded);
         Index[] array = search.toArray(new Index[search.size()]);
         for (Index i: array) {
@@ -73,8 +76,6 @@ public class SearchContext {
         }
         array = search.toArray(new Index[search.size()]);
         search.clear();
-        System.out.println("searching done");
-        System.out.println(java.util.Arrays.toString(array));
         return array;
     }
     

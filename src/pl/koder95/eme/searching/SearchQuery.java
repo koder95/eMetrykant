@@ -26,7 +26,7 @@ import pl.koder95.eme.idf.ActNumber;
  * Klasa reprezentuje kwerendę wyszukującą.
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.0.201, 2017-08-16
+ * @version 0.0.202, 2017-08-23
  * @since 0.0.201
  */
 public class SearchQuery extends AbstractSearchQuery {
@@ -80,10 +80,13 @@ public class SearchQuery extends AbstractSearchQuery {
 
     @Override
     int getYear() {
-        int year;
+        int year = -1;
         try (Scanner scan = new Scanner(String.join(" ", phrase.getWords()))) {
-            scan.useDelimiter(" ");
-            year = scan.nextInt();
+            while (scan.hasNext()) {
+                if (scan.hasNextInt()) {
+                    year = scan.useDelimiter(" ").nextInt(); break;
+                } else scan.next();
+            }
         } catch (InputMismatchException ex) {
             ActNumber an = getActNumber();
             if (an == null) return -1;

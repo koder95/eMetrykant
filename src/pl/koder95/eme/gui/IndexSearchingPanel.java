@@ -23,12 +23,15 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.PlainDocument;
 
 /**
  * Panel zawiera komponenty umożliwiające wyszukiwanie indeksów.
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.0.201, 2017-08-16
+ * @version 0.0.202, 2017-08-23
  * @since 0.0.201
  */
 public class IndexSearchingPanel extends JPanel {
@@ -43,6 +46,13 @@ public class IndexSearchingPanel extends JPanel {
         searchButton.setEnabled(false);
         yearCombo.setEnabled(false);
         searchField.setPreferredSize(new java.awt.Dimension(250, 20));
+        PlainDocument doc = new PlainDocument() {
+            @Override
+            public void insertString(int offs, String str, AttributeSet a) throws BadLocationException {
+                super.insertString(offs, str.toUpperCase(), a);
+            }
+        };
+        searchField.setDocument(doc);
         searchLabel.setText("Wyszukaj:");
         searchButton.setText("Szukaj");
         

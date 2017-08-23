@@ -35,7 +35,7 @@ import pl.koder95.eme.idf.Indices;
  * Klasa zarządza całym interfejsem graficznym.
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.0.201, 2017-08-16
+ * @version 0.0.202, 2017-08-23
  * @since 0.0.201
  */
 public class GUIMediator implements KeyListener {
@@ -288,5 +288,6 @@ public class GUIMediator implements KeyListener {
      */
     public void showFrame() {
         gui.frame.setVisible(true);
+        updateFooter();
     }
 }
