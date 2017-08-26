@@ -25,6 +25,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import pl.koder95.eme.Main;
 import static pl.koder95.eme.Main.BUNDLE;
 import static pl.koder95.eme.Main.CSV_DEFAULT_CHARSET;
 import static pl.koder95.eme.Main.DATA_DIR;
@@ -38,7 +39,7 @@ import pl.koder95.eme.gui.MarriageIndexInfoPanel;
  * Zawiera wszystkie typy ksiąg i zawierających się w nich zbiorach indeksów.
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.0.201, 2017-08-16
+ * @version 0.0.203, 2017-08-26
  * @since 0.0.201
  */
 public enum Indices {
@@ -165,5 +166,15 @@ public enum Indices {
      */
     public IndexInfoPanel getInfoPanel() {
         return infoPanel;
+    }
+
+    /**
+     * Usuwa wczytane dane i zwalnia pamięć dla potencjalnie nowych danych.
+     * 
+     * @since 0.0.203
+     */
+    public void clear() {
+        loaded.clear();
+        Main.releaseMemory();
     }
 }

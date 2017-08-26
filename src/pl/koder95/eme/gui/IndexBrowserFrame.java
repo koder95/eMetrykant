@@ -18,6 +18,8 @@ package pl.koder95.eme.gui;
 
 import pl.koder95.eme.Main;
 import java.awt.Insets;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -34,7 +36,7 @@ import pl.koder95.eme.idf.Indices;
  * Ramka wyświetlająca interfejs wyszukiwania indeksów.
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.0.201, 2017-08-16
+ * @version 0.0.203, 2017-08-26
  * @since 0.0.201
  */
 public class IndexBrowserFrame extends JFrame {
@@ -55,6 +57,13 @@ public class IndexBrowserFrame extends JFrame {
         super.setTitle("eMetrykant — " + searcher.getIndices().getName());
         super.setMinimumSize(new java.awt.Dimension(384, 365));
         super.setResizable(false);
+        super.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent e) {
+                indices.clear();
+            }
+            
+        });
         this.infoPanel = searcher.getIndices().getInfoPanel();
         initComponents();
 

@@ -30,7 +30,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 /**
  * Klasa uruchamiająca i inicjalizująca podstawowe elementy aplikacji.
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.0.202, 2017-08-23
+ * @version 0.0.203, 2017-08-26
  * @since 0.0.201
  */
 public class Main {
@@ -91,7 +91,8 @@ public class Main {
     /**
      * Wzór identyfikujący liczby w stringu.
      */
-    public static final Pattern DIGITS_STRING_PATTERN = Pattern.compile( "([0-9]*)");
+    public static final Pattern DIGITS_STRING_PATTERN
+            = Pattern.compile("([0-9]*)");
     
     static {
         try {
@@ -104,7 +105,7 @@ public class Main {
     }
 
     /**
-     * Tworzy nowy obiekt {@link pl.koder95.eme.SystemTray SystemTray} i wywołuje
+    * Tworzy nowy obiekt {@link pl.koder95.eme.SystemTray SystemTray} i wywołuje
      * metodę {@link pl.koder95.emt.SystemTray#start() start()}.
      * 
      * @param args może być <code>null</code>;
@@ -198,5 +199,13 @@ public class Main {
             InstantiationException, IllegalAccessException,
             UnsupportedLookAndFeelException {
         UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+    }
+    
+    /**
+     * @since 0.0.203
+     * @see MemoryUtils#releaseMemory()
+     */
+    public static void releaseMemory() {
+        MemoryUtils.releaseMemory();
     }
 }

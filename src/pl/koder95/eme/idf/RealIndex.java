@@ -15,7 +15,7 @@ import java.util.Arrays;
  * wirtualnego}.
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.0.201, 2017-08-16
+ * @version 0.0.203, 2017-08-26
  * @since 0.0.201
  */
 class RealIndex extends Index {
@@ -47,6 +47,18 @@ class RealIndex extends Index {
     public String toString() {
         return ID + ": " + AN + " " + Arrays.deepToString(data);
     }
+
+    @Override
+    @SuppressWarnings("FinalizeDeclaration")
+    protected void finalize() throws Throwable {
+        try {
+            for (int i = 0; i < data.length; i++) {
+                data[i] = null;
+            }
+        } finally {
+            super.finalize();
+        }
+    }
     
     /**
      * @param indices zbiór indeksów, z którego pochodzi ten indeks
@@ -62,13 +74,24 @@ class RealIndex extends Index {
      * 
      * @param id identyfikator
      * @param line linia, ciąg znaków pochodzący np. z pliku
-     * @return nowy rzeczywisty indeks
+     * @exception IllegalArgumentException linia nie jest pusta, a nie zawiera
+     * delimitera ({@code ';'})
+     * @return nowy rzeczywisty indeks, {@code null} - linia jest pusta lub
+     * rozpoczyna się od delimitera ({@code ';'})
      */
-    public static RealIndex create(int id, String line) {
+    public static RealIndex create(int id, String line)
+            throws IllegalArgumentException{
         if (line.isEmpty()) return null;
         if (line.startsWith(";")) return null;
+        if (!line.contains(";")) 
+            throw new IllegalArgumentException(
+                    "line does not contains specified delimiter"
+            );
+        
         ArrayList<String> dataL = new ArrayList<>();
         dataL.addAll(Arrays.asList(line.split(";")));
+        if (dataL.get(dataL.size()-1).matches("( )+"))
+            dataL.remove(dataL.size()-1);
         
         int year = Integer.parseInt(dataL.remove(dataL.size()-1));
         String sign = dataL.remove(dataL.size()-1);

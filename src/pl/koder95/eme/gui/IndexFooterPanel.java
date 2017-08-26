@@ -25,7 +25,7 @@ import javax.swing.JPanel;
  * Stopka wyświetlająca ogólne informacje.
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.0.201, 2017-08-16
+ * @version 0.0.203, 2017-08-26
  * @since 0.0.201
  */
 public class IndexFooterPanel extends JPanel {
@@ -37,8 +37,9 @@ public class IndexFooterPanel extends JPanel {
      * Domyślny konstruktor.
      */
     public IndexFooterPanel() {
-        min.setFont(BOLD);
         max.setFont(BOLD);
+        min.setFont(BOLD);
+        sum.setFont(BOLD);
         
         GroupLayout l = new GroupLayout(this);
         super.setLayout(l);
@@ -52,6 +53,12 @@ public class IndexFooterPanel extends JPanel {
                 .addComponent(inter)
                 .addGap(0, 0, 0)
                 .addComponent(max)
+                .addGap(0, 0, 0)
+                .addComponent(preSum)
+                .addGap(0, 0, 0)
+                .addComponent(sum)
+                .addGap(0, 0, 0)
+                .addComponent(end)
                 .addGap(0, 0, Short.MAX_VALUE)
         );
         l.setVerticalGroup(l.createParallelGroup(GroupLayout.Alignment.BASELINE)
@@ -60,6 +67,9 @@ public class IndexFooterPanel extends JPanel {
                 .addComponent(inter)
                 .addComponent(max)
                 .addComponent(title)
+                .addComponent(end)
+                .addComponent(preSum)
+                .addComponent(sum)
         );
     }
 
@@ -85,12 +95,21 @@ public class IndexFooterPanel extends JPanel {
     public JLabel getTitle() {
         return title;
     }
+/**
+     * @return etykieta, wyświetlająca ilość wczytanych indeksów do zbioru
+     */
+    public JLabel getSum() {
+        return sum;
+    }
     
     // Variables declaration - do not modify
+    private final JLabel end = new JLabel(" indeksów.");
     private final JLabel inter = new JLabel(" do ");
     private final JLabel max = new JLabel("-/-");
     private final JLabel min = new JLabel("-/-");
     private final JLabel prefix = new JLabel(" zawiera dane od ");
+    private final JLabel preSum = new JLabel(", czyli w sumie ");
+    private final JLabel sum = new JLabel("0");
     private final JLabel title = new JLabel("Program");
     // End of variables declaration
 }

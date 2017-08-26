@@ -19,6 +19,7 @@ package pl.koder95.eme.searching;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import pl.koder95.eme.Main;
 import pl.koder95.eme.idf.Index;
 
 /**
@@ -44,7 +45,7 @@ import pl.koder95.eme.idf.Index;
  * </ol>
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.0.202, 2017-08-23
+ * @version 0.0.203, 2017-08-26
  * @since 0.0.201
  */
 public class SearchContext {
@@ -89,6 +90,7 @@ public class SearchContext {
         Index theBest = searchResult.pollFirst();
         while (!searchResult.isEmpty())
             theBest = better(theBest, searchResult.pollFirst());
+        Main.releaseMemory();
         return theBest;
     }
     
@@ -122,7 +124,9 @@ public class SearchContext {
             String data0 = strategy.query.getData(ii);
             for (int d = ii; d < i.getData().length; d+=2) {
                 String data1 = i.getData(d);
-                similarity*= similarity(data0, data1);
+                similarity*= similarity(
+                        data0.toUpperCase(), data1.toUpperCase()
+                );
             }
         }
         return similarity;

@@ -18,16 +18,20 @@ package pl.koder95.eme.gui;
 
 import java.awt.Rectangle;
 import java.awt.Toolkit;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import static java.awt.event.KeyEvent.VK_LEFT;
-import static java.awt.event.KeyEvent.VK_RIGHT;
-import java.awt.event.KeyListener;
+import java.awt.event.ActionEvent;
 import java.util.Arrays;
+import javax.swing.AbstractAction;
+import javax.swing.ActionMap;
+import javax.swing.ComponentInputMap;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.InputMap;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JList;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.KeyStroke;
+import pl.koder95.eme.Main;
 import pl.koder95.eme.idf.Index;
 import pl.koder95.eme.idf.Indices;
 
@@ -35,10 +39,10 @@ import pl.koder95.eme.idf.Indices;
  * Klasa zarządza całym interfejsem graficznym.
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.0.202, 2017-08-23
+ * @version 0.0.203, 2017-08-26
  * @since 0.0.201
  */
-public class GUIMediator implements KeyListener {
+public class GUIMediator {
     
     private class GUI {
         IndexBrowserFrame frame;
@@ -80,6 +84,8 @@ public class GUIMediator implements KeyListener {
     }
     
     private final GUI gui;
+    private final ActionMap actions = new ActionMap();
+    private final InputMap input;
     
     /**
      * Tworzy GUI zależnie od zbioru indeksów.
@@ -88,18 +94,58 @@ public class GUIMediator implements KeyListener {
      */
     public GUIMediator(Indices indices) {
         gui = new GUI(indices);
-        gui.frame.addKeyListener((KeyListener) this);
+        input = new ComponentInputMap((JComponent) gui.frame.getContentPane());
+        ((JPanel) gui.frame.getContentPane()).setActionMap(actions);
+        ((JPanel) gui.frame.getContentPane())
+                .setInputMap(JPanel.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT, input);
         
-        gui.getPrevButton().addActionListener((e) -> prevIndex());
-        gui.getNextButton().addActionListener((e) -> nextIndex());
-        gui.getSearchingPanel().getActSearching()
-                .addActionListener((e) -> switchSearching());
         gui.getSearchingPanel().getYearCombo()
                 .addActionListener((e) -> loadActComboBoxModel());
+        actions.put("search", new AbstractAction("Szukaj") {
+            private static final long serialVersionUID = 4377386270269629176L;
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                search();
+            }
+        });
         
-        ActionListener search = (e) -> search();
-        gui.getSearchingPanel().getSearchButton().addActionListener(search);
-        gui.getSearchingPanel().getSearchField().addActionListener(search);
+        gui.getSearchingPanel().getActSearching().setAction(
+                new AbstractAction() {
+            private static final long serialVersionUID = -5644390861803492172L;
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                setActSearchingEnable(!gui.getSearchingPanel().getActCombo()
+                        .isEnabled());
+            }
+        });
+        gui.getPrevButton().setAction(new AbstractAction("<") {
+            private static final long serialVersionUID = 4377386270269629176L;
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                setIndex(gui.getInfoPanel().getIndexID()-1);
+            }
+        });
+        gui.getNextButton().setAction(new AbstractAction(">") {
+            private static final long serialVersionUID = -5644390861803492172L;
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                setIndex(gui.getInfoPanel().getIndexID()+1);
+            }
+        });
+        actions.put("switchSearching", gui.getSearchingPanel().getActSearching()
+                .getAction());
+        actions.put("prevIndex", gui.getPrevButton().getAction());
+        actions.put("nextIndex", gui.getNextButton().getAction());
+        
+        gui.getSearchingPanel().getSearchButton()
+                .setAction(actions.get("search"));
+        gui.getSearchingPanel().getSearchField()
+                .setAction(actions.get("search"));
+        
+        input.put(KeyStroke.getKeyStroke("pressed ENTER"), "search");
+        input.put(KeyStroke.getKeyStroke("pressed INSERT"), "switchSearching");
+        input.put(KeyStroke.getKeyStroke("pressed PAGE_DOWN"), "prevIndex");
+        input.put(KeyStroke.getKeyStroke("pressed PAGE_UP"), "nextIndex");
     }
     
     /**
@@ -112,6 +158,17 @@ public class GUIMediator implements KeyListener {
         else {
             gui.getInfoPanel().setIndex(i);
         }
+    }
+    
+    /**
+     * Ustawia indeks, który ma zostać wyświetlony w panelu informacyjnym.
+     * 
+     * @param id identyfikator
+     */
+    public void setIndex(int id) {
+        int size = gui.getSearcher().getIndices().size();
+        if (id < 1 || id > size) setIndex(null);
+        else setIndex(gui.getSearcher().get(id));
     }
 
     /**
@@ -126,14 +183,14 @@ public class GUIMediator implements KeyListener {
      * Ustawia następny indeks.
      */
     public void nextIndex() {
-        setIndex(gui.getSearcher().get(gui.getInfoPanel().getIndexID()+1));
+        setIndex(gui.getInfoPanel().getIndexID()+1);
     }
     
     /**
      * Ustawia poprzedni indeks.
      */
     public void prevIndex() {
-        setIndex(gui.getSearcher().get(gui.getInfoPanel().getIndexID()-1));
+        setIndex(gui.getInfoPanel().getIndexID()-1);
     }
     
     /**
@@ -146,7 +203,7 @@ public class GUIMediator implements KeyListener {
     public void setActSearchingEnable(boolean actSearching) {
         gui.getSearchingPanel().getActCombo().setEnabled(actSearching);
         gui.getSearchingPanel().getYearCombo().setEnabled(actSearching);
-        gui.getSearchingPanel().getSearchButton().setEnabled(actSearching);
+        gui.getSearchingPanel().getActSearching().setSelected(actSearching);
         if (actSearching) {
             DefaultComboBoxModel<Integer> model = new DefaultComboBoxModel<>();
             int minYear = gui.getFirstIndex().getActNumber().getYear(),
@@ -226,6 +283,7 @@ public class GUIMediator implements KeyListener {
         }
         if (result != null) setForm(gui.getSearcher().selectOne(result));
         else Toolkit.getDefaultToolkit().beep();
+        Main.releaseMemory();
     }
     
     /**
@@ -238,6 +296,7 @@ public class GUIMediator implements KeyListener {
                 + "/" + gui.getFirstIndex().getActNumber().getYear());
         footer.getMax().setText(gui.getLastIndex().getActNumber().getSign()
                 + "/" + gui.getLastIndex().getActNumber().getYear());
+        footer.getSum().setText("" + gui.getSearcher().getIndices().size());
     }
     
     /**
@@ -265,22 +324,6 @@ public class GUIMediator implements KeyListener {
                 w,
                 h
         );
-    }
-
-    @Override
-    public void keyPressed(KeyEvent e) {
-        if (VK_LEFT == e.getKeyCode()) gui.getPrevButton().doClick();
-        if (VK_RIGHT == e.getKeyCode()) gui.getNextButton().doClick();
-    }
-
-    @Override
-    public void keyTyped(KeyEvent e) {
-        // do nothing
-    }
-
-    @Override
-    public void keyReleased(KeyEvent e) {
-        // do nothing
     }
     
     /**
