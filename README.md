@@ -13,11 +13,12 @@ Program do odczytywania i przeszukiwania bazy danych dot. metryk parafialnych.
   ![screen2](https://user-images.githubusercontent.com/9617256/29740481-feef37e6-8a57-11e7-919d-5f2f6f804921.png)
 
 ## Faza buildów
-Dnia 8 sierpnia 2017 rozpoczęła się faza testów wstępnych przed ukończeniem wersji 0.1, która będzie wersją alfa. Planowanych jest 7 buildów przed wypuszczeniem wersji alfa. Build 7 został opublikowany 23 sierpnia 2017, co oznacza, że faza buildów dobiegła końca i do 15 września 2017 należy się spodziewać wydania wersji alfa, przedpremierowej. W przypadku znalezienia błędów w build 7 należy zgłosić je na [ten](mailto:kammul@outlook.com) adres, bądź na stronie [Issues](https://github.com/koder95/eMetrykant/issues).
+Dnia 8 sierpnia 2017 rozpoczęła się faza testów wstępnych przed ukończeniem wersji 0.1, która będzie wersją alfa. Planowanych jest 7 buildów przed wypuszczeniem wersji alfa. Build 7 został opublikowany 23 sierpnia 2017, co oznacza, że faza buildów została zakończona pomyślnie i do końca sierpnia należy się spodziewać wydania wersji alfa, przedpremierowej.
 
 Wersje poprawiające build 7:
 - Wersja 0.0.203 poprawia błędy z build 7 i optymalizuje program.
 - Wersja 0.0.204 dodaje możliwość łączenia wyrazów.
+- Wersja 0.0.205 zmienia zasadę działania przycisków '<' i '>' oraz klawiszy 'Page Up' i 'Page Down'. Wersja bazowa dla wersji alfa.
 
 ## Zestaw przykładowych danych
 Aby program działał poprawnie, należy w tym miejscu, gdzie on się znajduje, umieścić również folder _data_ z danymi do wczytania. Dane te są w formie 4 plików o rozszerzeniu CSV. Można pobrać paczkę z przykładowymi danymi, które nie są rzeczywiste.
