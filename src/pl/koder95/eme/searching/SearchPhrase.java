@@ -56,10 +56,12 @@ package pl.koder95.eme.searching;
  * 
  * Jednak, aby nie było to zamknięte ostateczne rozwiązanie lepiej dać dowolność
  * określania jakie są słowa i które z nich to te unikalne ID lub AN.
- * 
+ * <p>
+ * Istnieje możliwość łączenia wyrazów przez wstawienie znaku '_' zamiast
+ * spacji.
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.0.201, 2017-08-16
+ * @version 0.0.204, 2017-08-26
  * @since 0.0.201
  */
 public class SearchPhrase {
@@ -155,6 +157,11 @@ public class SearchPhrase {
 
         private DataSearchPhrase(String... data) {
             super(data, -1, -1);
+            for (int i = 0; i < data.length; i++) {
+                if (data[i].contains("_")) {
+                    data[i] = data[i].replace('_', ' ');
+                }
+            }
         }
         
     }
