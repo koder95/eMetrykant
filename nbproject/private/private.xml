@@ -1,19 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
-    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="1"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Kamil/OneDrive/JAVA/Indeksy%20parafialne/src/pl/koder95/ip/MainFrame.java</file>
-            <file>file:/C:/Users/Kamil/OneDrive/JAVA/Indeksy%20parafialne/src/pl/koder95/ip/IndexBrowserFrame.java</file>
-            <file>file:/C:/Users/Kamil/OneDrive/JAVA/Indeksy%20parafialne/src/pl/koder95/ip/idf/Index.java</file>
-            <file>file:/C:/Users/Kamil/OneDrive/JAVA/Indeksy%20parafialne/src/pl/koder95/ip/SuggestIndexManager.java</file>
-            <file>file:/C:/Users/Kamil/OneDrive/JAVA/Indeksy%20parafialne/src/pl/koder95/ip/IndexBrowserMediator.java</file>
-            <file>file:/C:/Users/Kamil/OneDrive/JAVA/Indeksy%20parafialne/src/pl/koder95/ip/IndexBrowser.java</file>
-            <file>file:/C:/Users/Kamil/OneDrive/JAVA/Indeksy%20parafialne/src/pl/koder95/ip/ActManager.java</file>
-            <file>file:/C:/Users/Kamil/OneDrive/JAVA/Indeksy%20parafialne/src/pl/koder95/ip/Main.java</file>
-            <file>file:/C:/Users/Kamil/OneDrive/JAVA/Indeksy%20parafialne/src/pl/koder95/ip/idf/IndexBrowser.java</file>
-            <file>file:/C:/Users/Kamil/OneDrive/JAVA/Indeksy%20parafialne/src/pl/koder95/tools/Eliminator.java</file>
-            <file>file:/C:/Users/Kamil/OneDrive/JAVA/Indeksy%20parafialne/src/pl/koder95/ip/IndexInfoPanel.java</file>
+            <file>file:/C:/Users/Kamil/OneDrive/JAVA/eMetrykant/src/pl/koder95/eme/gui/IndexBrowserFrame.java</file>
+            <file>file:/C:/Users/Kamil/OneDrive/JAVA/eMetrykant/src/pl/koder95/eme/idf/RealIndex.java</file>
+            <file>file:/C:/Users/Kamil/OneDrive/JAVA/eMetrykant/src/pl/koder95/eme/Main.java</file>
+            <file>file:/C:/Users/Kamil/OneDrive/JAVA/eMetrykant/src/pl/koder95/eme/gui/IndexFooterPanel.java</file>
+            <file>file:/C:/Users/Kamil/OneDrive/JAVA/eMetrykant/src/pl/koder95/eme/SystemTray.java</file>
+            <file>file:/C:/Users/Kamil/OneDrive/JAVA/eMetrykant/src/pl/koder95/eme/idf/Indices.java</file>
+            <file>file:/C:/Users/Kamil/OneDrive/JAVA/eMetrykant/src/pl/koder95/eme/MemoryUtils.java</file>
+            <file>file:/C:/Users/Kamil/OneDrive/JAVA/eMetrykant/src/pl/koder95/eme/gui/GUIMediator.java</file>
         </group>
     </open-files>
 </project-private>
