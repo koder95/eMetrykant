@@ -1,1 +1,0 @@
-﻿Dane zostały wygenerowane.
