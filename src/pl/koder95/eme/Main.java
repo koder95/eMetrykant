@@ -33,7 +33,7 @@ import javax.xml.transform.TransformerException;
 /**
  * Klasa uruchamiająca i inicjalizująca podstawowe elementy aplikacji.
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.0.203, 2017-08-26
+ * @version 0.1.2, 2017-09-05
  * @since 0.0.201
  */
 public class Main {
@@ -102,14 +102,17 @@ public class Main {
             setSystemLookAndFeel();
         } catch (ClassNotFoundException | InstantiationException 
                 | IllegalAccessException | UnsupportedLookAndFeelException ex) {
-            showErrorMessage(null, ex.getLocalizedMessage(),
-                    BUNDLE.getString("ERR_GUI_TITLE"));
+            showErrorMessage(ex.getLocalizedMessage(),
+                    BUNDLE.getString("ERR_GUI_TITLE"), true);
         }
     }
 
     /**
-    * Tworzy nowy obiekt {@link pl.koder95.eme.SystemTray SystemTray} i wywołuje
-     * metodę {@link pl.koder95.emt.SystemTray#start() start()}.
+     * Tworzy nowy obiekt {@link pl.koder95.eme.SystemTray SystemTray}
+     * i wywołuje metodę {@link pl.koder95.emt.SystemTray#start() start()}.
+     * Metoda na samym początku działania uruchamia konwerter CSV, który
+     * w folderze data tworzy plik indices.xml zawierający dane ze wszystkich
+     * plików CSV w tym folderze.
      * 
      * @param args może być <code>null</code>;
      * <i style="color:red;">ignorowany</i>
@@ -120,6 +123,7 @@ public class Main {
             ConverterCSV.convert(conv, DATA_DIR.list(
                     (File d, String name) -> name.endsWith(".csv")
             ));
+            Main.releaseMemory();
         } catch (ParserConfigurationException | IOException
                 | TransformerException ex) {
             showErrorMessage(ex.getMessage(), ex.getClass().getCanonicalName());

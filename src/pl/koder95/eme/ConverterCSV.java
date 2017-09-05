@@ -26,7 +26,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
@@ -36,8 +35,11 @@ import org.w3c.dom.Element;
 import static pl.koder95.eme.Main.DATA_DIR;
 
 /**
+ * Umożliwia przekonwertowanie plików o rozszerzeniu CSV na plik XML.
  *
  * @author Kamil Jan Mularski [@koder95]
+ * @version 0.1.2, 2017-09-05
+ * @since 0.1.1
  */
 public final class ConverterCSV {
 
@@ -101,8 +103,7 @@ public final class ConverterCSV {
         }
     }
     
-    private void saveXML() throws IOException,
-            TransformerConfigurationException, TransformerException {
+    private void saveXML() throws IOException, TransformerException {
         TransformerFactory ftrans = TransformerFactory.newInstance();
         Transformer trans = ftrans.newTransformer();
         trans.setOutputProperty(OutputKeys.INDENT, "yes");
@@ -132,9 +133,22 @@ public final class ConverterCSV {
         doc = null;
         out = null;
         root = null;
-        Main.releaseMemory();
     }
     
+    /**
+     * Konwertuje pliki CSV na XML, tak aby zawierające w każdym z nich dane
+     * przydzielone były do ksiąg o podanych nazwach.
+     * 
+     * @param csv konwerter CSV
+     * @param csvFileNames nazwy plików
+     * @param bookNames nazwy ksiąg
+     * 
+     * @throws ParserConfigurationException jeśli {@code DocumentBuilder}
+     * nie może być utworzony co wymaga określonej konfiguracji
+     * @throws IOException błąd wejścia/wyjścia
+     * @throws TransformerException Jeśli nie do naprawienia błąd występuje
+     * w trakcie przebiegu transformacji lub brakuje odpowiedniej konfiguracji.
+     */
     public static void convert(ConverterCSV csv, String[] csvFileNames,
             String[] bookNames)
             throws ParserConfigurationException, IOException,
@@ -148,6 +162,19 @@ public final class ConverterCSV {
         csv.clear();
     }
     
+    /**
+     * Konwertuje pliki CSV na XML, tak aby zawierające w każdym z nich dane
+     * przydzielone były do ksiąg o nazwach zaczerpniętych z nazw plików.
+     * 
+     * @param csv konwerter CSV
+     * @param csvFileNames nazwy plików
+     * 
+     * @throws ParserConfigurationException jeśli {@code DocumentBuilder}
+     * nie może być utworzony co wymaga określonej konfiguracji
+     * @throws IOException błąd wejścia/wyjścia
+     * @throws TransformerException Jeśli nie do naprawienia błąd występuje
+     * w trakcie przebiegu transformacji lub brakuje odpowiedniej konfiguracji.
+     */
     public static void convert(ConverterCSV csv, String[] csvFileNames)
             throws ParserConfigurationException, IOException,
             TransformerException {
@@ -158,16 +185,29 @@ public final class ConverterCSV {
         csv.clear();
     }
     
+    /**
+     * Tworzy nowy konwerter, który pracować będzie w określonych warunkach.
+     * 
+     * @param csvDir definiuje folder, z którego pobierane będą pliki CSV do
+     * przekonwertowania
+     * @param xmlDir definiuje folder, gdzie zapisany zostanie plik XML
+     * @param xmlFileName definiuje nazwę nowego pliku XML
+     * @return nowy konwerter
+     */
     public static ConverterCSV create(File csvDir, File xmlDir,
-            String xmlFileName)
-            throws ParserConfigurationException, IOException,
-            TransformerException {
+            String xmlFileName) {
         return new ConverterCSV(csvDir, new File(xmlDir, xmlFileName));
     }
     
-    public static ConverterCSV create(File dataDir, String xmlFileName)
-            throws ParserConfigurationException, IOException,
-            TransformerException {
+    /**
+     * Tworzy nowy konwerter, który pracować będzie w określonych warunkach.
+     * 
+     * @param dataDir definiuje folder, z którego pobierane będą pliki CSV do
+     * przekonwertowania i gdzie zapisany zostanie plik XML
+     * @param xmlFileName definiuje nazwę nowego pliku XML
+     * @return nowy konwerter
+     */
+    public static ConverterCSV create(File dataDir, String xmlFileName) {
         return new ConverterCSV(dataDir, new File(dataDir, xmlFileName));
     }
 }
