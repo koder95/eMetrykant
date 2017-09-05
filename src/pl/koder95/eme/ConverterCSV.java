@@ -30,6 +30,7 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import static pl.koder95.eme.Main.DATA_DIR;
@@ -38,7 +39,7 @@ import static pl.koder95.eme.Main.DATA_DIR;
  * Umożliwia przekonwertowanie plików o rozszerzeniu CSV na plik XML.
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.1.2, 2017-09-05
+ * @version 0.1.3, 2017-09-05
  * @since 0.1.1
  */
 public final class ConverterCSV {
@@ -83,12 +84,49 @@ public final class ConverterCSV {
         return book;
     }
     
-    private Element createIndex(Element book, String an, String data) {
+    private Element createIndex(Element book, String an, Attr[] attrs) {
         Element index = doc.createElement("index");
         index.setAttribute("an", an);
-        index.setAttribute("data", data);
+        for (Attr a: attrs) index.setAttributeNode(a);
         book.appendChild(index);
         return index;
+    }
+    
+    private Element createIndex(Element book, String an,
+            String husbandSurname, String husbandName, String wifeSurname,
+            String wifeName) {
+        Attr[] attrs = {
+            doc.createAttribute("husband-surname"),
+            doc.createAttribute("husband-name"),
+            doc.createAttribute("wife-surname"),
+            doc.createAttribute("wife-name")
+        };
+        attrs[0].setValue(husbandSurname);
+        attrs[1].setValue(husbandName);
+        attrs[2].setValue(wifeSurname);
+        attrs[3].setValue(wifeName);
+        return createIndex(book, an, attrs);
+    }
+    
+    private Element createIndex(Element book, String an, String surname,
+            String name) {
+        Attr[] attrs = {
+            doc.createAttribute("surname"),
+            doc.createAttribute("name")
+        };
+        attrs[0].setValue(surname);
+        attrs[1].setValue(name);
+        return createIndex(book, an, attrs);
+    }
+    
+    private Element createIndex(Element book, String an, String data) {
+        String[] cells = data.split(";");
+        switch (cells.length) {
+            case 2: return createIndex(book, an, cells[0], cells[1]);
+            case 4: return createIndex(book, an, cells[0], cells[1], cells[2],
+                    cells[3]);
+            default: return createIndex(book, an, new Attr[0]);
+        }
     }
     
     private Element createIndex(Element book, String line) {
