@@ -3,14 +3,17 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="1"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Kamil/OneDrive/JAVA/eMetrykant/src/pl/koder95/eme/gui/IndexBrowserFrame.java</file>
             <file>file:/C:/Users/Kamil/OneDrive/JAVA/eMetrykant/src/pl/koder95/eme/idf/RealIndex.java</file>
-            <file>file:/C:/Users/Kamil/OneDrive/JAVA/eMetrykant/src/pl/koder95/eme/Main.java</file>
-            <file>file:/C:/Users/Kamil/OneDrive/JAVA/eMetrykant/src/pl/koder95/eme/gui/IndexFooterPanel.java</file>
-            <file>file:/C:/Users/Kamil/OneDrive/JAVA/eMetrykant/src/pl/koder95/eme/SystemTray.java</file>
+            <file>file:/C:/Users/Kamil/OneDrive/JAVA/eMetrykant/src/pl/koder95/eme/searching/SearchPhrase.java</file>
+            <file>file:/C:/Users/Kamil/OneDrive/JAVA/eMetrykant/src/pl/koder95/eme/idf/Year.java</file>
+            <file>file:/C:/Users/Kamil/OneDrive/JAVA/eMetrykant/src/pl/koder95/eme/idf/Book.java</file>
+            <file>file:/C:/Users/Kamil/OneDrive/JAVA/eMetrykant/src/pl/koder95/eme/idf/BookTemplate.java</file>
             <file>file:/C:/Users/Kamil/OneDrive/JAVA/eMetrykant/src/pl/koder95/eme/idf/Indices.java</file>
-            <file>file:/C:/Users/Kamil/OneDrive/JAVA/eMetrykant/src/pl/koder95/eme/MemoryUtils.java</file>
             <file>file:/C:/Users/Kamil/OneDrive/JAVA/eMetrykant/src/pl/koder95/eme/gui/GUIMediator.java</file>
+            <file>file:/C:/Users/Kamil/OneDrive/JAVA/eMetrykant/src/pl/koder95/eme/searching/DataSearchStrategy.java</file>
+            <file>file:/C:/Users/Kamil/OneDrive/JAVA/eMetrykant/src/pl/koder95/eme/idf/BookTemplateLoader.java</file>
+            <file>file:/C:/Users/Kamil/OneDrive/JAVA/eMetrykant/README.md</file>
+            <file>file:/C:/Users/Kamil/OneDrive/JAVA/eMetrykant/src/pl/koder95/eme/searching/SearchQuery.java</file>
         </group>
     </open-files>
 </project-private>

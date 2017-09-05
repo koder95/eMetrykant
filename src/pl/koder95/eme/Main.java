@@ -19,6 +19,7 @@ package pl.koder95.eme;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.io.File;
+import java.io.IOException;
 import java.nio.charset.Charset;
 import java.text.Collator;
 import java.util.Locale;
@@ -26,6 +27,8 @@ import java.util.ResourceBundle;
 import java.util.regex.Pattern;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
 
 /**
  * Klasa uruchamiająca i inicjalizująca podstawowe elementy aplikacji.
@@ -112,6 +115,15 @@ public class Main {
      * <i style="color:red;">ignorowany</i>
      */
     public static void main(String[] args) {
+        try {
+            ConverterCSV conv = ConverterCSV.create(DATA_DIR, "indices.xml");
+            ConverterCSV.convert(conv, DATA_DIR.list(
+                    (File d, String name) -> name.endsWith(".csv")
+            ));
+        } catch (ParserConfigurationException | IOException
+                | TransformerException ex) {
+            showErrorMessage(ex.getMessage(), ex.getClass().getCanonicalName());
+        }
         SystemTray tray = new SystemTray();
         tray.init();
         tray.show();
