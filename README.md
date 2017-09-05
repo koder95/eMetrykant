@@ -21,9 +21,11 @@ Pierwsza stabilna wersja programu (v1.0.0), będzie programem, który w pełni p
 ### Wersja 0.2
 - Wczytywanie danych z pliku XML.
 - Konwerter danych z CSV do formatu XML.
+
+### Wersja 0.3
 - Podpowiedzi wyszukiwania.
 - Wyszukiwanie w księdze zaślubionych po płci.
 
-### Wersja 0.3
+### Wersja 0.4
 - Modernizacja GUI.
 - Dodanie możliwości edycji bazy indeksów.
