@@ -33,7 +33,7 @@ import javax.xml.transform.TransformerException;
 /**
  * Klasa uruchamiająca i inicjalizująca podstawowe elementy aplikacji.
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.1.2, 2017-09-05
+ * @version 0.1.4, 2017-09-06
  * @since 0.0.201
  */
 public class Main {
@@ -108,17 +108,14 @@ public class Main {
     }
 
     /**
-     * Tworzy nowy obiekt {@link pl.koder95.eme.SystemTray SystemTray}
-     * i wywołuje metodę {@link pl.koder95.emt.SystemTray#start() start()}.
-     * Metoda na samym początku działania uruchamia konwerter CSV, który
-     * w folderze data tworzy plik indices.xml zawierający dane ze wszystkich
-     * plików CSV w tym folderze.
+     * Uruchamia program.
      * 
-     * @param args może być <code>null</code>;
-     * <i style="color:red;">ignorowany</i>
+     * @param args jeśli tablica jest pusta, uruchamia program standardowo;
+     * jeśli tablica zawiera {@code "-c"}, zostanie uruchomiony konwerter plików
+     * CSV na XML
      */
     public static void main(String[] args) {
-        try {
+        if (args.length > 1 && args[0].equalsIgnoreCase("-c")) try {
             ConverterCSV conv = ConverterCSV.create(DATA_DIR, "indices.xml");
             ConverterCSV.convert(conv, DATA_DIR.list(
                     (File d, String name) -> name.endsWith(".csv")
@@ -128,9 +125,11 @@ public class Main {
                 | TransformerException ex) {
             showErrorMessage(ex.getMessage(), ex.getClass().getCanonicalName());
         }
-        SystemTray tray = new SystemTray();
-        tray.init();
-        tray.show();
+        else {
+            SystemTray tray = new SystemTray();
+            tray.init();
+            tray.show();
+        }
     }
     
     /**

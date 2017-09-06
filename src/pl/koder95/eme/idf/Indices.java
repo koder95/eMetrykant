@@ -16,18 +16,15 @@
  */
 package pl.koder95.eme.idf;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import javax.xml.parsers.ParserConfigurationException;
+import org.xml.sax.SAXException;
 import pl.koder95.eme.Main;
 import static pl.koder95.eme.Main.BUNDLE;
-import static pl.koder95.eme.Main.CSV_DEFAULT_CHARSET;
 import static pl.koder95.eme.Main.DATA_DIR;
 import static pl.koder95.eme.Main.READ_CSV_ERR_MESSAGE;
 import static pl.koder95.eme.Main.READ_CSV_ERR_TITLE;
@@ -39,10 +36,10 @@ import pl.koder95.eme.gui.MarriageIndexInfoPanel;
  * Zawiera wszystkie typy ksiąg i zawierających się w nich zbiorach indeksów.
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.0.203, 2017-08-26
+ * @version 0.1.4, 2017-09-06
  * @since 0.0.201
  */
-public enum Indices {
+public enum Indices implements IndexContainer {
 
     /**
      * Zbiór indeksów osób ochrzczonych. Indeksy zawierają dane: nazwisko,
@@ -78,10 +75,7 @@ public enum Indices {
         infoPanel = info;
     }
     
-    /**
-     * @param id identyfikator > 0
-     * @return indeks
-     */
+    @Override
     public Index get(int id) {
         return getReal(id).toVirtualIndex(this);
     }
@@ -89,41 +83,30 @@ public enum Indices {
     RealIndex getReal(int id) {
         return loaded.get(id-1);
     }
-
-    /**
-     * @return lista wczytanych indeksów
-     */
+    
+    @Override
     public List<Index> getLoaded() {
         List<Index> virtual = new LinkedList<>();
         loaded.stream().forEach((ri)
-                -> virtual.add(new VirtualIndex(ri.ID, this)));
+                -> virtual.add(get(ri.ID)));
         return virtual;
     }
     
-    private int load(String line) {
-        int id = loaded.size()+1;
-        RealIndex r = RealIndex.create(id, line);
-        if (r == null) return -1;
-        if (loaded.add(r)) return id;
-        return -1;
-    }
-    
     /**
-     * Wczytuje z dysku indeksy zapisane w pliku CSV
+     * Wczytuje z dysku indeksy zapisane w pliku XML.
      */
     public void load() {
-        loaded = new LinkedList<>();
-        try (BufferedReader reader
-                = new BufferedReader(new InputStreamReader(new FileInputStream(
-                        new File(DATA_DIR, fileName)), CSV_DEFAULT_CHARSET))) {
-            while (reader.ready()) load(reader.readLine());
+        BookLoader books = BookLoader.get();
+        try {
+            books.loadBookTemplate(new File(DATA_DIR, "templates.xml"), name);
+            books.createIndicesLoader(name);
+            loaded = books.load(new File(DATA_DIR, "indices.xml"), name);
         } catch (FileNotFoundException ex) {
             showErrorMessage(READ_CSV_ERR_MESSAGE, READ_CSV_ERR_TITLE, true);
-        } catch (IOException ex) {
+        } catch (IOException | SAXException | ParserConfigurationException ex) {
             showErrorMessage(BUNDLE.getString("ERR_EX_IO"),
                     BUNDLE.getString("ERR_EX_IO_TITLE"), true);
         }
-        loaded = new ArrayList<>(loaded);
     }
 
     /**
@@ -140,23 +123,17 @@ public enum Indices {
         return name;
     }
     
-    /**
-     * @return liczba indeksów wczytanych oraz ostatni utworzony identyfikator
-     */
+    @Override
     public int size() {
         return loaded.size();
     }
     
-    /**
-     * @return pierwszy indeks
-     */
+    @Override
     public Index getFirst() {
         return get(size());
     }
     
-    /**
-     * @return ostatni indeks
-     */
+    @Override
     public Index getLast() {
         return get(1);
     }
@@ -168,11 +145,7 @@ public enum Indices {
         return infoPanel;
     }
 
-    /**
-     * Usuwa wczytane dane i zwalnia pamięć dla potencjalnie nowych danych.
-     * 
-     * @since 0.0.203
-     */
+    @Override
     public void clear() {
         loaded.clear();
         Main.releaseMemory();

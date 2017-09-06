@@ -15,7 +15,7 @@ import java.util.Arrays;
  * wirtualnego}.
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.0.203, 2017-08-26
+ * @version 0.1.4, 2017-09-06
  * @since 0.0.201
  */
 class RealIndex extends Index {
@@ -104,6 +104,20 @@ class RealIndex extends Index {
      * Tworzy indeks na podstawie argumentów.
      * 
      * @param id identyfikator
+     * @param an numer aktu
+     * @param data dane, jakie zawierać ma indeks
+     * @return nowy rzeczywisty indeks
+     * @since 0.1.4
+     */
+    static RealIndex create(int id, ActNumber an, String[] data) {
+        System.out.println("data=" + Arrays.toString(data));
+        return new RealIndex(id, an, data);
+    }
+    
+    /**
+     * Tworzy indeks na podstawie argumentów.
+     * 
+     * @param id identyfikator
      * @param sign sygnatura
      * @param year rok
      * @param data dane, jakie zawierać ma indeks
@@ -111,6 +125,6 @@ class RealIndex extends Index {
      */
     public static RealIndex create(int id, String sign, int year,
             String[] data) {
-        return new RealIndex(id, new ActNumber(sign, year), data);
+        return create(id, new ActNumber(sign, year), data);
     }
 }

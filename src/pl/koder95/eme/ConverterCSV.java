@@ -39,7 +39,7 @@ import static pl.koder95.eme.Main.DATA_DIR;
  * Umożliwia przekonwertowanie plików o rozszerzeniu CSV na plik XML.
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.1.3, 2017-09-05
+ * @version 0.1.4, 2017-09-06
  * @since 0.1.1
  */
 public final class ConverterCSV {
@@ -131,7 +131,6 @@ public final class ConverterCSV {
     
     private Element createIndex(Element book, String line) {
         while (line.endsWith(";")) line = line.substring(0, line.length()-1);
-        System.out.println("line=" + line);
         String[] cells = line.split(";");
         if (cells.length < 2) return createIndex(book, "", "");
         else {
@@ -147,7 +146,6 @@ public final class ConverterCSV {
         trans.setOutputProperty(OutputKeys.INDENT, "yes");
         DOMSource src = new DOMSource(doc);
         trans.transform(src, new StreamResult(out));
-        trans.transform(src, new StreamResult(System.out));
     }
     
     private void convert(String csvFileName, String bookName) {
