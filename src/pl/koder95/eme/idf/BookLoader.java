@@ -36,7 +36,7 @@ import org.xml.sax.SAXException;
  * Umożliwia wczytanie ksiąg zapisanych w plikach XML.
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.1.4, 2017-09-06
+ * @version 0.1.5, 2017-09-08
  * @since 0.1.4
  */
 public class BookLoader {
@@ -68,33 +68,95 @@ public class BookLoader {
         return null;
     }
     
+    /**
+     * Tworzy nowe szablony ksiąg wczytując je z pliku XML.
+     * 
+     * @param xml plik XML zawierający szablony ksiąg
+     * @throws IOException problemy z odczytaniem pliku
+     * @throws SAXException błąd SAX
+     * @throws ParserConfigurationException problemy z konfiguracją parsera XML
+     */
     public void loadBookTemplates(File xml) throws IOException, SAXException,
             ParserConfigurationException {
         this.templates = BookTemplateLoader.load(xml);
     }
     
+    /**
+     * Tworzy nowy szablon księgi o podanej nazwie wczytując go z pliku XML.
+     * 
+     * @param xml plik XML zawierający szablon księgi
+     * @param bookName nazwa księgi
+     * @throws IOException problemy z odczytaniem pliku
+     * @throws SAXException błąd SAX
+     * @throws ParserConfigurationException problemy z konfiguracją parsera XML
+     */
     public void loadBookTemplate(File xml, String bookName) throws IOException,
             SAXException, ParserConfigurationException {
         if (this.templates == null) this.templates = new HashMap<>();
         this.templates.put(bookName, BookTemplateLoader.load(xml, bookName));
     }
 
+    /**
+     * @param bookName nazwa księgi
+     * @return obiekt wczytujący indeksy dla księgi
+     */
     public IndicesLoader getLoader(String bookName) {
         return loaders.get(bookName);
     }
     
+    /**
+     * Tworzy nowy obiekt wczytujący indeksy dla księgi o podanej nazwie. Każdy
+     * nowowczytany indeks tworzony będzie według podanego schematu.
+     * 
+     * @param bookName nazwa księgi
+     * @param tmpl szablon indeksu
+     */
     public void createIndicesLoader(String bookName, IndexTemplate tmpl) {
         loaders.put(bookName, new IndicesLoader(bookName, tmpl));
     }
     
-    public void createIndicesLoader(String bookName) {
+    /**
+     * Tworzy nowy obiekt wczytujący indeksy dla księgi o podanej nazwie. Każdy
+     * nowowczytany indeks tworzony będzie według schematu, który utworzony
+     * zostanie z szablonu księgi.
+     * 
+     * @param bookName nazwa księgi
+     * @throws IllegalStateException jeśli przed wywołaniem tej funkcji nie
+     * został utworzony szablon dla księgi o podanej nazwie (należy wywołać
+     * metodę {@link #loadBookTemplate(java.io.File, java.lang.String)
+     * loadBookTemplate} lub {@link #loadBookTemplates(java.io.File)
+     * loadBookTemplates})
+     */
+    public void createIndicesLoader(String bookName)
+            throws IllegalStateException{
         BookTemplate btmpl = templates.get(bookName);
+        if (btmpl == null) throw new IllegalStateException("nie znaleziono "
+                + "szablonu dla księgi o nazwie: \"" + bookName + "\"");
         createIndicesLoader(bookName, btmpl.createIndexTemplate());
     }
     
     private static final BookLoader INSTANCE = new BookLoader(new HashMap<>());
     
+    /**
+     * @return instancja {@code BookLoader}a
+     */
     public static BookLoader get() {
         return INSTANCE;
+    }
+    
+    /**
+     * Wczytuje szablon indeksu.
+     * 
+     * @param xml plik z zapisanymi szablonami indeksów
+     * @param bookName nazwa księgi
+     * @return szablon indeksu
+     * @throws IOException problemy z odczytaniem pliku
+     * @throws SAXException błąd SAX
+     * @throws ParserConfigurationException problemy z konfiguracją parsera XML
+     * @since 0.1.5 
+     */
+    public static IndexTemplate loadIndexTemplate(File xml, String bookName)
+            throws IOException, SAXException, ParserConfigurationException {
+        return BookTemplateLoader.load(xml, bookName).createIndexTemplate();
     }
 }

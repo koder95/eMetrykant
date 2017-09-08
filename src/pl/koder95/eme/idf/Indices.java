@@ -23,20 +23,20 @@ import java.util.LinkedList;
 import java.util.List;
 import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
+import pl.koder95.eme.Files;
 import pl.koder95.eme.Main;
 import static pl.koder95.eme.Main.BUNDLE;
-import static pl.koder95.eme.Main.DATA_DIR;
-import static pl.koder95.eme.Main.READ_CSV_ERR_MESSAGE;
-import static pl.koder95.eme.Main.READ_CSV_ERR_TITLE;
-import static pl.koder95.eme.Main.showErrorMessage;
 import pl.koder95.eme.gui.IndexInfoPanel;
 import pl.koder95.eme.gui.MarriageIndexInfoPanel;
+import static pl.koder95.eme.Main.READ_DATA_ERR_MESSAGE;
+import static pl.koder95.eme.Main.READ_DATA_ERR_TITLE;
+import static pl.koder95.eme.Main.showErrorMessage;
 
 /**
  * Zawiera wszystkie typy ksiąg i zawierających się w nich zbiorach indeksów.
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.1.4, 2017-09-06
+ * @version 0.1.5, 2017-09-08
  * @since 0.0.201
  */
 public enum Indices implements IndexContainer {
@@ -98,11 +98,11 @@ public enum Indices implements IndexContainer {
     public void load() {
         BookLoader books = BookLoader.get();
         try {
-            books.loadBookTemplate(new File(DATA_DIR, "templates.xml"), name);
+            books.loadBookTemplate(Files.TEMPLATE_XML, name);
             books.createIndicesLoader(name);
-            loaded = books.load(new File(DATA_DIR, "indices.xml"), name);
+            loaded = books.load(new File(Files.XML_DIR, "indices.xml"), name);
         } catch (FileNotFoundException ex) {
-            showErrorMessage(READ_CSV_ERR_MESSAGE, READ_CSV_ERR_TITLE, true);
+            showErrorMessage(READ_DATA_ERR_MESSAGE, READ_DATA_ERR_TITLE, true);
         } catch (IOException | SAXException | ParserConfigurationException ex) {
             showErrorMessage(BUNDLE.getString("ERR_EX_IO"),
                     BUNDLE.getString("ERR_EX_IO_TITLE"), true);

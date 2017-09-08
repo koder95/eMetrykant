@@ -19,8 +19,9 @@ package pl.koder95.eme;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -33,13 +34,15 @@ import javax.xml.transform.stream.StreamResult;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import static pl.koder95.eme.Main.DATA_DIR;
+import org.xml.sax.SAXException;
+import pl.koder95.eme.idf.BookLoader;
+import pl.koder95.eme.idf.IndexTemplate;
 
 /**
  * Umożliwia przekonwertowanie plików o rozszerzeniu CSV na plik XML.
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.1.4, 2017-09-06
+ * @version 0.1.5, 2017-09-08
  * @since 0.1.1
  */
 public final class ConverterCSV {
@@ -54,12 +57,16 @@ public final class ConverterCSV {
         this.csvDir = csvDir;
     }
 
-    private ConverterCSV(String xmlFileName, File dataDir) {
-        this(dataDir, new File(dataDir, xmlFileName));
+    private ConverterCSV(File csvDir, File xmlDir, String xmlFileName) {
+        this(csvDir, new File(xmlDir, xmlFileName));
+    }
+
+    private ConverterCSV(File csvDir, String xmlFileName) {
+        this(csvDir, Files.XML_DIR, xmlFileName);
     }
 
     private ConverterCSV(String xmlFileName) {
-        this(xmlFileName, DATA_DIR);
+        this(Files.CSV_DIR, xmlFileName);
     }
 
     private ConverterCSV() {
@@ -92,51 +99,31 @@ public final class ConverterCSV {
         return index;
     }
     
-    private Element createIndex(Element book, String an,
-            String husbandSurname, String husbandName, String wifeSurname,
-            String wifeName) {
-        Attr[] attrs = {
-            doc.createAttribute("husband-surname"),
-            doc.createAttribute("husband-name"),
-            doc.createAttribute("wife-surname"),
-            doc.createAttribute("wife-name")
-        };
-        attrs[0].setValue(husbandSurname);
-        attrs[1].setValue(husbandName);
-        attrs[2].setValue(wifeSurname);
-        attrs[3].setValue(wifeName);
-        return createIndex(book, an, attrs);
-    }
-    
-    private Element createIndex(Element book, String an, String surname,
-            String name) {
-        Attr[] attrs = {
-            doc.createAttribute("surname"),
-            doc.createAttribute("name")
-        };
-        attrs[0].setValue(surname);
-        attrs[1].setValue(name);
-        return createIndex(book, an, attrs);
-    }
-    
-    private Element createIndex(Element book, String an, String data) {
-        String[] cells = data.split(";");
-        switch (cells.length) {
-            case 2: return createIndex(book, an, cells[0], cells[1]);
-            case 4: return createIndex(book, an, cells[0], cells[1], cells[2],
-                    cells[3]);
-            default: return createIndex(book, an, new Attr[0]);
+    private Element createIndex(Element book, String an, IndexTemplate tmpl,
+            String[] data) {
+        if (data.length == 0) return createIndex(book, an, new Attr[0]);
+        
+        Attr[] attrs = tmpl.createAttrXMLArray(doc);
+        for (Attr attr : attrs) {
+            attr.setValue(tmpl.getData(data, attr.getName()));
         }
+        return createIndex(book, an, attrs);
     }
     
-    private Element createIndex(Element book, String line) {
+    private Element createIndex(Element book, IndexTemplate tmpl, String line) {
         while (line.endsWith(";")) line = line.substring(0, line.length()-1);
         String[] cells = line.split(";");
-        if (cells.length < 2) return createIndex(book, "", "");
+        if (cells.length < 2) return createIndex(book, "", tmpl, new String[0]);
         else {
             String an = cells[cells.length-2] + "/" + cells[cells.length-1];
             String data = line.substring(0, line.length()-an.length()-1);
-            return createIndex(book, an, data);
+            cells = data.split(";");
+            if (cells.length != tmpl.getDataLength()) {
+                String[] array = cells;
+                cells = new String[tmpl.getDataLength()];
+                System.arraycopy(array, 0, cells, 0, array.length);
+            }
+            return createIndex(book, an, tmpl, cells);
         }
     }
     
@@ -144,16 +131,22 @@ public final class ConverterCSV {
         TransformerFactory ftrans = TransformerFactory.newInstance();
         Transformer trans = ftrans.newTransformer();
         trans.setOutputProperty(OutputKeys.INDENT, "yes");
+        trans.setOutputProperty(OutputKeys.ENCODING, "utf-8");
         DOMSource src = new DOMSource(doc);
         trans.transform(src, new StreamResult(out));
     }
     
     private void convert(String csvFileName, String bookName) {
         File in = new File(csvDir, csvFileName);
-        try (BufferedReader reader = new BufferedReader(new FileReader(in))) {
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(
+                new FileInputStream(in), Main.CSV_DEFAULT_CHARSET))) {
             Element book = createBook(bookName);
-            while (reader.ready()) createIndex(book, reader.readLine());
-        } catch (IOException ex) {}
+            IndexTemplate tmpl = BookLoader
+                    .loadIndexTemplate(Files.TEMPLATE_XML, bookName);
+            while (reader.ready()) createIndex(book, tmpl, reader.readLine());
+        } catch (IOException | SAXException | ParserConfigurationException ex) {
+            // do nothing
+        }
     }
     
     private void convert(String csvFileName) {
@@ -232,18 +225,20 @@ public final class ConverterCSV {
      */
     public static ConverterCSV create(File csvDir, File xmlDir,
             String xmlFileName) {
-        return new ConverterCSV(csvDir, new File(xmlDir, xmlFileName));
+        return new ConverterCSV(csvDir, xmlDir, xmlFileName);
     }
     
     /**
-     * Tworzy nowy konwerter, który pracować będzie w określonych warunkach.
-     * 
-     * @param dataDir definiuje folder, z którego pobierane będą pliki CSV do
-     * przekonwertowania i gdzie zapisany zostanie plik XML
-     * @param xmlFileName definiuje nazwę nowego pliku XML
-     * @return nowy konwerter
+     * @deprecated Metoda nie przydatna dla bieżącej hierarchi plików.
+     * Napleży stosować metodę {@link #create(java.io.File, java.io.File,
+     * java.lang.String)}, która jest nowszą wersją tej metody.
+     * Zawsze zwraca wartość {@code null}.
+     * @param dataDir nie używany
+     * @param xmlFileName nie używany
+     * @return {@code null}
      */
+    @Deprecated
     public static ConverterCSV create(File dataDir, String xmlFileName) {
-        return new ConverterCSV(dataDir, new File(dataDir, xmlFileName));
+        return null;
     }
 }

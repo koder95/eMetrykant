@@ -33,7 +33,7 @@ import javax.xml.transform.TransformerException;
 /**
  * Klasa uruchamiająca i inicjalizująca podstawowe elementy aplikacji.
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.1.4, 2017-09-06
+ * @version 0.1.5, 2017-09-08
  * @since 0.0.201
  */
 public class Main {
@@ -49,13 +49,12 @@ public class Main {
     /**
      * Folder, gdzie znajdują się pliki programu.
      */
-    public static final File WORKDIR
-            = new File(System.getProperty("user.dir")); //NOI18N
+    public static final File WORKDIR = Files.WORKDIR;
     /**
      * Folder, gdzie znajdują się pliki zawierające dane do wczytania
      * przez program.
      */
-    public static final File DATA_DIR = new File(WORKDIR, "data"); //NOI18N
+    public static final File DATA_DIR = Files.DATA_DIR;
     /**
      * Domyślne kodowanie dla pliku CSV.
      */
@@ -84,12 +83,12 @@ public class Main {
     /**
      * Komunikat błędu braku danych, które powinny zostać wczytane.
      */
-    public static final Object READ_CSV_ERR_MESSAGE
+    public static final Object READ_DATA_ERR_MESSAGE
             = BUNDLE.getString("ERR_IMPORTANT_FILE_NOT_FOUND");
     /**
      * Tytuł komunikatu błędu braku danych, które powinny zostać wczytane.
      */
-    public static final String READ_CSV_ERR_TITLE
+    public static final String READ_DATA_ERR_TITLE
             = BUNDLE.getString("ERR_IMPORTANT_FILE_NOT_FOUND_TITLE");
     /**
      * Wzór identyfikujący liczby w stringu.
@@ -115,9 +114,18 @@ public class Main {
      * CSV na XML
      */
     public static void main(String[] args) {
-        if (args.length > 1 && args[0].equalsIgnoreCase("-c")) try {
-            ConverterCSV conv = ConverterCSV.create(DATA_DIR, "indices.xml");
-            ConverterCSV.convert(conv, DATA_DIR.list(
+        Files.createNotExistDirs();
+        try {
+            Files.createNotExistFiles();
+        } catch (IOException ex) {
+            showErrorMessage(BUNDLE.getString("ERR_CANNOT_CREATE_NEW_FILE"),
+                    BUNDLE.getString("ERR_CANNOT_CREATE_NEW_FILE_TITLE"));
+        }
+        if (args.length > 0 && args[0].equalsIgnoreCase("-c")) try {
+        Files.createNotExistFiles();
+            ConverterCSV conv = ConverterCSV.create(Files.CSV_DIR,
+                    Files.XML_DIR, "indices.xml");
+            ConverterCSV.convert(conv, Files.CSV_DIR.list(
                     (File d, String name) -> name.endsWith(".csv")
             ));
             Main.releaseMemory();

@@ -19,6 +19,8 @@ package pl.koder95.eme.idf;
 
 import java.util.HashMap;
 import java.util.Map;
+import org.w3c.dom.Attr;
+import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
@@ -27,7 +29,7 @@ import org.w3c.dom.Node;
  * układania danych.
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.1.4, 2017-09-06
+ * @version 0.1.5, 2017-09-08
  * @since 0.1.4
  */
 public class IndexTemplate {
@@ -66,6 +68,18 @@ public class IndexTemplate {
     }
     
     /**
+     * Pobiera określoną informacje z indeksu.
+     * 
+     * @param data tablica danych, z której pobrana ma być informacja
+     * @param attr atrybut, odnosi się do konkretnego miejsca w tablicy z danymi
+     * @return informacja, wartość atrybutu
+     * @since 0.1.5
+     */
+    public String getData(String[] data, String attr) {
+        return data[attr_data.get(attr)];
+    }
+    
+    /**
      * Pozwala pobrać nazwę atrybutu, który przypisany jest do podanej etykiety.
      * 
      * @param label etykieta, wykorzystywana w różnych formularzach
@@ -80,7 +94,7 @@ public class IndexTemplate {
      * atrybut.
      * 
      * @param attr nazwa atrybutu
-     * @return 
+     * @return etykieta wyświetlana w formularzach
      */
     public String getLabel(String attr) {
         for (String key: label_attr.keySet()) {
@@ -113,12 +127,34 @@ public class IndexTemplate {
         if (ans == null || ans.isEmpty()) return null;
         
         ActNumber an = ActNumber.parseActNumber(ans);
-        System.out.println("an=" + an);
         for (int i = 0; i < attrs.getLength(); i++) {
             Node n = attrs.item(i);
             int data_index = attr_data.get(n.getNodeName());
             if (data_index >= 0) data[data_index] = n.getTextContent();
         }
         return RealIndex.create(id, an, data);
+    }
+
+    /**
+     * Tworzy tablicę pustych atrybutów.
+     * 
+     * @param doc dokument XML
+     * @return tablica atrybutów, wartości nie ustawione
+     * @since 0.1.5
+     */
+    public Attr[] createAttrXMLArray(Document doc) {
+        Attr[] attrs = new Attr[attr_data.size()];
+        int i = 0;
+        for (String a : attr_data.keySet()) {
+            attrs[i++] = doc.createAttribute(a);
+        }
+        return attrs;
+    }
+
+    /**
+     * @return ilość informacji, jakie zawiera każdy indeks według tego szablonu
+     */
+    public int getDataLength() {
+        return data_length;
     }
 }

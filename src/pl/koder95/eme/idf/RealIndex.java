@@ -15,7 +15,7 @@ import java.util.Arrays;
  * wirtualnego}.
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.1.4, 2017-09-06
+ * @version 0.1.5, 2017-09-08
  * @since 0.0.201
  */
 class RealIndex extends Index {
@@ -110,7 +110,6 @@ class RealIndex extends Index {
      * @since 0.1.4
      */
     static RealIndex create(int id, ActNumber an, String[] data) {
-        System.out.println("data=" + Arrays.toString(data));
         return new RealIndex(id, an, data);
     }
     
