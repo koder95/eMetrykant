@@ -36,7 +36,7 @@ import static pl.koder95.eme.Main.showErrorMessage;
  * Zawiera wszystkie typy ksiąg i zawierających się w nich zbiorach indeksów.
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.1.5, 2017-09-08
+ * @version 0.1.8, 2018-01-30
  * @since 0.0.201
  */
 public enum Indices implements IndexContainer {
@@ -73,8 +73,7 @@ public enum Indices implements IndexContainer {
         this.name = name;
         infoPanel = info;
     }
-    }
-    
+
     @Override
     public Index get(int id) {
         return getReal(id).toVirtualIndex(this);
