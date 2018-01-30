@@ -20,28 +20,26 @@ package pl.koder95.eme.idf;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import org.w3c.dom.Document;
-import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import static pl.koder95.eme.idf.BookTemplate.Section;
 import org.xml.sax.SAXException;
+import pl.koder95.eme.xml.XMLLoader;
 
 /**
  * Pozwala wczytać szablon księgi lub ksiąg.
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.1.4, 2017-09-06
+ * @version 0.1.7, 2018-01-30
  * @since 0.1.4
  */
 public class BookTemplateLoader {
     
     /**
      * Czyta plik XML i pobiera z niego szablony dla ksiąg, tworząc mapę, której
-     * kluczami są nazwy ksiąg a zawartościami szablony.
+     * kluczami są nazwy ksiąg a zawartościami - szablony.
      * 
      * @param xml plik XML zawierający szablony dla ksiąg
      * @return mapa, gdzie kluczem jest nazwa księgi a szablon wartością
@@ -51,9 +49,7 @@ public class BookTemplateLoader {
      */
     public static HashMap<String, BookTemplate> load(File xml)
             throws IOException, SAXException, ParserConfigurationException {
-        DocumentBuilderFactory fact = DocumentBuilderFactory.newInstance();
-        DocumentBuilder docBuilder = fact.newDocumentBuilder();
-        Document doc = docBuilder.parse(xml);
+        Document doc = XMLLoader.loadDOM(xml);
         HashMap<String, BookTemplate> tmpls = new HashMap<>();
         NodeList bts = doc.getElementsByTagName("bt");
         for (int i = 0; i < bts.getLength(); i++) {
@@ -63,45 +59,44 @@ public class BookTemplateLoader {
         return tmpls;
     }
 
+    /**
+     * Przetwarza plik XML i zwraca jako szablon księgi. Jeżeli szablon nie
+     * zawiera szablonu księgi o podanej nazwie, to zostaje zwrócona wartość
+     * {@code null}.
+     * 
+     * @param xml plik XML
+     * @param bookName nazwa księgi
+     * @return szablon księgi wczytany z pliku XML
+     * @throws IOException
+     * @throws SAXException
+     * @throws ParserConfigurationException 
+     */
     static BookTemplate load(File xml, String bookName)
             throws IOException, SAXException, ParserConfigurationException {
-        DocumentBuilderFactory fact = DocumentBuilderFactory.newInstance();
-        DocumentBuilder docBuilder = fact.newDocumentBuilder();
-        Document doc = docBuilder.parse(xml);
-        NodeList bts = doc.getElementsByTagName("bt");
-        for (int i = 0; i < bts.getLength(); i++) {
-            Node btTag = bts.item(i);
-            if (btTag.getAttributes().getNamedItem("name").getTextContent()
-                    .equalsIgnoreCase(bookName)) {
-                return load(btTag);
-            }
-        }
-        return null;
+        return load(XMLLoader.getTagNode(XMLLoader.loadDOM(xml), "bt",
+                "name", bookName));
     }
     
     private static BookTemplate load(Node btTag) {
+        if (btTag == null) return null;
         if (!btTag.getNodeName().equalsIgnoreCase("bt")) return null;
         
-        BookTemplate tmpl = new BookTemplate(btTag.getAttributes()
-                .getNamedItem("name").getTextContent());
+        BookTemplate tmpl = new BookTemplate(XMLLoader.getAttrV(btTag, "name"));
         if (btTag.hasChildNodes()) {
             NodeList sections = btTag.getChildNodes();
             for (int i = 0; i < sections.getLength(); i++) {
                 Node s = sections.item(i);
                 if (!s.getNodeName().equalsIgnoreCase("section")) continue;
-                Section section = new Section(s.getAttributes()
-                        .getNamedItem("header").getTextContent());
+                Section section = new Section(XMLLoader.getAttrV(s, "header"));
                 NodeList fields = s.getChildNodes();
                 for (int n = 0; n < fields.getLength(); n++) {
                     Node f = fields.item(n);
                     if (!f.getNodeName().equalsIgnoreCase("field")) continue;
-                    NamedNodeMap attribs = f.getAttributes();
-                    String name = attribs.getNamedItem("name")
-                            .getTextContent();
-                    String label = attribs.getNamedItem("label")
-                            .getTextContent();
-                    int index = Integer.parseInt(attribs.getNamedItem("index")
-                            .getTextContent());
+                    
+                    String name = XMLLoader.getAttrV(f, "name");
+                    String label = XMLLoader.getAttrV(f, "label");
+                    int index = Integer.parseInt(XMLLoader
+                            .getAttrV(f, "index"));
                     section.fields.add(new BookTemplate
                             .Field(name, index, label));
                 }
