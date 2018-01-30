@@ -33,7 +33,7 @@ import javax.xml.transform.TransformerException;
 /**
  * Klasa uruchamiająca i inicjalizująca podstawowe elementy aplikacji.
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.1.5, 2017-09-08
+ * @version 0.1.6, 2018-01-30
  * @since 0.0.201
  */
 public class Main {
@@ -122,7 +122,6 @@ public class Main {
                     BUNDLE.getString("ERR_CANNOT_CREATE_NEW_FILE_TITLE"));
         }
         if (args.length > 0 && args[0].equalsIgnoreCase("-c")) try {
-        Files.createNotExistFiles();
             ConverterCSV conv = ConverterCSV.create(Files.CSV_DIR,
                     Files.XML_DIR, "indices.xml");
             ConverterCSV.convert(conv, Files.CSV_DIR.list(

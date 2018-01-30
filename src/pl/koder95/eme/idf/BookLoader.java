@@ -22,15 +22,13 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
+import pl.koder95.eme.xml.XMLLoader;
 
 /**
  * Umożliwia wczytanie ksiąg zapisanych w plikach XML.
@@ -50,22 +48,23 @@ public class BookLoader {
     
     List<RealIndex> load(File xml, String bookName)
             throws ParserConfigurationException,SAXException, IOException {
-        DocumentBuilderFactory fdoc = DocumentBuilderFactory.newInstance();
-        DocumentBuilder bdoc = fdoc.newDocumentBuilder();
-        Document doc = bdoc.parse(xml);
+        Document doc = XMLLoader.loadDOM(xml);
         Element root = doc.getDocumentElement();
         NodeList books = root.getElementsByTagName("book");
-        for (int i = 0; i < books.getLength(); i++) {
-            Node book = books.item(i);
-            if (book.hasAttributes()) {
-                NamedNodeMap attrs = book.getAttributes();
-                String name = attrs.getNamedItem("name").getTextContent();
-                if (name.equalsIgnoreCase(bookName))
-                    return loaders.get(attrs.getNamedItem("name")
-                           .getTextContent()).load(attrs, book.getChildNodes());
-            }
-        }
-        return null;
+        Node book = XMLLoader.getTagNode(books, "book", "name", bookName);
+        return loaders.get(book.getAttributes().getNamedItem("name")
+                .getTextContent()).load(book.getAttributes(),
+                        book.getChildNodes());
+    }
+    
+    static List<RealIndex> load(File xml, String bookName, IndexTemplate tmpl)
+            throws ParserConfigurationException,SAXException, IOException {
+        Document doc = XMLLoader.loadDOM(xml);
+        Element root = doc.getDocumentElement();
+        NodeList books = root.getElementsByTagName("book");
+        Node book = XMLLoader.getTagNode(books, "book", "name", bookName);
+        return IndicesLoader.load(bookName, tmpl, book.getAttributes(),
+                book.getChildNodes());
     }
     
     /**

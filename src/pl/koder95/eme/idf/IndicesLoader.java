@@ -28,7 +28,7 @@ import org.w3c.dom.NodeList;
  * Wczytuje indeksy.
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.1.4, 2017-09-06
+ * @version 0.1.6, 2018-01-30
  * @since 0.1.4
  */
 public class IndicesLoader {
@@ -48,7 +48,30 @@ public class IndicesLoader {
         this.tmpl = tmpl;
     }
     
+    /**
+     * @param bookAttrs mapa nazwanych węzłów, atrybuty znacznika {@code <bt>}
+     * @param childNodes węzły-potomkowie, znaczniki {@code <indices>}
+     * @return lista indeksów
+     * @see #load(String, IndexTemplate, NamedNodeMap, NodeList) load
+     */
     List<RealIndex> load(NamedNodeMap bookAttrs, NodeList childNodes) {
+        return load(bookName, tmpl, bookAttrs, childNodes);
+    }
+    
+    /**
+     * Pobiera listę indeksów, które należą do księgi o podanej nazwie. <br/>
+     * Metoda korzysta z szablonu indeksu przy tworzeniu nowych indeksów.
+     * Dane indeksu wczytywane są ze wszystkich węzłów, które są znacznikami
+     * o nazwie {@code indices}.
+     * 
+     * @param bookName nazwa księgi
+     * @param tmpl szablon indeksów
+     * @param bookAttrs mapa nazwanych węzłów, atrybuty znacznika {@code <bt>}
+     * @param childNodes węzły-potomkowie, znaczniki {@code <indices>}
+     * @return lista indeksów
+     */
+    static List<RealIndex> load(String bookName, IndexTemplate tmpl,
+            NamedNodeMap bookAttrs, NodeList childNodes) {
         List<RealIndex> reals = new LinkedList<>();
         if (bookAttrs.getNamedItem("name").getTextContent()
                 .equalsIgnoreCase(bookName)) {

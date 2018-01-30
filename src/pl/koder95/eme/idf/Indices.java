@@ -45,34 +45,34 @@ public enum Indices implements IndexContainer {
      * Zbiór indeksów osób ochrzczonych. Indeksy zawierają dane: nazwisko,
      * imiona, nr aktu, rok chrztu.
      */
-    LIBER_BAPTIZATORUM("Księga ochrzczonych.csv", new IndexInfoPanel()),
+    LIBER_BAPTIZATORUM("Księga ochrzczonych", new IndexInfoPanel()),
 
     /**
      * Zbiór indeksów osób bierzmowanych. Indeksy zawierają dane: nazwisko,
      * imiona, nr aktu, rok bierzmowania.
      */
-    LIBER_CONFIRMATORUM("Księga bierzmowanych.csv", new IndexInfoPanel()),
+    LIBER_CONFIRMATORUM("Księga bierzmowanych", new IndexInfoPanel()),
 
     /**
      * Zbiór indeksów osób zaślubionych. Indeksy zawierają dane: nazwisko męża,
      * imiona męża, nazwisko panieńskie żony, imiona żony, nr aktu, rok ślubu.
      */
-    LIBER_MATRIMONIORUM("Księga zaślubionych.csv",new MarriageIndexInfoPanel()),
+    LIBER_MATRIMONIORUM("Księga zaślubionych",new MarriageIndexInfoPanel()),
 
     /**
      * Zbiór indeksów osób zmarłych. Indeksy zawierają dane: nazwisko,
      * imiona, nr aktu, rok śmierci.
      */
-    LIBER_DEFUNCTORUM("Księga zmarłych.csv", new IndexInfoPanel());
+    LIBER_DEFUNCTORUM("Księga zmarłych", new IndexInfoPanel());
     
     private List<RealIndex> loaded;
-    private final String fileName, name;
+    private final String name;
     private final IndexInfoPanel infoPanel;
 
-    private Indices(String fileName, IndexInfoPanel info) {
-        this.fileName = fileName;
-        name = fileName.substring(0, fileName.length()-4);
+    private Indices(String name, IndexInfoPanel info) {
+        this.name = name;
         infoPanel = info;
+    }
     }
     
     @Override
@@ -107,13 +107,6 @@ public enum Indices implements IndexContainer {
             showErrorMessage(BUNDLE.getString("ERR_EX_IO"),
                     BUNDLE.getString("ERR_EX_IO_TITLE"), true);
         }
-    }
-
-    /**
-     * @return nazwa pliku, który zawiera indeksy
-     */
-    public String getFileName() {
-        return fileName;
     }
 
     /**
