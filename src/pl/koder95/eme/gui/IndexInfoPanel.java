@@ -29,17 +29,67 @@ import pl.koder95.eme.idf.Index;
  * Panel wyświetla zestaw informacji na temat indeksu.
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.0.201, 2017-08-16
+ * @version 0.1.9, 2018-02-11
  * @since 0.0.201
  */
 public class IndexInfoPanel extends JPanel {
 
     private static final long serialVersionUID = 3889281569274752554L;
+    
+    private static GroupLayout.ParallelGroup buildHorizontalGroup(GroupLayout l,
+            IndexInfo[] infos) {
+        GroupLayout.ParallelGroup g = l.createParallelGroup(GroupLayout
+                .Alignment.LEADING);
+        for (IndexInfo info: infos) {
+            g = g.addGroup(l.createSequentialGroup()
+                    .addComponent(info.getName())
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(info.getValue())
+            );
+        }
+        return g;
+    }
+    
+    private static GroupLayout.SequentialGroup buildVerticalGroup(GroupLayout l,
+            IndexInfo[] infos) {
+        GroupLayout.SequentialGroup g = l.createSequentialGroup();
+        g = g.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE);
+        int i = 0;
+        for (IndexInfo info: infos) {
+            if (i++ != 0)
+                g = g.addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED);
+            
+            g = g.addGroup(l
+                    .createParallelGroup(GroupLayout.Alignment.BASELINE)
+                    .addComponent(info.getName(),
+                            GroupLayout.PREFERRED_SIZE,
+                            15,
+                            GroupLayout.PREFERRED_SIZE
+                    )
+                    .addComponent(info.getValue())
+            );
+        }
+        g = g.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE);
+        return g;
+    }
+    
+    static void linkSize(GroupLayout l, IndexInfo[] infos) {
+        for (IndexInfo info: infos) l.linkSize(SwingConstants.VERTICAL,
+                new Component[] {info.getValue(), info.getName()});
+    }
 
     /**
      * Domyślny konstruktor.
      */
     public IndexInfoPanel() {
+        this(new IndexInfo[]{
+            new IndexInfo("Nazwisko"), new IndexInfo("Imię"),
+            new IndexInfo("Nr aktu"), new IndexInfo("Rok")
+        });
+    }
+    
+    private IndexInfoPanel(IndexInfo[] infos) {
+        this.infos = infos;
         super.setBorder(BorderFactory.createTitledBorder(""));
         GroupLayout l = new GroupLayout(this);
         super.setLayout(l);
@@ -47,78 +97,43 @@ public class IndexInfoPanel extends JPanel {
             l.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(l.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(l.createParallelGroup(GroupLayout.Alignment.LEADING)
-                    .addGroup(createHG(l, lastNameInfo))
-                    .addGroup(createHG(l, nameInfo) )
-                    .addGroup(createHG(l, actNumberInfo))
-                    .addGroup(createHG(l, yearInfo)))
+                .addGroup(buildHorizontalGroup(l, infos))
                 .addContainerGap())
         );
         l.setVerticalGroup(
             l.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addGroup(l.createSequentialGroup()
-                .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(createVG(l, lastNameInfo))
-                .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(createVG(l, nameInfo))
-                .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(createVG(l, actNumberInfo))
-                .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(createVG(l, yearInfo))
-                .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(buildVerticalGroup(l, infos))
         );
 
-        linkSize(l, yearInfo);
-        linkSize(l,actNumberInfo);
-        linkSize(l, nameInfo);
-        linkSize(l, lastNameInfo);
-    }
-    
-    final void linkSize(GroupLayout l, IndexInfo i) {
-        l.linkSize(SwingConstants.VERTICAL,
-                new Component[] {i.getValue(), i.getName()});
-    }
-    
-    private GroupLayout.SequentialGroup createHG(GroupLayout l, IndexInfo i) {
-        return l.createSequentialGroup()
-                .addComponent(i.getName())
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(i.getValue());
-    }
-    
-    private GroupLayout.ParallelGroup createVG(GroupLayout l, IndexInfo i) {
-        return l.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                    .addComponent(i.getName(), GroupLayout.PREFERRED_SIZE, 15,
-                            GroupLayout.PREFERRED_SIZE)
-                    .addComponent(i.getValue());
+        linkSize(l, infos);
     }
 
     /**
      * @return pole z informacjami o nazwisku
      */
     public IndexInfo getLastNameInfo() {
-        return lastNameInfo;
+        return infos[0];
     }
 
     /**
      * @return pole z informacjami o imieniu/imionach
      */
     public IndexInfo getNameInfo() {
-        return nameInfo;
+        return infos[1];
     }
 
     /**
      * @return pole z informacjami o numerze aktu
      */
     public IndexInfo getActNumberInfo() {
-        return actNumberInfo;
+        return infos[2];
     }
 
     /**
      * @return pole z informacjami o roku
      */
     public IndexInfo getYearInfo() {
-        return yearInfo;
+        return infos[3];
     }
     
     private void setIndexID(int id) {
@@ -140,10 +155,10 @@ public class IndexInfoPanel extends JPanel {
     private void setIndex(int id, String lastName, String name,
             String act, String year) {
         setIndexID(id);
-        actNumberInfo.getValue().setText(act);
-        lastNameInfo.getValue().setText(lastName);
-        nameInfo.getValue().setText(name);
-        yearInfo.getValue().setText(year);
+        getActNumberInfo().getValue().setText(act);
+        getLastNameInfo().getValue().setText(lastName);
+        getNameInfo().getValue().setText(name);
+        getYearInfo().getValue().setText(year);
     }
     
     /**
@@ -168,9 +183,6 @@ public class IndexInfoPanel extends JPanel {
     }
 
     // Variables declaration - do not modify
-    private final IndexInfo lastNameInfo = new IndexInfo("Nazwisko");
-    private final IndexInfo nameInfo = new IndexInfo("Imię");
-    private final IndexInfo actNumberInfo = new IndexInfo("Nr aktu");
-    private final IndexInfo yearInfo = new IndexInfo("Rok");
+    private final IndexInfo[] infos;
     // End of variables declaration
 }

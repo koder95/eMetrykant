@@ -26,7 +26,7 @@ import pl.koder95.eme.idf.Index;
 /**
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.0.201, 2017-08-16
+ * @version 0.1.9, 2018-02-11
  * @since 0.0.201
  */
 public class MarriageIndexInfoPanel extends IndexInfoPanel {
@@ -133,12 +133,9 @@ public class MarriageIndexInfoPanel extends IndexInfoPanel {
                 .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
-        linkSize(l, super.getYearInfo());
-        linkSize(l, super.getActNumberInfo());
-        linkSize(lay0, super.getNameInfo());
-        linkSize(lay0, super.getLastNameInfo());
-        linkSize(lay1, nameInfo);
-        linkSize(lay1, lastNameInfo);
+        linkSize(l, new IndexInfo[] { super.getYearInfo(), super.getActNumberInfo() });
+        linkSize(lay0, new IndexInfo[] { super.getNameInfo(), super.getLastNameInfo() });
+        linkSize(lay1, new IndexInfo[] { nameInfo, lastNameInfo });
     }
     
     private GroupLayout.SequentialGroup createHG(GroupLayout l, IndexInfo i) {
