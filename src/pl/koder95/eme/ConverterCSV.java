@@ -35,6 +35,7 @@ import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
+import static pl.koder95.eme.Main.showErrorMessage;
 import pl.koder95.eme.idf.BookLoader;
 import pl.koder95.eme.idf.IndexTemplate;
 
@@ -42,11 +43,12 @@ import pl.koder95.eme.idf.IndexTemplate;
  * Umożliwia przekonwertowanie plików o rozszerzeniu CSV na plik XML.
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.1.5, 2017-09-08
+ * @version 0.1.10, 2018-03-18
  * @since 0.1.1
  */
-public final class ConverterCSV {
+public final class ConverterCSV implements LaunchMethod {
 
+    private final LaunchMethod next = new SystemTray();
     private File out;
     private File csvDir;
     private Document doc;
@@ -240,5 +242,38 @@ public final class ConverterCSV {
     @Deprecated
     public static ConverterCSV create(File dataDir, String xmlFileName) {
         return null;
+    }
+
+    @Override
+    public void launch(String[] args) {
+        if (args[0].equalsIgnoreCase("-c")) {
+            try {
+                String[] csvFileNames = pl.koder95.eme.Files.CSV_DIR.list(
+                        (File dir, String name) -> name.endsWith(".csv")
+                );
+                createXML();
+                createRootElement();
+                for (String csvFileName: csvFileNames) convert(csvFileName);
+                saveXML();
+                clear();
+            } catch (ParserConfigurationException | IOException
+                    | TransformerException ex) {
+                showErrorMessage(ex.getMessage(),
+                        ex.getClass().getCanonicalName());
+                nextMethod().launch(args);
+            } finally {
+                MemoryUtils.releaseMemory();
+            }
+        } else nextMethod().launch(args);
+    }
+
+    @Override
+    public void setNextLaunchMethod(LaunchMethod next) {
+        // do nothing
+    }
+
+    @Override
+    public LaunchMethod nextMethod() {
+        return next;
     }
 }

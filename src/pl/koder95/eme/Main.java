@@ -27,16 +27,14 @@ import java.util.ResourceBundle;
 import java.util.regex.Pattern;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.TransformerException;
 
 /**
  * Klasa uruchamiająca i inicjalizująca podstawowe elementy aplikacji.
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.1.6, 2018-01-30
+ * @version 0.1.10, 2018-03-18
  * @since 0.0.201
  */
-public class Main {
+public class Main implements LaunchMethod {
     /**
      * Domyślny pakiet językowy.
      */
@@ -95,16 +93,6 @@ public class Main {
      */
     public static final Pattern DIGITS_STRING_PATTERN
             = Pattern.compile("([0-9]*)");
-    
-    static {
-        try {
-            setSystemLookAndFeel();
-        } catch (ClassNotFoundException | InstantiationException 
-                | IllegalAccessException | UnsupportedLookAndFeelException ex) {
-            showErrorMessage(ex.getLocalizedMessage(),
-                    BUNDLE.getString("ERR_GUI_TITLE"), true);
-        }
-    }
 
     /**
      * Uruchamia program.
@@ -114,29 +102,11 @@ public class Main {
      * CSV na XML
      */
     public static void main(String[] args) {
-        Files.createNotExistDirs();
-        try {
-            Files.createNotExistFiles();
-        } catch (IOException ex) {
-            showErrorMessage(BUNDLE.getString("ERR_CANNOT_CREATE_NEW_FILE"),
-                    BUNDLE.getString("ERR_CANNOT_CREATE_NEW_FILE_TITLE"));
-        }
-        if (args.length > 0 && args[0].equalsIgnoreCase("-c")) try {
-            ConverterCSV conv = ConverterCSV.create(Files.CSV_DIR,
-                    Files.XML_DIR, "indices.xml");
-            ConverterCSV.convert(conv, Files.CSV_DIR.list(
-                    (File d, String name) -> name.endsWith(".csv")
-            ));
-            Main.releaseMemory();
-        } catch (ParserConfigurationException | IOException
-                | TransformerException ex) {
-            showErrorMessage(ex.getMessage(), ex.getClass().getCanonicalName());
-        }
-        else {
-            SystemTray tray = new SystemTray();
-            tray.init();
-            tray.show();
-        }
+        Main instance = new Main(Files.CSV_DIR, Files.XML_DIR, "indices.xml");
+        if (args == null || args.length == 0)
+            instance.setNextLaunchMethod(new SystemTray());
+        
+        instance.launch(args);
     }
     
     /**
@@ -229,5 +199,42 @@ public class Main {
      */
     public static void releaseMemory() {
         MemoryUtils.releaseMemory();
+    }
+    
+    private LaunchMethod next;
+
+    public Main(File csvDir, File xmlDir, String xmlFileName) {
+        this.next = ConverterCSV.create(csvDir, xmlDir, xmlFileName);
+    }
+
+    @Override
+    public void launch(String[] args) {
+        try {
+            setSystemLookAndFeel();
+        } catch (ClassNotFoundException | InstantiationException 
+                | IllegalAccessException | UnsupportedLookAndFeelException ex) {
+            showErrorMessage(ex.getLocalizedMessage(),
+                    BUNDLE.getString("ERR_GUI_TITLE"), true);
+        }
+        
+        Files.createNotExistDirs();
+        try {
+            Files.createNotExistFiles();
+        } catch (IOException ex) {
+            showErrorMessage(BUNDLE.getString("ERR_CANNOT_CREATE_NEW_FILE"),
+                    BUNDLE.getString("ERR_CANNOT_CREATE_NEW_FILE_TITLE"));
+        } finally {
+            nextMethod().launch(args);
+        }
+    }
+
+    @Override
+    public void setNextLaunchMethod(LaunchMethod next) {
+        this.next = next;
+    }
+
+    @Override
+    public LaunchMethod nextMethod() {
+        return next;
     }
 }

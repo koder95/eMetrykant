@@ -39,7 +39,7 @@ import pl.koder95.eme.idf.Indices;
  * Klasa zarządza całym interfejsem graficznym.
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.0.205, 2017-08-27
+ * @version 0.1.10, 2018-03-18
  * @since 0.0.201
  */
 public class GUIMediator {
@@ -114,8 +114,7 @@ public class GUIMediator {
             private static final long serialVersionUID = -5644390861803492172L;
             @Override
             public void actionPerformed(ActionEvent e) {
-                setActSearchingEnable(!gui.getSearchingPanel().getActCombo()
-                        .isEnabled());
+                switchSearching();
             }
         });
         gui.getPrevButton().setAction(new AbstractAction("<") {
@@ -238,7 +237,7 @@ public class GUIMediator {
      * po numerze aktu, zostanie włączone wyszukiwanie standardowe.
      */
     public void switchSearching() {
-        setActSearchingEnable(isActSearchingEnable());
+        setActSearchingEnable(!isActSearchingEnable());
     }
 
     /**

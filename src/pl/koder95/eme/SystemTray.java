@@ -27,10 +27,10 @@ import pl.koder95.eme.idf.Indices;
 /**
  * Klasa zarządza ikoną zasobnika systemu.
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.0.202, 2017-08-23
+ * @version 0.1.10, 2018-03-18
  * @since 0.0.201
  */
-public class SystemTray {
+public class SystemTray extends AbstractDefaultLaunch {
     
     private Image image;
     private String title;
@@ -96,5 +96,11 @@ public class SystemTray {
      */
     private void service(Indices indices) {
         new GUIMediator(indices).showFrame();
+    }
+
+    @Override
+    public void launch(String[] args) {
+        this.init();
+        this.show();
     }
 }

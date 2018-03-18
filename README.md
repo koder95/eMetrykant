@@ -21,6 +21,7 @@ Pierwsza stabilna wersja programu (v1.0.0), będzie programem, który w pełni p
 ### Wersja 0.2
 - Wczytywanie danych z pliku XML. (_ZROBIONE_)
 - Konwerter danych z CSV do formatu XML. (_ZROBIONE_)
+- Uruchamianie aplikacji w oparciu o wzorzec _Chain of Responsibility_ (łańcuch odpowiedzialności). (_ZROBIONE_)
 - Używanie szablonów przez GUI.
 
 ### Wersja 0.3
