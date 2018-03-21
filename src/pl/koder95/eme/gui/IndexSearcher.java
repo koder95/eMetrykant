@@ -16,10 +16,11 @@
  */
 package pl.koder95.eme.gui;
 
+import java.util.HashSet;
 import java.util.List;
-import pl.koder95.eme.idf.ActNumber;
-import pl.koder95.eme.idf.Index;
-import pl.koder95.eme.idf.Indices;
+import java.util.Set;
+import pl.koder95.eme.dfs.IndexList;
+import pl.koder95.eme.dfs.Index;
 import pl.koder95.eme.searching.AbstractSearchQuery;
 import pl.koder95.eme.searching.SearchContext;
 import pl.koder95.eme.searching.SearchQuery;
@@ -28,28 +29,36 @@ import pl.koder95.eme.searching.SearchQuery;
  * Klasa pomagająca wyszukiwanie indeksów.
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.0.201, 2017-08-16
+ * @version 0.1.11, 2018-03-21
  * @since 0.0.201
  */
 public class IndexSearcher {
     
     private final SearchContext context = new SearchContext();
-    private final Indices indices;
+    private final IndexList indices;
+    private final Set<String> names = new HashSet<>();
 
     /**
      * Podstawowy konstruktor.
      * 
      * @param indices
      */
-    public IndexSearcher(Indices indices) {
+    public IndexSearcher(IndexList indices) {
         this.indices = indices;
         this.indices.load();
+        // dodawanie nazw, które mają być przeszukiwane:
+        this.names.add("surname");
+        this.names.add("name");
+        this.names.add("husband-surname");
+        this.names.add("husband-name");
+        this.names.add("wife-surname");
+        this.names.add("wife-name");
     }
 
     /**
      * @return zbiór indeksów
      */
-    public Indices getIndices() {
+    public IndexList getIndices() {
         return indices;
     }
 
@@ -107,13 +116,9 @@ public class IndexSearcher {
      */
     public Index[] find(String label) {
         String[] words = label.split(" ");
-        for (int i = 0; i < words.length; i++) {
-            if (words[i].endsWith(":")) {
-                words[i] = "#" + words[i].substring(0, words[i].lastIndexOf(':'));
-            }
-        }
+        System.out.println("find=" + label);
         context.setAutoSearch();
-        return find(new SearchQuery(String.join(" ", words)));
+        return find(new SearchQuery(names, String.join(" ", words)));
     }
 
     /**
@@ -121,18 +126,8 @@ public class IndexSearcher {
      * @return tablica indeksów pasujących do wyszukiwanych danych
      */
     public Index[] find(String... data) {
-        context.setDataSearch();
-        return find(new SearchQuery(String.join(" ", data)));
-    }
-
-    /**
-     * @param year rok
-     * @param act numer aktu
-     * @return tablica indeksów pasujących do podanego roku i numeru aktu
-     */
-    public Index[] find(int year, String act) {
-        context.setActNumberSearch();
-        return find(new SearchQuery(new ActNumber(act, year)));
+        context.setSearchQueueStrategy();
+        return find(new SearchQuery(names, String.join(" ", data)));
     }
 
     /**
@@ -142,7 +137,7 @@ public class IndexSearcher {
     public Index[] find(int year) {
         System.out.println("find year " + year);
         context.setYearSearch();
-        return find(new SearchQuery("" + year));
+        return find(new SearchQuery(names, "" + year));
     }
 
     /**

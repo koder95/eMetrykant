@@ -31,7 +31,7 @@ import javax.swing.text.PlainDocument;
  * Panel zawiera komponenty umożliwiające wyszukiwanie indeksów.
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.0.202, 2017-08-23
+ * @version 0.1.11, 2018-03-21
  * @since 0.0.201
  */
 public class IndexSearchingPanel extends JPanel {
@@ -47,8 +47,10 @@ public class IndexSearchingPanel extends JPanel {
         yearCombo.setEnabled(false);
         searchField.setPreferredSize(new java.awt.Dimension(250, 20));
         PlainDocument doc = new PlainDocument() {
+            private static final long serialVersionUID = 5542303891178286627L;
             @Override
-            public void insertString(int offs, String str, AttributeSet a) throws BadLocationException {
+            public void insertString(int offs, String str, AttributeSet a)
+                    throws BadLocationException {
                 super.insertString(offs, str.toUpperCase(), a);
             }
         };

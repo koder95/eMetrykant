@@ -43,7 +43,7 @@ import pl.koder95.eme.idf.IndexTemplate;
  * Umożliwia przekonwertowanie plików o rozszerzeniu CSV na plik XML.
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.1.10, 2018-03-18
+ * @version 0.1.11, 2018-03-21
  * @since 0.1.1
  */
 public final class ConverterCSV implements LaunchMethod {
@@ -167,56 +167,6 @@ public final class ConverterCSV implements LaunchMethod {
     }
     
     /**
-     * Konwertuje pliki CSV na XML, tak aby zawierające w każdym z nich dane
-     * przydzielone były do ksiąg o podanych nazwach.
-     * 
-     * @param csv konwerter CSV
-     * @param csvFileNames nazwy plików
-     * @param bookNames nazwy ksiąg
-     * 
-     * @throws ParserConfigurationException jeśli {@code DocumentBuilder}
-     * nie może być utworzony co wymaga określonej konfiguracji
-     * @throws IOException błąd wejścia/wyjścia
-     * @throws TransformerException Jeśli nie do naprawienia błąd występuje
-     * w trakcie przebiegu transformacji lub brakuje odpowiedniej konfiguracji.
-     */
-    public static void convert(ConverterCSV csv, String[] csvFileNames,
-            String[] bookNames)
-            throws ParserConfigurationException, IOException,
-            TransformerException {
-        csv.createXML();
-        csv.createRootElement();
-        for (int i = 0; i < bookNames.length; i++) {
-            csv.convert(csvFileNames[i], bookNames[i]);
-        }
-        csv.saveXML();
-        csv.clear();
-    }
-    
-    /**
-     * Konwertuje pliki CSV na XML, tak aby zawierające w każdym z nich dane
-     * przydzielone były do ksiąg o nazwach zaczerpniętych z nazw plików.
-     * 
-     * @param csv konwerter CSV
-     * @param csvFileNames nazwy plików
-     * 
-     * @throws ParserConfigurationException jeśli {@code DocumentBuilder}
-     * nie może być utworzony co wymaga określonej konfiguracji
-     * @throws IOException błąd wejścia/wyjścia
-     * @throws TransformerException Jeśli nie do naprawienia błąd występuje
-     * w trakcie przebiegu transformacji lub brakuje odpowiedniej konfiguracji.
-     */
-    public static void convert(ConverterCSV csv, String[] csvFileNames)
-            throws ParserConfigurationException, IOException,
-            TransformerException {
-        csv.createXML();
-        csv.createRootElement();
-        for (String csvFileName: csvFileNames) csv.convert(csvFileName);
-        csv.saveXML();
-        csv.clear();
-    }
-    
-    /**
      * Tworzy nowy konwerter, który pracować będzie w określonych warunkach.
      * 
      * @param csvDir definiuje folder, z którego pobierane będą pliki CSV do
@@ -228,20 +178,6 @@ public final class ConverterCSV implements LaunchMethod {
     public static ConverterCSV create(File csvDir, File xmlDir,
             String xmlFileName) {
         return new ConverterCSV(csvDir, xmlDir, xmlFileName);
-    }
-    
-    /**
-     * @deprecated Metoda nie przydatna dla bieżącej hierarchi plików.
-     * Napleży stosować metodę {@link #create(java.io.File, java.io.File,
-     * java.lang.String)}, która jest nowszą wersją tej metody.
-     * Zawsze zwraca wartość {@code null}.
-     * @param dataDir nie używany
-     * @param xmlFileName nie używany
-     * @return {@code null}
-     */
-    @Deprecated
-    public static ConverterCSV create(File dataDir, String xmlFileName) {
-        return null;
     }
 
     @Override

@@ -32,14 +32,15 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.KeyStroke;
 import pl.koder95.eme.Main;
-import pl.koder95.eme.idf.Index;
-import pl.koder95.eme.idf.Indices;
+import pl.koder95.eme.dfs.ActNumber;
+import pl.koder95.eme.dfs.Index;
+import pl.koder95.eme.dfs.IndexList;
 
 /**
  * Klasa zarządza całym interfejsem graficznym.
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.1.10, 2018-03-18
+ * @version 0.1.11, 2018-03-21
  * @since 0.0.201
  */
 public class GUIMediator {
@@ -47,7 +48,7 @@ public class GUIMediator {
     private class GUI {
         IndexBrowserFrame frame;
         
-        GUI(Indices indices) {
+        GUI(IndexList indices) {
             this.frame = new IndexBrowserFrame(indices);
         }
         
@@ -57,8 +58,8 @@ public class GUIMediator {
         IndexFooterPanel getFooterPanel() {
             return frame.getFooterPanel();
         }
-        IndexInfoPanel getInfoPanel() {
-            return frame.getInfoPanel();
+        DataPanel getDataPanel() {
+            return frame.getDataPanel();
         }
         IndexSearchingPanel getSearchingPanel() {
             return frame.getSearchingPanel();
@@ -86,18 +87,19 @@ public class GUIMediator {
     private final GUI gui;
     private final ActionMap actions = new ActionMap();
     private final InputMap input;
+    private Index current = null; // indeks aktualnie wyświetlany
     
     /**
      * Tworzy GUI zależnie od zbioru indeksów.
      * 
      * @param indices zbiór indeksów
      */
-    public GUIMediator(Indices indices) {
+    public GUIMediator(IndexList indices) {
         gui = new GUI(indices);
         input = new ComponentInputMap((JComponent) gui.frame.getContentPane());
-        ((JPanel) gui.frame.getContentPane()).setActionMap(actions);
-        ((JPanel) gui.frame.getContentPane())
-                .setInputMap(JPanel.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT, input);
+        JPanel content = (JPanel) gui.frame.getContentPane();
+        content.setActionMap(actions);
+        content.setInputMap(JPanel.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT, input);
         
         gui.getSearchingPanel().getYearCombo()
                 .addActionListener((e) -> loadActComboBoxModel());
@@ -121,14 +123,14 @@ public class GUIMediator {
             private static final long serialVersionUID = 4377386270269629176L;
             @Override
             public void actionPerformed(ActionEvent e) {
-                setIndex(gui.getInfoPanel().getIndexID()+1);
+                prevIndex();
             }
         });
         gui.getNextButton().setAction(new AbstractAction(">") {
             private static final long serialVersionUID = -5644390861803492172L;
             @Override
             public void actionPerformed(ActionEvent e) {
-                setIndex(gui.getInfoPanel().getIndexID()-1);
+                nextIndex();
             }
         });
         actions.put("switchSearching", gui.getSearchingPanel().getActSearching()
@@ -145,6 +147,15 @@ public class GUIMediator {
         input.put(KeyStroke.getKeyStroke("pressed INSERT"), "switchSearching");
         input.put(KeyStroke.getKeyStroke("pressed PAGE_DOWN"), "prevIndex");
         input.put(KeyStroke.getKeyStroke("pressed PAGE_UP"), "nextIndex");
+        
+        // ustawianie etykiet dla nazw danych:
+        gui.frame.setDataNameLabel("an", "Akt");
+        gui.frame.setDataNameLabel("surname", "Nazwisko");
+        gui.frame.setDataNameLabel("name", "Imię");
+        gui.frame.setDataNameLabel("husband-surname", "Nazwisko męża");
+        gui.frame.setDataNameLabel("husband-name", "Imię męża");
+        gui.frame.setDataNameLabel("wife-surname", "Nazwisko żony");
+        gui.frame.setDataNameLabel("wife-name", "Imię żony");
     }
     
     /**
@@ -153,21 +164,13 @@ public class GUIMediator {
      * @param i indeks
      */
     public void setIndex(Index i) {
+        System.out.println("setIndex=" + i);
         if (i == null) Toolkit.getDefaultToolkit().beep();
         else {
-            gui.getInfoPanel().setIndex(i);
+            current = i;
+            gui.getDataPanel().showData(current, gui.getSearcher().getIndices().queueNames());
+            gui.getDataPanel().repaint();
         }
-    }
-    
-    /**
-     * Ustawia indeks, który ma zostać wyświetlony w panelu informacyjnym.
-     * 
-     * @param id identyfikator
-     */
-    public void setIndex(int id) {
-        int size = gui.getSearcher().getIndices().size();
-        if (id < 1 || id > size) setIndex(null);
-        else setIndex(gui.getSearcher().get(id));
     }
 
     /**
@@ -175,21 +178,21 @@ public class GUIMediator {
      * @see IndexInfoPanel#resetIndex()
      */
     public void resetIndex() {
-        gui.getInfoPanel().resetIndex();
+        gui.getDataPanel().reset();
     }
     
     /**
      * Ustawia następny indeks.
      */
     public void nextIndex() {
-        setIndex(gui.getInfoPanel().getIndexID()+1);
+        setIndex(gui.getSearcher().getIndices().getNext(current));
     }
     
     /**
      * Ustawia poprzedni indeks.
      */
     public void prevIndex() {
-        setIndex(gui.getInfoPanel().getIndexID()-1);
+        setIndex(gui.getSearcher().getIndices().getPrev(current));
     }
     
     /**
@@ -237,7 +240,7 @@ public class GUIMediator {
      * po numerze aktu, zostanie włączone wyszukiwanie standardowe.
      */
     public void switchSearching() {
-        setActSearchingEnable(!isActSearchingEnable());
+        setActSearchingEnable(isActSearchingEnable());
     }
 
     /**
@@ -270,10 +273,12 @@ public class GUIMediator {
     public void search() {
         Index[] result;
         if (isActSearchingEnable()) {
-            result = gui.getSearcher().find(
-                (int) gui.getSearchingPanel().getYearCombo().getSelectedItem(),
-                (String) gui.getSearchingPanel().getActCombo().getSelectedItem()
+            ActNumber an = new ActNumber(
+               (String) gui.getSearchingPanel().getActCombo().getSelectedItem(),
+                (int) gui.getSearchingPanel().getYearCombo().getSelectedItem()
             );
+            // wyszukaj indeks po numerze aktu
+            result = gui.getSearcher().find(an.toString());
             System.out.println("result=" + Arrays.toString(result));
         } else {
             result = gui.getSearcher()
@@ -291,10 +296,9 @@ public class GUIMediator {
     public void updateFooter() {
         IndexFooterPanel footer = gui.getFooterPanel();
         footer.getTitle().setText(gui.getSearcher().getIndices().getName());
-        footer.getMin().setText(gui.getFirstIndex().getActNumber().getSign()
-                + "/" + gui.getFirstIndex().getActNumber().getYear());
-        footer.getMax().setText(gui.getLastIndex().getActNumber().getSign()
-                + "/" + gui.getLastIndex().getActNumber().getYear());
+        System.out.println("gui.getFirstIndex().getActNumber()=" + gui.getFirstIndex().getActNumber());
+        footer.getMin().setText(gui.getFirstIndex().getActNumber().toString());
+        footer.getMax().setText(gui.getLastIndex().getActNumber().toString());
         footer.getSum().setText("" + gui.getSearcher().getIndices().size());
     }
     

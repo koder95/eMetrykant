@@ -23,13 +23,14 @@ import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
+import pl.koder95.eme.dfs.ActNumber;
 
 /**
  * Szablon dla indeksów, który pozwala utworzyć indeks według określonych reguł
  * układania danych.
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.1.5, 2017-09-08
+ * @version 0.1.11, 2018-03-21
  * @since 0.1.4
  */
 public class IndexTemplate {

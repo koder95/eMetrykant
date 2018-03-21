@@ -17,93 +17,52 @@
 package pl.koder95.eme.searching;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.InputMismatchException;
 import java.util.LinkedList;
+import java.util.Map;
 import java.util.Scanner;
-import pl.koder95.eme.idf.ActNumber;
+import java.util.Set;
+import pl.koder95.eme.dfs.ActNumber;
 
 /**
  * Klasa reprezentuje kwerendę wyszukującą.
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.0.202, 2017-08-23
+ * @version 0.1.11, 2018-03-21
  * @since 0.0.202
  */
 class ConstantSearchQuery extends AbstractSearchQuery {
     
-    private final int id;
     private final int year;
     private final ActNumber an;
-    private final String[] data;
+    private final Map<String, String> data;
 
     /**
      * Podstawowy konstruktor.
      * 
-     * @param id identyfikator
-     * @param year rok
-     * @param an numer aktu
-     * @param data dane
-     */
-    public ConstantSearchQuery(int id, int year, ActNumber an, String... data) {
-        this.id = id;
-        this.year = year;
-        this.an = an;
-        this.data = data;
-    }
-
-    /**
-     * Alternatywny konstruktor.
-     * 
-     * @param words słowa
-     * @param idIndex indeks słowa będącego identyfikatorem
-     * @param anIndex indeks słowa będącego numerem aktu
-     */
-    public ConstantSearchQuery(String[] words, int idIndex, int anIndex) {
-        this.id = getID(words, idIndex);
-        this.year = getYear(words, anIndex);
-        this.an = getActNumber(words, anIndex);
-        this.data = getData(words, idIndex, anIndex, year);
-    }
-
-    /**
-     * Alternatywny konstruktor.
-     * 
-     * @param phrase fraza wyszukiwania
-     */
-    public ConstantSearchQuery(SearchPhrase phrase) {
-      this(phrase.getWords(), phrase.getIDWordIndex(), phrase.getANWordIndex());
-    }
-
-    /**
-     * Alternatywny konstruktor.
-     * 
+     * @param names zbiór nazw danych do przeszukania
      * @param value wartość do znalezienia
      */
-    public ConstantSearchQuery(String value) {
-        this(SearchPhrase.createDefault(value));
+    public ConstantSearchQuery(Set<String> names, String value) {
+        super(value);
+        SearchPhrase phrase = SearchPhrase.createDefault(value);
+        this.year = getYear(phrase.getWords(), phrase.getANWordIndex());
+        this.an = getActNumber(phrase.getWords(), phrase.getANWordIndex());
+        this.data = getData(names, phrase.getWords(), phrase.getIDWordIndex(),
+                year);
     }
 
     /**
-     * Alternatywny konstruktor.
+     * Tworzy nową kwerendę szukającą numer aktu.
      * 
      * @param an numer aktu do znalezienia
      */
-    public ConstantSearchQuery(ActNumber an) {
-        this(an.toString());
-    }
-
-    /**
-     * Alternatywny konstruktor.
-     * 
-     * @param id identyfikator do znalezienia
-     */
-    public ConstantSearchQuery(int id) {
-        this("#" + id);
-    }
-
-    @Override
-    int getID() {
-        return id;
+    public static ConstantSearchQuery create(ActNumber an) {
+        HashSet<String> names = new HashSet<>();
+        names.add("an");
+        return new ConstantSearchQuery(names, an.toString());
     }
 
     @Override
@@ -117,54 +76,13 @@ class ConstantSearchQuery extends AbstractSearchQuery {
     }
 
     @Override
-    String[] getData() {
+    String getData(String name) {
+        return data.get(name);
+    }
+
+    @Override
+    Map<String, String> getData() {
         return data;
-    }
-
-    @Override
-    String getData(int i) {
-        return getData()[i];
-    }
-
-    @Override
-    public SearchFilter getIDFilter() {
-        return (i)-> {
-            return getID() == i.ID;
-        };
-    }
-
-    @Override
-    public SearchFilter getActNumberFilter() {
-        return (i)-> {
-            return getActNumber().compareTo(i.getActNumber()) == 0;
-        };
-    }
-
-    @Override
-    public SearchFilter getYearFilter() {
-        return (i)-> {
-            return getYear() == i.getActNumber().getYear();
-        };
-    }
-
-    @Override
-    public SearchFilter getDataFilter() {
-        return (i)-> {
-            String[] data = getData();
-            boolean accept = true;
-            for (int ii = 0; ii < data.length; ii++) {
-                accept = accept && i.getData(ii).startsWith(data[ii]);
-            }
-            return accept;
-        };
-    }
-    
-    private static int getID(String[] words, int idIndex) {
-        if (idIndex < 0) return -1;
-        String idWord = words[idIndex];
-        try {
-            return Integer.parseInt(idWord.substring(1));
-        } catch (NumberFormatException ex) { return -1; }
     }
     
     private static int getYear(String[] words, int anIndex) {
@@ -203,33 +121,22 @@ class ConstantSearchQuery extends AbstractSearchQuery {
         return null;
     }
     
-    private static String[] getData(String[] words, int idIndex, int anIndex,
-            int year) {
+    private static Map<String, String> getData(Set<String> names, String[] words,
+            int anIndex, int year) {
+        HashMap<String, String> map = new HashMap<>();
         LinkedList<String> data = new LinkedList<>();
         data.addAll(Arrays.asList(words));
         
-        if (idIndex >= 0) {
-            if (anIndex >= 0) {
-                if (idIndex == anIndex) data.remove(idIndex);
-                else if (idIndex > anIndex) {
-                    data.remove(idIndex);
-                    data.remove(anIndex);
-                }
-                else {
-                    data.remove(anIndex);
-                    data.remove(idIndex);
-                }
-            }
-            else data.remove(idIndex);
-        }
-        else if (anIndex >= 0) data.remove(anIndex);
+        if (anIndex >= 0) data.remove(anIndex);
         if (year > 0) data.remove(year + "");
         
-        return data.toArray(new String[data.size()]);
+        names.forEach((name) -> {
+            map.put(name, data.remove());
+        });
+        return map;
     }
     
     static ConstantSearchQuery toConstant(AbstractSearchQuery q) {
-        return new ConstantSearchQuery(q.getID(), q.getYear(), q.getActNumber(),
-                q.getData());
+        return new ConstantSearchQuery(q.getData().keySet(), q.getEnteredText());
     }
 }

@@ -21,13 +21,13 @@ import java.awt.Image;
 import java.awt.MenuItem;
 import java.awt.PopupMenu;
 import java.awt.TrayIcon;
+import pl.koder95.eme.dfs.IndexList;
 import pl.koder95.eme.gui.GUIMediator;
-import pl.koder95.eme.idf.Indices;
 
 /**
  * Klasa zarządza ikoną zasobnika systemu.
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.1.10, 2018-03-18
+ * @version 0.1.11, 2018-03-21
  * @since 0.0.201
  */
 public class SystemTray extends AbstractDefaultLaunch {
@@ -82,7 +82,7 @@ public class SystemTray extends AbstractDefaultLaunch {
      * rozwijanej.
      */
     private void createMenuItemForAllIndices() {
-        for (Indices indices: Indices.values()) {
+        for (IndexList indices: IndexList.values()) {
             MenuItem action = new MenuItem(indices.getName());
             action.addActionListener((e)-> service(indices));
             popup.add(action);
@@ -94,7 +94,7 @@ public class SystemTray extends AbstractDefaultLaunch {
      * odpowiedniej ramki.
      * @param indices zbiór indeksów
      */
-    private void service(Indices indices) {
+    private void service(IndexList indices) {
         new GUIMediator(indices).showFrame();
     }
 

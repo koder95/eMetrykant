@@ -8,6 +8,7 @@ package pl.koder95.eme.idf;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import pl.koder95.eme.dfs.ActNumber;
 
 /**
  * Rzeczywisty indeks, czyli klasa przechowująca każdą informację o indeksie,
@@ -15,10 +16,13 @@ import java.util.Arrays;
  * wirtualnego}.
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.1.5, 2017-09-08
+ * @version 0.1.11, 2018-03-21
  * @since 0.0.201
  */
 class RealIndex extends Index {
+    /**
+     * Numer aktu, pod którym znajdują się dane tego indeksu.
+     */
     public final ActNumber AN;
     private final String[] data;
 

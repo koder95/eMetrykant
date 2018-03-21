@@ -9,6 +9,7 @@ package pl.koder95.eme.idf;
 import java.text.Collator;
 import java.util.Arrays;
 import pl.koder95.eme.Main;
+import pl.koder95.eme.dfs.ActNumber;
 
 /**
  * Klasa reprezentuje indeks, czyli zbiór danych posiadających unikalny
@@ -17,7 +18,7 @@ import pl.koder95.eme.Main;
  * przechowywanych na parafii.
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.0.201, 2017-08-16
+ * @version 0.1.11, 2018-03-21
  * @since 0.0.201
  */
 public abstract class Index implements Comparable<Index> {

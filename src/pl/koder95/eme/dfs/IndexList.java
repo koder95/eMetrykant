@@ -14,13 +14,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package pl.koder95.eme.idf;
+package pl.koder95.eme.dfs;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
 import pl.koder95.eme.Files;
@@ -35,73 +37,72 @@ import static pl.koder95.eme.Main.showErrorMessage;
  *
  * @author Kamil Jan Mularski [@koder95]
  * @version 0.1.11, 2018-03-21
- * @since 0.0.201
+ * @since 0.1.11
  */
-public enum Indices implements IndexContainer {
+public enum IndexList implements IndexContainer {
 
     /**
      * Zbiór indeksów osób ochrzczonych. Indeksy zawierają dane: nazwisko,
      * imiona, nr aktu, rok chrztu.
      */
-    LIBER_BAPTIZATORUM("Księga ochrzczonych"),
+    LIBER_BAPTIZATORUM("Księga ochrzczonych", new LinkedList<>(Arrays.asList(
+            "name", "surname", "an"
+    ))),
 
     /**
      * Zbiór indeksów osób bierzmowanych. Indeksy zawierają dane: nazwisko,
      * imiona, nr aktu, rok bierzmowania.
      */
-    LIBER_CONFIRMATORUM("Księga bierzmowanych"),
+    LIBER_CONFIRMATORUM("Księga bierzmowanych", new LinkedList<>(Arrays.asList(
+            "name", "surname", "an"
+    ))),
 
     /**
      * Zbiór indeksów osób zaślubionych. Indeksy zawierają dane: nazwisko męża,
      * imiona męża, nazwisko panieńskie żony, imiona żony, nr aktu, rok ślubu.
      */
-    LIBER_MATRIMONIORUM("Księga zaślubionych"),
+    LIBER_MATRIMONIORUM("Księga zaślubionych", new LinkedList<>(Arrays.asList(
+            "husband-name", "husband-surname", "wife-name", "wife-surname", "an"
+    ))),
 
     /**
      * Zbiór indeksów osób zmarłych. Indeksy zawierają dane: nazwisko,
      * imiona, nr aktu, rok śmierci.
      */
-    LIBER_DEFUNCTORUM("Księga zmarłych");
+    LIBER_DEFUNCTORUM("Księga zmarłych", new LinkedList<>(Arrays.asList(
+            "name", "surname", "an"
+    )));
     
-    private List<RealIndex> loaded;
+    private List<Index> loaded;
     private final String name;
+    private final Queue<String> nameQueue;
 
-    private Indices(String name) {
+    private IndexList(String name, Queue<String> nameQueue) {
         this.name = name;
+        this.nameQueue = nameQueue;
     }
 
     @Override
     public Index get(int id) {
-        return getReal(id).toVirtualIndex(this);
-    }
-    
-    RealIndex getReal(int id) {
+        System.out.println("get[id]=" + id);
         return loaded.get(id-1);
     }
     
     @Override
     public List<Index> getLoaded() {
-        List<Index> virtual = new LinkedList<>();
-        loaded.stream().forEach((ri)
-                -> virtual.add(get(ri.ID)));
-        return virtual;
+        return loaded;
     }
     
     /**
      * Wczytuje z dysku indeksy zapisane w pliku XML.
      */
     public void load() {
-        BookLoader books = BookLoader.get();
-        try {
-            books.loadBookTemplate(Files.TEMPLATE_XML, name);
-            books.createIndicesLoader(name);
-            loaded = books.load(new File(Files.XML_DIR, "indices.xml"), name);
-        } catch (FileNotFoundException ex) {
-            showErrorMessage(READ_DATA_ERR_MESSAGE, READ_DATA_ERR_TITLE, true);
-        } catch (IOException | SAXException | ParserConfigurationException ex) {
-            showErrorMessage(BUNDLE.getString("ERR_EX_IO"),
-                    BUNDLE.getString("ERR_EX_IO_TITLE"), true);
-        }
+        loaded = new LinkedList<>();
+        if (BOOKS == null) loadBooks();
+        BOOKS.stream().filter((b)->b.getName().equalsIgnoreCase(name))
+                .forEach((b)->{
+                    loaded.addAll(b.indices);
+                });
     }
 
     /**
@@ -121,6 +122,24 @@ public enum Indices implements IndexContainer {
         return get(size());
     }
     
+    /**
+     * @param i indeks
+     * @return kolejny indeks
+     */
+    public Index getNext(Index i) {
+        int index = loaded.indexOf(i);
+        return index < 0? null : loaded.get(index-1);
+    }
+    
+    /**
+     * @param i indeks
+     * @return poprzedni indeks
+     */
+    public Index getPrev(Index i) {
+        int index = loaded.indexOf(i);
+        return index < loaded.size()? loaded.get(index+1) : null;
+    }
+    
     @Override
     public Index getLast() {
         return get(1);
@@ -130,5 +149,28 @@ public enum Indices implements IndexContainer {
     public void clear() {
         loaded.clear();
         Main.releaseMemory();
+    }
+    
+    /**
+     * Tworzy i zwraca kolejkę nazw, które służą do pobrania odpowiednich danych
+     * z indeksów.
+     * 
+     * @return nazwy danych w postaci kolejki
+     */
+    public Queue<String> queueNames() {
+        return new LinkedList<>(nameQueue);
+    }
+    
+    private static List<Book> BOOKS;
+    
+    private static void loadBooks() {
+        try {
+            BOOKS = Book.load(new File(Files.XML_DIR, "indices.xml"));
+        } catch (FileNotFoundException ex) {
+            showErrorMessage(READ_DATA_ERR_MESSAGE, READ_DATA_ERR_TITLE, true);
+        } catch (IOException | SAXException | ParserConfigurationException ex) {
+            showErrorMessage(BUNDLE.getString("ERR_EX_IO"),
+                    BUNDLE.getString("ERR_EX_IO_TITLE"), true);
+        }
     }
 }

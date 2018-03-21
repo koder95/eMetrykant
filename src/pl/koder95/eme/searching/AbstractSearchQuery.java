@@ -16,43 +16,33 @@
  */
 package pl.koder95.eme.searching;
 
-import pl.koder95.eme.idf.ActNumber;
+import java.util.Map;
+import pl.koder95.eme.dfs.ActNumber;
 
 /**
  * Klasa reprezentująca kwerendę szukającą.
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.0.201, 2017-08-16
+ * @version 0.1.11, 2018-03-21
  * @since 0.0.201
  */
 public abstract class AbstractSearchQuery {
+
+    private final String enteredText;
     
-    /**
-     * @return filtr identyfikata
-     */
-    public abstract SearchFilter getIDFilter();
+    AbstractSearchQuery(String entered) {
+        this.enteredText = entered;
+    }
 
-    /**
-     * @return filtr numeru aktu
-     */
-    public abstract SearchFilter getActNumberFilter();
-
-    /**
-     * @return filtr roku
-     */
-    public abstract SearchFilter getYearFilter();
-
-    /**
-     * @return filtr danych
-     */
-    public abstract SearchFilter getDataFilter();
-
-    abstract int getID();
     abstract int getYear();
     abstract ActNumber getActNumber();
-    abstract String[] getData();
+    abstract Map<String, String> getData();
 
-    String getData(int i) {
-        return getData()[i];
+    String getData(String name) {
+        return getData().get(name);
+    }
+
+    String getEnteredText() {
+        return enteredText;
     }
 }

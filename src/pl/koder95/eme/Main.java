@@ -31,7 +31,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 /**
  * Klasa uruchamiająca i inicjalizująca podstawowe elementy aplikacji.
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.1.10, 2018-03-18
+ * @version 0.1.11, 2018-03-21
  * @since 0.0.201
  */
 public class Main implements LaunchMethod {
@@ -209,20 +209,19 @@ public class Main implements LaunchMethod {
 
     @Override
     public void launch(String[] args) {
-        try {
-            setSystemLookAndFeel();
-        } catch (ClassNotFoundException | InstantiationException 
-                | IllegalAccessException | UnsupportedLookAndFeelException ex) {
-            showErrorMessage(ex.getLocalizedMessage(),
-                    BUNDLE.getString("ERR_GUI_TITLE"), true);
-        }
-        
         Files.createNotExistDirs();
         try {
             Files.createNotExistFiles();
         } catch (IOException ex) {
             showErrorMessage(BUNDLE.getString("ERR_CANNOT_CREATE_NEW_FILE"),
                     BUNDLE.getString("ERR_CANNOT_CREATE_NEW_FILE_TITLE"));
+        }
+        try {
+            setSystemLookAndFeel();
+        } catch (ClassNotFoundException | InstantiationException 
+                | IllegalAccessException | UnsupportedLookAndFeelException ex) {
+            showErrorMessage(ex.getLocalizedMessage(),
+                    BUNDLE.getString("ERR_GUI_TITLE"), true);
         } finally {
             nextMethod().launch(args);
         }

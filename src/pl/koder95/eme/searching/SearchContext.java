@@ -20,7 +20,7 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import pl.koder95.eme.Main;
-import pl.koder95.eme.idf.Index;
+import pl.koder95.eme.dfs.Index;
 
 /**
  * Klasa określa kontekst dla wyszukiwań i umożliwia wybranie odpowiedniej
@@ -45,7 +45,7 @@ import pl.koder95.eme.idf.Index;
  * </ol>
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.0.203, 2017-08-26
+ * @version 0.1.11, 2018-03-21
  * @since 0.0.201
  */
 public class SearchContext {
@@ -113,21 +113,16 @@ public class SearchContext {
     }
     
     private double similarity(Index i) {
-        if (strategy.query.getID() == i.ID) return 1d;
         if (strategy.query.getActNumber()!= null) {
             if (strategy.query.getActNumber().compareTo(i.getActNumber()) == 0)
                 return 1d;
         }
         
         double similarity = 1d;
-        for (int ii = 0; ii < strategy.query.getData().length; ii++) {
-            String data0 = strategy.query.getData(ii);
-            for (int d = ii; d < i.getData().length; d+=2) {
-                String data1 = i.getData(d);
-                similarity*= similarity(
-                        data0.toUpperCase(), data1.toUpperCase()
-                );
-            }
+        for (String name : strategy.query.getData().keySet()) {
+            if (strategy.query.getData(name) != null && i.getData(name) != null)
+            similarity*= similarity(strategy.query.getData(name).toUpperCase(),
+                    i.getData(name).toUpperCase());
         }
         return similarity;
     }
@@ -143,31 +138,10 @@ public class SearchContext {
     }
 
     /**
-     * Ustawia wyszukiwanie po indentyfikatorze.
-     */
-    public void setIDSearch() {
-        strategy = new IDSearchStrategy(strategy.query);
-    }
-
-    /**
      * Ustawia wyszukiwanie automatyczne.
      */
     public void setAutoSearch() {
         strategy = new AutoSearchStrategy(strategy.query);
-    }
-
-    /**
-     * Ustawia wyszukiwanie po danych.
-     */
-    public void setDataSearch() {
-        strategy = new DataSearchStrategy(strategy.query);
-    }
-
-    /**
-     * Ustawia wyszukiwanie po numerze aktu.
-     */
-    public void setActNumberSearch() {
-        strategy = new ANSearchStrategy(strategy.query);
     }
 
     /**
@@ -178,10 +152,9 @@ public class SearchContext {
     }
 
     /**
-     * Ustawia wyszukiwanie filtrem.
-     * @param filter filter szukający
+     * Ustawia wyszukiwanie według określonej kolejki wyszukiwania.
      */
-    public void setFilterSearch(SearchFilter filter) {
-        strategy = new FilterSearchStrategy(strategy.query, filter);
+    public void setSearchQueueStrategy() {
+        strategy = new SearchQueue(strategy.query);
     }
 }

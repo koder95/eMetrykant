@@ -20,6 +20,8 @@ import pl.koder95.eme.Main;
 import java.awt.Insets;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.HashMap;
+import java.util.Map;
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -30,19 +32,23 @@ import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.LayoutStyle;
 import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
-import pl.koder95.eme.idf.Indices;
+import pl.koder95.eme.dfs.IndexList;
 
 /**
  * Ramka wyświetlająca interfejs wyszukiwania indeksów.
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.0.203, 2017-08-26
+ * @version 0.1.11, 2018-03-21
  * @since 0.0.201
  */
 public class IndexBrowserFrame extends JFrame {
 
     private static final long serialVersionUID = -2027617319030960915L;
     
+    /**
+     * Nazwy danych i przypisane im etykiety, czyli nazwy wyświetlane.
+     */
+    private final Map<String, String> names = new HashMap<>();
     private final IndexSearcher searcher;
 
     /**
@@ -50,7 +56,7 @@ public class IndexBrowserFrame extends JFrame {
      * 
      * @param indices zbiór indeksów
      */
-    IndexBrowserFrame(Indices indices) {
+    IndexBrowserFrame(IndexList indices) {
         this.searcher = new IndexSearcher(indices);
         super.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         super.setIconImage(Main.FAVICON);
@@ -62,9 +68,8 @@ public class IndexBrowserFrame extends JFrame {
             public void windowClosed(WindowEvent e) {
                 indices.clear();
             }
-            
         });
-        this.infoPanel = searcher.getIndices().getInfoPanel();
+        this.dataPanel = new SimpleDataPanel(new LabeledDataShowing(), names);
         initComponents();
 
         GroupLayout l = new GroupLayout(super.getContentPane());
@@ -120,7 +125,7 @@ public class IndexBrowserFrame extends JFrame {
                     .addGroup(mainPanelLayout.createSequentialGroup()
                         .addComponent(prev)
                         .addGap(0, 0, 0)
-                        .addComponent(infoPanel,
+                        .addComponent(dataPanel,
                                 GroupLayout.DEFAULT_SIZE,
                                 GroupLayout.DEFAULT_SIZE,
                                 Short.MAX_VALUE)
@@ -142,7 +147,7 @@ public class IndexBrowserFrame extends JFrame {
                             GroupLayout.DEFAULT_SIZE,
                             GroupLayout.DEFAULT_SIZE,
                             Short.MAX_VALUE)
-                    .addComponent(infoPanel,
+                    .addComponent(dataPanel,
                             GroupLayout.DEFAULT_SIZE,
                             GroupLayout.DEFAULT_SIZE,
                             Short.MAX_VALUE)
@@ -224,8 +229,8 @@ public class IndexBrowserFrame extends JFrame {
     /**
      * @return panel informacyjny
      */
-    public IndexInfoPanel getInfoPanel() {
-        return infoPanel;
+    public DataPanel getDataPanel() {
+        return dataPanel;
     }
 
     /**
@@ -277,10 +282,22 @@ public class IndexBrowserFrame extends JFrame {
         return suggestScroll;
     }
     
+    /**
+     * Dla podanej nazwy ustawia nazwę, która będzie wyświetlana,
+     * czyli etykietę.
+     * 
+     * @param name nazwa systemowa
+     * @param label nazwa wyświetlana - etykieta
+     */
+    public void setDataNameLabel(String name, String label) {
+        names.put(name, label);
+        System.out.println(name.hashCode());
+    }
+    
 
     // Variables declaration - do not modify
     private final IndexFooterPanel footerPanel = new IndexFooterPanel();
-    private final IndexInfoPanel infoPanel;
+    private final DataPanel dataPanel;
     private final IndexSearchingPanel searchingPanel
             = new IndexSearchingPanel();
     private final JButton next = new JButton();

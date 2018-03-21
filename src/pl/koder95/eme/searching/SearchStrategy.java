@@ -18,13 +18,13 @@ package pl.koder95.eme.searching;
 
 import java.util.LinkedList;
 import java.util.List;
-import pl.koder95.eme.idf.Index;
+import pl.koder95.eme.dfs.Index;
 
 /**
  * Klasa reprezentuje strategię wyszukiwania indeksów.
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.0.201, 2017-08-16
+ * @version 0.1.11, 2018-03-21
  * @since 0.0.201
  */
 abstract class SearchStrategy {
