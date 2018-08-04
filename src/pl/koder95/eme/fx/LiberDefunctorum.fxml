@@ -32,13 +32,13 @@
               </rowConstraints>
                <children>
                   <Label text="Imię:" />
-                  <Label fx:id="name" text="Karol" GridPane.columnIndex="1">
+                  <Label fx:id="name" text="-" GridPane.columnIndex="1">
                      <font>
                         <Font name="System Bold" size="16.0" />
                      </font>
                   </Label>
                   <Label text="Nazwisko:" GridPane.rowIndex="1" />
-                  <Label fx:id="surname" text="Dobrasiewicz" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                  <Label fx:id="surname" text="-" GridPane.columnIndex="1" GridPane.rowIndex="1">
                      <font>
                         <Font name="System Bold" size="16.0" />
                      </font>
@@ -48,7 +48,7 @@
             <HBox alignment="CENTER" layoutX="30.0" layoutY="321.0" minHeight="30.0" minWidth="150.0" spacing="15.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0">
                <children>
                   <Label text="Nr aktu:" />
-                  <Label fx:id="act" text="117/1992">
+                  <Label fx:id="act" text="-">
                      <font>
                         <Font name="System Bold" size="16.0" />
                      </font>

@@ -18,34 +18,33 @@ package pl.koder95.eme.searching;
 
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.InputMismatchException;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
-import java.util.Set;
 import pl.koder95.eme.dfs.ActNumber;
 
 /**
  * Klasa reprezentuje kwerendę wyszukującą.
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.1.11, 2018-03-21
+ * @version 0.1.13-alt, 2018-08-04
  * @since 0.0.201
  */
 public class SearchQuery extends AbstractSearchQuery {
     
-    private final Set<String> names; // zbiór nazw danych do przeszukania
+    private final List<String> names; // lista nazw danych do przeszukania
     private final SearchPhrase phrase;
 
     /**
      * Podstawowy konstruktor.
      * 
      * @param enteredText wprowadzony tekst
-     * @param names zbiór nazw danych do przeszukania
+     * @param names lista nazw danych do przeszukania
      * @param phrase fraza wyszukiwania
      */
-    public SearchQuery(String enteredText, Set<String> names, SearchPhrase phrase) {
+    public SearchQuery(String enteredText, List<String> names, SearchPhrase phrase) {
         super(enteredText);
         this.names = names;
         this.phrase = phrase;
@@ -54,10 +53,10 @@ public class SearchQuery extends AbstractSearchQuery {
     /**
      * Alternatywny konstruktor.
      * 
-     * @param names zbiór nazw danych do przeszukania
+     * @param names lista nazw danych do przeszukania
      * @param value wartość do znalezienia
      */
-    public SearchQuery(Set<String> names, String value) {
+    public SearchQuery(List<String> names, String value) {
         this(value, names, SearchPhrase.createDefault(value));
     }
 
@@ -67,7 +66,7 @@ public class SearchQuery extends AbstractSearchQuery {
      * @param an numer aktu do znalezienia
      */
     public static SearchQuery create(ActNumber an) {
-        HashSet<String> names = new HashSet<>();
+        List<String> names = new LinkedList<>();
         names.add("an");
         return new SearchQuery(names, an.toString());
     }

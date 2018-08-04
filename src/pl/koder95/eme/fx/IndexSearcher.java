@@ -16,7 +16,9 @@
  */
 package pl.koder95.eme.fx;
 
+import java.util.Arrays;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import pl.koder95.eme.dfs.IndexList;
@@ -29,19 +31,19 @@ import pl.koder95.eme.searching.SearchQuery;
  * Klasa pomagająca wyszukiwanie indeksów.
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.1.11, 2018-03-21
+ * @version 0.1.13-alt, 2018-08-04
  * @since 0.0.201
  */
 public class IndexSearcher {
     
     private final SearchContext context = new SearchContext();
     private final IndexList indices;
-    private final Set<String> names = new HashSet<>();
+    private final List<String> names = new LinkedList<>();
 
     /**
      * Podstawowy konstruktor.
      * 
-     * @param indices
+     * @param indices 
      */
     public IndexSearcher(IndexList indices) {
         this.indices = indices;
@@ -53,6 +55,8 @@ public class IndexSearcher {
         addName("husband-name");
         addName("wife-surname");
         addName("wife-name");
+        addName("an");
+        System.out.println(names);
     }
     
     private void addName(String name) {
@@ -151,6 +155,7 @@ public class IndexSearcher {
      * @return jeden, najbardziej odpowiedni indeks
      */
     public Index selectOne(Index[] result) {
+        System.out.println("result=" + Arrays.toString(result));
         return context.select(result);
     }
 
