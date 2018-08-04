@@ -26,6 +26,8 @@ import javafx.scene.control.Accordion;
  * FXML Controller class
  *
  * @author Kamil Jan Mularski [@koder95]
+ * @version 0.1.12-alt, 2018-08-04
+ * @since 0.1.12-alt
  */
 public class MainController implements Initializable {
 

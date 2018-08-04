@@ -36,6 +36,8 @@ import pl.koder95.eme.dfs.IndexList;
  * FXML Controller class
  *
  * @author Kamil Jan Mularski [@koder95]
+ * @version 0.1.12-alt, 2018-08-04
+ * @since 0.1.12-alt
  */
 public class LiberDefunctorumController implements Initializable {
 

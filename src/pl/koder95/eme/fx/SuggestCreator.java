@@ -19,13 +19,14 @@ package pl.koder95.eme.fx;
 
 import java.util.LinkedList;
 import java.util.List;
-import javax.swing.DefaultListModel;
 import pl.koder95.eme.Visitor;
 import pl.koder95.eme.dfs.Index;
 
 /**
  *
  * @author Kamil Jan Mularski [@koder95]
+ * @version 0.1.12-alt, 2018-08-04
+ * @since 0.1.12-alt
  */
 public class SuggestCreator implements Visitor<Index> {
 

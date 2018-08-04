@@ -20,26 +20,24 @@ import java.awt.Toolkit;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.Map;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
-import javafx.scene.control.TextInputControl;
 import javafx.scene.layout.GridPane;
 import org.controlsfx.control.textfield.TextFields;
 import pl.koder95.eme.dfs.Index;
 import pl.koder95.eme.dfs.IndexList;
-import pl.koder95.eme.searching.SearchContext;
 
 /**
  * FXML Controller class
  *
  * @author Kamil Jan Mularski [@koder95]
+ * @version 0.1.12-alt, 2018-08-04
+ * @since 0.1.12-alt
  */
 public class LiberBaptismorumController implements Initializable {
 
