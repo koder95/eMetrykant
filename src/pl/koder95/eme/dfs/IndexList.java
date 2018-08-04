@@ -31,6 +31,11 @@ import static pl.koder95.eme.Main.BUNDLE;
 import static pl.koder95.eme.Main.READ_DATA_ERR_MESSAGE;
 import static pl.koder95.eme.Main.READ_DATA_ERR_TITLE;
 import static pl.koder95.eme.Main.showErrorMessage;
+import pl.koder95.eme.MemoryUtils;
+import pl.koder95.eme.fx.SuggestCreatingMethod;
+import pl.koder95.eme.fx.SuggestCreator;
+import static pl.koder95.eme.fx.SuggestCreator.prepareData;
+import pl.koder95.eme.searching.SearchContext;
 
 /**
  * Zawiera wszystkie typy ksiąg i zawierających się w nich zbiorach indeksów.
@@ -45,9 +50,9 @@ public enum IndexList implements IndexContainer {
      * Zbiór indeksów osób ochrzczonych. Indeksy zawierają dane: nazwisko,
      * imiona, nr aktu, rok chrztu.
      */
-    LIBER_BAPTIZATORUM("Księga ochrzczonych", new LinkedList<>(Arrays.asList(
+    LIBER_BAPTISMORUM("Księga ochrzczonych", new LinkedList<>(Arrays.asList(
             "name", "surname", "an"
-    ))),
+    )), SuggestCreator.DEFAULT_METHOD),
 
     /**
      * Zbiór indeksów osób bierzmowanych. Indeksy zawierają dane: nazwisko,
@@ -55,15 +60,23 @@ public enum IndexList implements IndexContainer {
      */
     LIBER_CONFIRMATORUM("Księga bierzmowanych", new LinkedList<>(Arrays.asList(
             "name", "surname", "an"
-    ))),
+    )), SuggestCreator.DEFAULT_METHOD),
 
     /**
      * Zbiór indeksów osób zaślubionych. Indeksy zawierają dane: nazwisko męża,
      * imiona męża, nazwisko panieńskie żony, imiona żony, nr aktu, rok ślubu.
      */
     LIBER_MATRIMONIORUM("Księga zaślubionych", new LinkedList<>(Arrays.asList(
-            "husband-name", "husband-surname", "wife-name", "wife-surname", "an"
-    ))),
+            "husband-surname", "husband-name", "wife-surname", "wife-name", "an"
+    )), (i) -> {
+        StringBuilder builder = new StringBuilder();
+        builder.append(prepareData(i.getData("husband-surname")));
+        builder.append(" ").append(prepareData(i.getData("husband-name")));
+        builder.append(" ").append(prepareData(i.getData("wife-surname")));
+        builder.append(" ").append(prepareData(i.getData("wife-name")));
+        builder.append(" ").append(prepareData(i.getData("an")));
+        return builder.toString();
+    }),
 
     /**
      * Zbiór indeksów osób zmarłych. Indeksy zawierają dane: nazwisko,
@@ -71,15 +84,18 @@ public enum IndexList implements IndexContainer {
      */
     LIBER_DEFUNCTORUM("Księga zmarłych", new LinkedList<>(Arrays.asList(
             "name", "surname", "an"
-    )));
+    )), SuggestCreator.DEFAULT_METHOD);
     
     private List<Index> loaded;
     private final String name;
     private final Queue<String> nameQueue;
+    private final SuggestCreatingMethod scm;
 
-    private IndexList(String name, Queue<String> nameQueue) {
+    private IndexList(String name, Queue<String> nameQueue,
+            SuggestCreatingMethod scm) {
         this.name = name;
         this.nameQueue = nameQueue;
+        this.scm = scm;
     }
 
     @Override
@@ -97,12 +113,19 @@ public enum IndexList implements IndexContainer {
      * Wczytuje z dysku indeksy zapisane w pliku XML.
      */
     public void load() {
+        MemoryUtils.memory();
         loaded = new LinkedList<>();
         if (BOOKS == null) loadBooks();
         BOOKS.stream().filter((b)->b.getName().equalsIgnoreCase(name))
-                .forEach((b)->{
-                    loaded.addAll(b.indices);
-                });
+        .forEach((b)->{
+            MemoryUtils.memory();
+            loaded.addAll(b.indices);
+            MemoryUtils.memory();
+            b.indices.forEach((i) -> i.getDataNames().stream()
+                    .filter(nameQueue::contains)
+                    .forEachOrdered(nameQueue::add));
+            MemoryUtils.memory();
+        });
     }
 
     /**
@@ -150,6 +173,10 @@ public enum IndexList implements IndexContainer {
         loaded.clear();
         Main.releaseMemory();
     }
+
+    public SuggestCreatingMethod getSCM() {
+        return scm;
+    }
     
     /**
      * Tworzy i zwraca kolejkę nazw, które służą do pobrania odpowiednich danych
@@ -172,5 +199,11 @@ public enum IndexList implements IndexContainer {
             showErrorMessage(BUNDLE.getString("ERR_EX_IO"),
                     BUNDLE.getString("ERR_EX_IO_TITLE"), true);
         }
+    }
+    
+    public Index search(String query) {
+        SearchContext context = new SearchContext();
+        context.setAutoSearch();
+        return context.select(context.search(loaded));
     }
 }

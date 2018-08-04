@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Kamil Jan Mularski [@koder95]
+ * Copyright (C) 2018 Kamil Jan Mularski [@koder95]
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,12 +15,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+package pl.koder95.eme;
+
 /**
- * Paczka zawiera klasy tworzące i zarządzające graficznym interfejsem
- * użytkownika. Nazwa <i>gui</i> to skrót od <b>G</b>raphical <b>U</b>ser
- * <b>I</b>nterface.
- * 
+ *
  * @author Kamil Jan Mularski [@koder95]
- * @since 0.0.201
  */
-package pl.koder95.eme.gui;
+public interface Visitor<Type> {
+
+    public void visit(Type t);
+}

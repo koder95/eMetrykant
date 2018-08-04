@@ -17,6 +17,8 @@
 
 package pl.koder95.eme;
 
+import java.util.List;
+
 /**
  * Interfejs reprezentuje metodę uruchamiania służącą do uruchomienia aplikacji.
  *
@@ -32,7 +34,7 @@ public interface LaunchMethod {
      * 
      * @param args lista argumentów
      */
-    public void launch(String[] args);
+    public void launch(List<String> args);
     
     /**
      * Ustawia metodę, której zostaną przekazane argumenty, gdyby ta metoda nie

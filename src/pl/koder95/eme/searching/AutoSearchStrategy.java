@@ -27,7 +27,7 @@ import pl.koder95.eme.dfs.Index;
  * możliwości należy unikać zastosowania tej strategii, gdyż jest mało wydajna.
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.1.11, 2018-03-21
+ * @version 0.1.12-alt, 2018-08-04
  * @since 0.0.201
  */
 class AutoSearchStrategy extends SearchStrategy {
@@ -44,6 +44,7 @@ class AutoSearchStrategy extends SearchStrategy {
         queue.addNameGroup("wife-surname", "name", "husband-name", "wife-name", "an");
         queue.addNameGroup("husband-name", "wife-name", "an");
         queue.addNameGroup("wife-name", "an");
+        queue.addNameGroup("an");
     }
 
     @Override
@@ -54,6 +55,7 @@ class AutoSearchStrategy extends SearchStrategy {
         Map<String, String> data = query.getData();
         int year = query.getYear();
         if (data != null && !data.isEmpty()) {
+            if (list == null) System.err.println("list == null");
             return this.queue.searchFor(list);
         }
         if (year > 0) return this.year.searchFor(list);

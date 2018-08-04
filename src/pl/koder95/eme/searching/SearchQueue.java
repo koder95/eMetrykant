@@ -19,9 +19,11 @@ package pl.koder95.eme.searching;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
+import java.util.Set;
 import pl.koder95.eme.dfs.Index;
 
 /**
@@ -29,7 +31,7 @@ import pl.koder95.eme.dfs.Index;
  * każdego indeksu.
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.1.11, 2018-03-21
+ * @version 0.1.12-alt, 2018-08-04
  * @since 0.1.11
  */
 public class SearchQueue extends SearchStrategy {
@@ -53,19 +55,23 @@ public class SearchQueue extends SearchStrategy {
     @Override
     public LinkedList<Index> searchFor(List<Index> list) {
         Queue<Collection<String>> groups = new LinkedList<>(this.groups);
-        LinkedList<Index> found = new LinkedList<>(list);
+        if (groups.isEmpty()) System.err.println("Queue is empty!");
+        Set<Index> found = new HashSet<>(list);
         
         String[] words = query.getEnteredText().split(" ");
         for (String word : words) {
-            found = searchFor(found, groups.poll(), word);
+            Collection<String> group = groups.poll();
+            //if (group == null) continue;
+            found.addAll(searchFor(new LinkedList<>(found), group, word));
         }
-        
-        return found;
+        return new LinkedList<>(found);
     }
     
     private LinkedList<Index> searchFor(List<Index> list,
             Collection<String> names, String text) {
         LinkedList<Index> found = new LinkedList<>();
+        System.out.println("names = " + names);
+        System.out.println("names.stream() = " + names.stream());
         names.stream().forEach((name) -> {
             searchFor(list, name, text).stream()
                     .filter((index) -> (!found.contains(index)))

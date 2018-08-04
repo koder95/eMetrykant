@@ -14,32 +14,36 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+package pl.koder95.eme.fx;
 
-package pl.koder95.eme;
-
-import java.util.List;
+import java.net.URL;
+import java.util.ResourceBundle;
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.control.Accordion;
 
 /**
- * Klasa reprezentuje uruchamianie domyślne, które nie posiada odniesień do
- * jakiegoś innego sposobu uruchamiania.
+ * FXML Controller class
  *
  * @author Kamil Jan Mularski [@koder95]
  * @version 0.1.12-alt, 2018-08-04
- * @since 0.1.10
+ * @since 0.1.12-alt
  */
-public abstract class AbstractDefaultLaunch implements LaunchMethod {
+public class MainController implements Initializable {
 
+    @FXML
+    private Accordion root;
+
+    /**
+     * Initializes the controller class.
+     */
     @Override
-    public LaunchMethod nextMethod() {
-        return null;
+    public void initialize(URL url, ResourceBundle rb) {
+        // TODO
+    }    
+
+    public Accordion getRoot() {
+        return root;
     }
-
-    @Override
-    public void setNextLaunchMethod(LaunchMethod next) {
-        // do nothing
-    }
-
-    @Override
-    public abstract void launch(List<String> args);
-
+    
 }

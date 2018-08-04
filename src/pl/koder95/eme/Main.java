@@ -22,6 +22,9 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.text.Collator;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.regex.Pattern;
@@ -31,7 +34,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 /**
  * Klasa uruchamiająca i inicjalizująca podstawowe elementy aplikacji.
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.1.11, 2018-03-21
+ * @version 0.1.12-alt, 2018-08-04
  * @since 0.0.201
  */
 public class Main implements LaunchMethod {
@@ -63,6 +66,10 @@ public class Main implements LaunchMethod {
     public static final Collator DEFAULT_COLLATOR
             = Collator.getInstance(POLISH); //NOI18N
     private static final String FAV_PATH_START = "pl/koder95/eme/favicon";
+    /**
+     * Ścieżka ikony dla okienek.
+     */
+    public static final String FAVICON_PATH = FAV_PATH_START + ".png";
     /**
      * Ikona dla okienek.
      */
@@ -102,11 +109,20 @@ public class Main implements LaunchMethod {
      * CSV na XML
      */
     public static void main(String[] args) {
+        LinkedList<String> arg = new LinkedList<>(Arrays.asList(args));
         Main instance = new Main(Files.CSV_DIR, Files.XML_DIR, "indices.xml");
-        if (args == null || args.length == 0)
-            instance.setNextLaunchMethod(new SystemTray());
-        
-        instance.launch(args);
+        if (args == null || args.length == 0) {
+            if (Files.XML_DIR != null || Files.XML_DIR.list() != null)
+                instance.setNextLaunchMethod(new AbstractDefaultLaunch() {
+                    @Override
+                    public void launch(List<String> args) {
+                        javafx.application.Application
+                                .launch(pl.koder95.eme.fx.Main.class,
+                                        args.toArray(new String[args.size()]));
+                    }
+                });
+        }
+        instance.launch(arg);
     }
     
     /**
@@ -208,10 +224,11 @@ public class Main implements LaunchMethod {
     }
 
     @Override
-    public void launch(String[] args) {
-        Files.createNotExistDirs();
+    public void launch(List<String> args) {
+        LinkedList<String> argL = new LinkedList<>();
+        argL.addAll(Files.createNotExistDirs(args));
         try {
-            Files.createNotExistFiles();
+            argL.addAll(Files.createNotExistFiles(args));
         } catch (IOException ex) {
             showErrorMessage(BUNDLE.getString("ERR_CANNOT_CREATE_NEW_FILE"),
                     BUNDLE.getString("ERR_CANNOT_CREATE_NEW_FILE_TITLE"));
@@ -223,7 +240,7 @@ public class Main implements LaunchMethod {
             showErrorMessage(ex.getLocalizedMessage(),
                     BUNDLE.getString("ERR_GUI_TITLE"), true);
         } finally {
-            nextMethod().launch(args);
+            nextMethod().launch(argL);
         }
     }
 

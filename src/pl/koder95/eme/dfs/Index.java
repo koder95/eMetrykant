@@ -17,11 +17,14 @@
 
 package pl.koder95.eme.dfs;
 
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
+import pl.koder95.eme.Visitor;
 
 /**
  * Klasa reprezentuje indeks, czyli zbiór danych osobowych. Może również
@@ -29,7 +32,7 @@ import org.w3c.dom.Node;
  * przechowywanych na parafii.
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.1.11, 2018-03-21
+ * @version 0.1.12, 2018-05-23
  * @since 0.1.11
  */
 public class Index {
@@ -92,5 +95,9 @@ public class Index {
     @Override
     public String toString() {
        return getActNumber() + " " + data;
+    }
+    
+    public void accept(Visitor v) {
+        v.visit(this);
     }
 }

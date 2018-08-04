@@ -14,9 +14,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package pl.koder95.eme.gui;
+package pl.koder95.eme.fx;
 
+import java.util.Arrays;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import pl.koder95.eme.dfs.IndexList;
@@ -29,30 +31,38 @@ import pl.koder95.eme.searching.SearchQuery;
  * Klasa pomagająca wyszukiwanie indeksów.
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.1.11, 2018-03-21
+ * @version 0.1.13-alt, 2018-08-04
  * @since 0.0.201
  */
 public class IndexSearcher {
     
     private final SearchContext context = new SearchContext();
     private final IndexList indices;
-    private final Set<String> names = new HashSet<>();
+    private final List<String> names = new LinkedList<>();
 
     /**
      * Podstawowy konstruktor.
      * 
-     * @param indices
+     * @param indices 
      */
     public IndexSearcher(IndexList indices) {
         this.indices = indices;
         this.indices.load();
         // dodawanie nazw, które mają być przeszukiwane:
-        this.names.add("surname");
-        this.names.add("name");
-        this.names.add("husband-surname");
-        this.names.add("husband-name");
-        this.names.add("wife-surname");
-        this.names.add("wife-name");
+        addName("surname");
+        addName("name");
+        addName("husband-surname");
+        addName("husband-name");
+        addName("wife-surname");
+        addName("wife-name");
+        addName("an");
+        System.out.println(names);
+    }
+    
+    private void addName(String name) {
+        if (indices.queueNames().contains(name)) names.add(name);
+        else System.err.println("The name (" + name + ") was not adding,"
+                + " because queue names is not contain this name!");
     }
 
     /**
@@ -144,7 +154,8 @@ public class IndexSearcher {
      * @param result wynik wyszukiwania
      * @return jeden, najbardziej odpowiedni indeks
      */
-    Index selectOne(Index[] result) {
+    public Index selectOne(Index[] result) {
+        System.out.println("result=" + Arrays.toString(result));
         return context.select(result);
     }
 

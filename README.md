@@ -24,12 +24,9 @@ Pierwsza stabilna wersja programu (v1.0.0), będzie programem, który w pełni p
 - Uruchamianie aplikacji w oparciu o wzorzec _Chain of Responsibility_ (łańcuch odpowiedzialności). (_ZROBIONE_)
 - Uniezależnienie sposobu wyświetlania danych od rodzaju i liczby danych (wzorzec _Bridge_). (_ZROBIONE_)
 - Umożliwienie wyszukiwania różnych danych. (_ZROBIONE_)
-- Używanie szablonów przez GUI.
+- Modernizacja GUI. (_ZROBIONE_)
+- Podpowiedzi wyszukiwania. (_ZROBIONE_)
 
 ### Wersja 0.3
-- Podpowiedzi wyszukiwania.
 - Wyszukiwanie w księdze zaślubionych po płci.
-
-### Wersja 0.4
-- Modernizacja GUI.
 - Dodanie możliwości edycji bazy indeksów.

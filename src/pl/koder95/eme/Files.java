@@ -19,6 +19,15 @@ package pl.koder95.eme;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.StandardCopyOption;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
  * Przechowuje dane na temat plików.
@@ -55,14 +64,30 @@ public final class Files {
     public static final File TEMPLATE_XML
             = new File(WORKDIR, "templates.xml"); //NOI18N
     
-    static void createNotExistDirs() {
+    static List<String> createNotExistDirs(List<String> args) {
         if (!DATA_DIR.exists()) DATA_DIR.mkdirs();
         if (!CSV_DIR.exists()) CSV_DIR.mkdirs();
         if (!XML_DIR.exists()) XML_DIR.mkdirs();
+        return args;
     }
     
-    static void createNotExistFiles() throws IOException {
+    static List<String> createNotExistFiles(List<String> args) throws IOException {
         if (!TEMPLATE_XML.exists()) TEMPLATE_XML.createNewFile();
+        if (CSV_DIR.list().length == 0) {
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setDialogTitle("Wybierz pliki CSV...");
+            fileChooser.setMultiSelectionEnabled(true);
+            fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("CSV", "csv"));
+            List<File> csv = null;
+            int result = fileChooser.showOpenDialog(null);
+            csv = Arrays.asList(result == JFileChooser.APPROVE_OPTION? fileChooser.getSelectedFiles() : null);
+            for (File f: csv) {
+                java.nio.file.Files.copy(f.toPath(),
+                        CSV_DIR.toPath().resolve(f.getName()),
+                        StandardCopyOption.REPLACE_EXISTING);
+            }
+            return new LinkedList<>(Arrays.asList(new String[] { "-c" }));
+        } else return args;
     }
 
     private Files() {}

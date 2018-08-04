@@ -30,7 +30,7 @@ import pl.koder95.eme.dfs.ActNumber;
  * Klasa reprezentuje kwerendę wyszukującą.
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.1.11, 2018-03-21
+ * @version 0.1.13-alt, 2018-08-04
  * @since 0.0.202
  */
 class ConstantSearchQuery extends AbstractSearchQuery {
@@ -52,6 +52,18 @@ class ConstantSearchQuery extends AbstractSearchQuery {
         this.an = getActNumber(phrase.getWords(), phrase.getANWordIndex());
         this.data = getData(names, phrase.getWords(), phrase.getIDWordIndex(),
                 year);
+    }
+    
+    /**
+     * Uproszczony konstruktor dla {@code SearchQuery}.
+     * 
+     * @param query niestatyczna kwerenda szukająca
+     */
+    public ConstantSearchQuery(SearchQuery query) {
+        super(query.getEnteredText());
+        this.year = query.getYear();
+        this.an = query.getActNumber();
+        this.data = query.getData();
     }
 
     /**
@@ -82,6 +94,7 @@ class ConstantSearchQuery extends AbstractSearchQuery {
 
     @Override
     Map<String, String> getData() {
+        System.out.println("getData() => " + data);
         return data;
     }
     
@@ -137,6 +150,9 @@ class ConstantSearchQuery extends AbstractSearchQuery {
     }
     
     static ConstantSearchQuery toConstant(AbstractSearchQuery q) {
+        if (q == null) return null;
+        if (q instanceof SearchQuery)
+            return new ConstantSearchQuery((SearchQuery) q);
         return new ConstantSearchQuery(q.getData().keySet(), q.getEnteredText());
     }
 }

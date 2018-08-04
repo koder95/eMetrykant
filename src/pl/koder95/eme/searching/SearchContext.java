@@ -19,6 +19,7 @@ package pl.koder95.eme.searching;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import pl.koder95.eme.Main;
 import pl.koder95.eme.dfs.Index;
 
@@ -32,10 +33,8 @@ import pl.koder95.eme.dfs.Index;
  * 
  * Podstawowe:
  * <ol>
- * <li>wyszukiwanie {@link #setIDSearch() po indentyfikatorze}</li>
  * <li>wyszukiwanie {@link #setYearSearch() po roku}</li>
- * <li>wyszukiwanie {@link #setActNumberSearch() po numerze aktu}</li>
- * <li>wyszukiwanie {@link #setDataSearch() po danych}</li>
+ * <li>wyszukiwanie {@link #setSearchQueueStrategy() po danych}</li>
  * <li>wyszukiwanie {@link #setAutoSearch() automatyczne}</li>
  * </ol>
  * Zaawansowana:
@@ -45,7 +44,7 @@ import pl.koder95.eme.dfs.Index;
  * </ol>
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.1.11, 2018-03-21
+ * @version 0.1.13-alt, 2018-08-04
  * @since 0.0.201
  */
 public class SearchContext {
@@ -70,6 +69,7 @@ public class SearchContext {
      */
     public Index[] search(List<Index> loaded) {
         constantQuery();
+        if (strategy == null) System.err.println("strategy == null");
         LinkedList<Index> search = strategy.searchFor(loaded);
         Index[] array = search.toArray(new Index[search.size()]);
         for (Index i: array) {
@@ -109,6 +109,7 @@ public class SearchContext {
     
     private Index better(Index i0, Index i1) {
         double s0 = similarity(i0), s1 = similarity(i1);
+        System.out.println(i0 + " => s0 = " + s0 + "; s1 = " + s1 + " <= " + i1);
         return s0 > s1? i0 : i1;
     }
     
@@ -119,22 +120,39 @@ public class SearchContext {
         }
         
         double similarity = 1d;
-        for (String name : strategy.query.getData().keySet()) {
-            if (strategy.query.getData(name) != null && i.getData(name) != null)
-            similarity*= similarity(strategy.query.getData(name).toUpperCase(),
+        Map<String, String> strData = strategy.query.getData();
+        for (String name : strData.keySet()) {
+            System.out.println("name: " + name);
+            if (strData.get(name) != null && i.getData(name) != null)
+            similarity*= similarity(strData.get(name).toUpperCase(),
                     i.getData(name).toUpperCase());
         }
         return similarity;
     }
     
     private double similarity(String s0, String s1) {
-        int length = s0.length() > s1.length()? s1.length() : s0.length();
-        double similar = 0;
-        for (int i = 0; i < length; i++) {
-            if (s0.charAt(i) != s1.charAt(i)) break;
-            similar++;
+        if (s0.equals(s1)) return 1f;
+        else if (s0.contains(s1)) {
+            System.out.println("CONTAINS");
+            return s1.length() / s0.length();
         }
-        return (s1.length() == s0.length()? 1 : 0.5)*(similar/length);
+        else if (s1.contains(s0)) {
+            System.out.println("CONTAINS");
+            return s0.length() / s1.length();
+        }
+        else {
+            System.out.println("SIMILARITY " + s0 + " &=& " + s1);
+            int length = s0.length() > s1.length()? s1.length() : s0.length();
+            double similar = 0;
+            if (s0.contains(s1)) {
+
+            }
+            for (int i = 0; i < length; i++) {
+                if (s0.charAt(i) != s1.charAt(i)) break;
+                similar++;
+            }
+            return (s1.length() == s0.length()? 1 : 0.5)*(similar/length);
+        }
     }
 
     /**

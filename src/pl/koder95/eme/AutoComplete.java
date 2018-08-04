@@ -15,34 +15,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package pl.koder95.eme.gui;
+package pl.koder95.eme;
 
-import java.util.Queue;
-import javax.swing.JPanel;
-import pl.koder95.eme.dfs.Index;
+import java.util.Collection;
 
 /**
- * Panel, który ma wyświetlać dane pobrane z indeksu.
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.1.11, 2018-03-21
- * @since 0.1.11
  */
-public abstract class DataPanel extends JPanel {
+public interface AutoComplete {
 
-    private static final long serialVersionUID = -2952779491434639106L;
-
-    /**
-     * Kieruje żądanie wyświetlenia danych indeksu w kolejności ustalonej przez
-     * kolejkę.
-     * 
-     * @param i indeks, którego dane mają zostać wyświetlone
-     * @param info kolejka nazw danych
-     */
-    public abstract void showData(Index i, Queue<String> info);
-    
-    /**
-     * Kieruje żądanie wyświetlenia początkowego stanu panela.
-     */
-    public abstract void reset();
+    public Collection<String> autocomplete(String prefix);
 }
