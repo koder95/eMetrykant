@@ -61,7 +61,7 @@ package pl.koder95.eme.searching;
  * spacji.
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.0.204, 2017-08-26
+ * @version 0.1.11, 2018-03-21
  * @since 0.0.201
  */
 public class SearchPhrase {
@@ -129,17 +129,6 @@ public class SearchPhrase {
     }
     
     /**
-     * Fraza poszukująca indeks z konkretnym identyfikatorem.
-     */
-    public static class IDSearchPhrase extends SearchPhrase {
-
-        private IDSearchPhrase(String value) {
-            super(new String[] {value}, 0, -1);
-        }
-        
-    }
-    
-    /**
      * Fraza poszukująca konkretny numer aktu.
      */
     public static class ANSearchPhrase extends SearchPhrase {
@@ -175,7 +164,6 @@ public class SearchPhrase {
     public static SearchPhrase createDefault(String s) {
         if (s.contains(" ")) return new DataSearchPhrase(s.split(" "));
         else {
-            if (s.startsWith("#")) return new IDSearchPhrase(s);
             if (s.contains("/")) return new ANSearchPhrase(s);
             return new DataSearchPhrase(new String[] {s});
         }

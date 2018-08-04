@@ -18,13 +18,14 @@ package pl.koder95.eme.searching;
 
 import java.util.LinkedList;
 import java.util.List;
-import pl.koder95.eme.idf.Index;
+import pl.koder95.eme.dfs.ActNumber;
+import pl.koder95.eme.dfs.Index;
 
 /**
  * Strategia wyszukiwania indeksów na podstawie roku w numerze aktu.
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.0.201, 2017-08-16
+ * @version 0.1.11, 2018-03-21
  * @since 0.0.201
  */
 class YearSearchStrategy extends SearchStrategy {
@@ -42,11 +43,12 @@ class YearSearchStrategy extends SearchStrategy {
         
             System.out.println("query.getYear()=" + query.getYear());
         LinkedList<Index> result = new LinkedList<>();
-        for (Index i: list) {
-            if (i.getActNumber().getYear() == query.getYear()) {
+        list.stream().forEach((i) -> {
+            ActNumber an = i.getActNumber();
+            if (an != null && an.getYear() == query.getYear()) {
                 result.add(i);
             }
-        }
+        });
         return result;
     }
 

@@ -15,12 +15,20 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+package pl.koder95.eme.idf;
+
 /**
- * Paczka zawiera klasy tworzące i zarządzające graficznym interfejsem
- * użytkownika. Nazwa <i>gui</i> to skrót od <b>G</b>raphical <b>U</b>ser
- * <b>I</b>nterface.
- * 
+ * Zawiera metody dla klasy, która przechowywać będzie indeksy.
+ *
  * @author Kamil Jan Mularski [@koder95]
- * @since 0.0.201
+ * @version 0.1.4, 2017-09-06
+ * @since 0.1.4
  */
-package pl.koder95.eme.gui;
+interface RealIndexContainer {
+    
+    /**
+     * @param id identyfikator > 0
+     * @return indeks, zawierający wszystkie dane
+     */
+    RealIndex getReal(int id);
+}

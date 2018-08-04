@@ -19,13 +19,14 @@ Aby program działał poprawnie, należy w tym miejscu, gdzie on się znajduje, 
 Pierwsza stabilna wersja programu (v1.0.0), będzie programem, który w pełni pozwoliłby na zarządzaniem metrykami parafialnymi. Wersja alfa jest podstawową wersją, do której dodawane będą dodatkowe możliwości:
 
 ### Wersja 0.2
-- Wczytywanie danych z pliku XML.
-- Konwerter danych z CSV do formatu XML.
+- Wczytywanie danych z pliku XML. (_ZROBIONE_)
+- Konwerter danych z CSV do formatu XML. (_ZROBIONE_)
+- Uruchamianie aplikacji w oparciu o wzorzec _Chain of Responsibility_ (łańcuch odpowiedzialności). (_ZROBIONE_)
+- Uniezależnienie sposobu wyświetlania danych od rodzaju i liczby danych (wzorzec _Bridge_). (_ZROBIONE_)
+- Umożliwienie wyszukiwania różnych danych. (_ZROBIONE_)
+- Modernizacja GUI. (_ZROBIONE_)
+- Podpowiedzi wyszukiwania. (_ZROBIONE_)
 
 ### Wersja 0.3
-- Podpowiedzi wyszukiwania.
 - Wyszukiwanie w księdze zaślubionych po płci.
-
-### Wersja 0.4
-- Modernizacja GUI.
 - Dodanie możliwości edycji bazy indeksów.

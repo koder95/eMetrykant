@@ -16,13 +16,14 @@
  */
 package pl.koder95.eme.idf;
 
+import pl.koder95.eme.dfs.ActNumber;
 /**
  * Klasa umożliwia stworzenie obiektu, który zawiera jedynie identyfikator,
  * a nie wszystkie informacje o obiekcie, czyli indeks wirtualny. Informacje
  * brakujące pobierane są ze zbioru {@link RealIndex indeksów rzeczywistych}.
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.0.201, 2017-08-16
+ * @version 0.1.11, 2018-03-21
  * @since 0.0.201
  */
 class VirtualIndex extends Index {

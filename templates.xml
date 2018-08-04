@@ -1,0 +1,190 @@
+<templates>
+<bt name="Księga ochrzczonych">
+    <section header="Ochrzczony">
+        <field name="name" index="1" label="Imię" />
+        <field name="surname" index="0" label="Nazwisko" />
+        <field name="birth-date" index="2" label="Data urodzenia" />
+        <field name="birth-place" index="3" label="Miejsce urodzenia" />
+        <field name="baptism-date" index="4" label="Data chrztu" />
+        <field name="baptism-place" index="5" label="Miejsce chrztu" />
+    </section>
+    <section header="Ojciec ochrzczonego">
+        <field name="father-surname" index="6" label="Nazwisko" />
+        <field name="father-name" index="7" label="Imię" />
+        <field name="father-age" index="8" label="Wiek" />
+        <field name="father-confession" index="9" label="Wyznanie" />
+        <field name="father-job" index="10" label="Zawód" />
+        <field name="father-residence" index="11" label="Miejsce zamieszkania" />
+    </section>
+    <section header="Matka ochrzczonego">
+        <field name="mother-surname" index="12" label="Nazwisko" />
+        <field name="mother-name" index="13" label="Imię" />
+        <field name="mother-age" index="14" label="Wiek" />
+        <field name="mother-confession" index="15" label="Wyznanie" />
+        <field name="mother-job" index="16" label="Zawód" />
+        <field name="mother-residence" index="17" label="Miejsce zamieszkania" />
+    </section>
+    <section header="Połączeni">
+        <field name="marriage-link" index="18" label="Typ małżeństwa" />
+    </section>
+    <section header="Ojciec chrzestny">
+        <field name="godfather-surname" index="19" label="Nazwisko" />
+        <field name="godfather-name" index="20" label="Imię" />
+        <field name="godfather-age" index="21" label="Wiek" />
+        <field name="godfather-confession" index="22" label="Wyznanie" />
+        <field name="godfather-job" index="23" label="Zawód" />
+        <field name="godfather-residence" index="24" label="Miejsce zamieszkania" />
+    </section>
+    <section header="Matka chrzestna">
+        <field name="godmother-surname" index="25" label="Nazwisko" />
+        <field name="godmother-name" index="26" label="Imię" />
+        <field name="godmother-age" index="27" label="Wiek" />
+        <field name="godmother-confession" index="28" label="Wyznanie" />
+        <field name="godmother-job" index="29" label="Zawód" />
+        <field name="godmother-residence" index="30" label="Miejsce zamieszkania" />
+    </section>
+    <section header="Szafarz chrztu świętego">
+        <field name="minister" index="31" label="Dane" />
+    </section>
+    <section header="Wpisy">
+        <field name="confirmation" index="32" label="Bierzmowanie" />
+        <field name="marriage" index="33" label="Małżeństwo" />
+        <field name="priesthood" index="34" label="Święcenia prezbiteratu" />
+        <field name="episcopate" index="35" label="Święcenia episkopatu" />
+        <field name="profession" index="36" label="Profesje zakonne" />
+    </section>
+    <section header="Uwagi">
+        <field name="note1" index="37" label="Uwaga 1" />
+        <field name="note2" index="38" label="Uwaga 2" />
+        <field name="note3" index="39" label="Uwaga 3" />
+        <field name="note4" index="40" label="Uwaga 4" />
+        <field name="note5" index="41" label="Uwaga 5" />
+    </section>
+</bt>
+<bt name="Księga bierzmowanych">
+    <section header="Bierzmowany">
+        <field name="name" index="1" label="Imię" />
+        <field name="surname" index="0" label="Nazwisko" />
+    </section>
+    <section header="Przybrane imię">
+        <field name="confirmation-name" index="2" label="Imię z bierzmowania" />
+    </section>
+    <section header="Szafarz bierzmowania">
+        <field name="minister" index="3" label="Dane" />
+    </section>
+    <section header="Świadek">
+        <field name="witness-surname" index="4" label="Nazwisko" />
+        <field name="witness-name" index="5" label="Imię" />
+    </section>
+    <section header="Data i miejsce bierzmowania">
+        <field name="date" index="6" label="Data" />
+        <field name="place" index="7" label="Miejsce" />
+    </section>
+</bt>
+<bt name="Księga zaślubionych">
+    <section header="Mąż">
+        <field name="husband-name" index="1" label="Imię" />
+        <field name="husband-surname" index="0" label="Nazwisko" />
+        <field name="husband-confession" index="4" label="Wyznanie" />
+        <field name="husband-marital-status" index="5" label="Stan cywilny" />
+        <field name="husband-residence" index="6" label="Miejsce zamieszkania" />
+        <field name="husband-birth-date" index="7" label="Data urodzenia" />
+        <field name="husband-birth-place" index="8" label="Miejsce urodzenia" />
+        <field name="husband-baptism-date" index="9" label="Data chrztu" />
+        <field name="husband-baptism-place" index="10" label="Miejsce chrztu" />
+        <field name="husband-father-name" index="11" label="Imię ojca" />
+        <field name="husband-father-surname" index="12" label="Nazwisko ojca" />
+        <field name="husband-mother-name" index="13" label="Imię matki" />
+        <field name="husband-mother-surname" index="14" label="Nazwisko matki" />
+        <field name="husband-mother-maiden-name" index="15" label="Nazwisko panieńskie matki" />
+    </section>
+    <section header="Żona">
+        <field name="wife-name" index="3" label="Imię" />
+        <field name="wife-surname" index="2" label="Nazwisko" />
+        <field name="wife-confession" index="16" label="Wyznanie" />
+        <field name="wife-marital-status" index="17" label="Stan cywilny" />
+        <field name="wife-residence" index="18" label="Miejsce zamieszkania" />
+        <field name="wife-birth-date" index="19" label="Data urodzenia" />
+        <field name="wife-birth-place" index="20" label="Miejsce urodzenia" />
+        <field name="wife-baptism-date" index="21" label="Data chrztu" />
+        <field name="wife-baptism-place" index="22" label="Miejsce chrztu" />
+        <field name="wife-father-name" index="23" label="Imię ojca" />
+        <field name="wife-father-surname" index="24" label="Nazwisko ojca" />
+        <field name="wife-mother-name" index="25" label="Imię matki" />
+        <field name="wife-mother-surname" index="26" label="Nazwisko matki" />
+        <field name="wife-mother-maiden-name" index="27" label="Nazwisko panieńskie matki" />
+    </section>
+    <section header="Data zawarcia sakramentu małżeństwa">
+        <field name="date" index="28" label="Data" />
+    </section>
+    <section header="Kapłan, błogosławiący sakrament małżeństwa. Ewentualna delegacja do asystowania.">
+        <field name="minister-surname" index="29" label="Nazwisko kapłana" />
+        <field name="minister-name" index="30" label="Imię kapłana" />
+        <field name="assisting-delegation" index="31" label="Delegacja" />
+    </section>
+    <section header="Świadek pana młodego">
+        <field name="husband-witness-name" index="33" label="Imię" />
+        <field name="husband-witness-surname" index="32" label="Nazwisko" />
+        <field name="husband-witness-age" index="34" label="Wiek" />
+        <field name="husband-witness-" index="35" label="Miejsce zamieszkania" />
+    </section>
+    <section header="Świadek panny młodej">
+        <field name="wife-witness-name" index="37" label="Imię" />
+        <field name="wife-witness-surname" index="36" label="Nazwisko" />
+        <field name="wife-witness-age" index="38" label="Wiek" />
+        <field name="wife-witness-" index="39" label="Miejsce zamieszkania" />
+    </section>
+    <section header="Nr br. protokołu przedślubnego">
+        <field name="prenatal-protocol" index="40" label="Nr" />
+    </section>
+    <section header="Wpisy">
+        <field name="regularized" index="41" label="Konwalidacja" />
+        <field name="nullity" index="42" label="Nieważność" />
+        <field name="others" index="43" label="Inne" />
+    </section>
+    <section header="Uwagi">
+        <field name="note1" index="44" label="Uwaga 1" />
+        <field name="note2" index="45" label="Uwaga 2" />
+        <field name="note3" index="46" label="Uwaga 3" />
+        <field name="note4" index="47" label="Uwaga 4" />
+        <field name="note5" index="48" label="Uwaga 5" />
+    </section>
+</bt>
+<bt name="Księga zmarłych">
+    <section header="Zmarły">
+        <field name="name" index="1" label="Imię" />
+        <field name="surname" index="0" label="Nazwisko" />
+        <field name="birth-date-age" index="2" label="Data urodzenia albo wiek" />
+        <field name="residence" index="3" label="Miejsce zamieszkania" />
+        <field name="confession" index="4" label="Wyznanie" />
+        <field name="death-date-time" index="5" label="Data i godzina zgonu" />
+        <field name="death-place" index="6" label="Miejsce zgonu" />
+    </section>
+    <section header="Rodzice zmarłego">
+        <field name="father-name" index="8" label="Imię ojca" />
+        <field name="father-surname" index="7" label="Nazwisko ojca" />
+        <field name="mother-name" index="10" label="Imię matki" />
+        <field name="mother-surname" index="9" label="Nazwisko matki" />
+    </section>
+    <section header="Pozostawiony małżonek">
+        <field name="left-spose" index="11" label="Imię i nazwisko" />
+    </section>
+    <section header="Kto i jakich udzielił sakramentów przed zgonem">
+        <field name="before-death-priest-surname" index="12" label="Nazwisko kapłana" />
+        <field name="before-death-priest-name" index="13" label="Imię kapłana" />
+        <field name="before-death-sacraments" index="14" label="Sakramenty" />
+    </section>
+    <section header="Pogrzeb">
+        <field name="date" index="15" label="Data" />
+        <field name="burial-place" index="16" label="Miejsce pogrzebu" />
+        <field name="grave-place" index="17" label="Miejsce grobu" />
+    </section>
+    <section header="Uwagi">
+        <field name="note1" index="18" label="Uwaga 1" />
+        <field name="note2" index="19" label="Uwaga 2" />
+        <field name="note3" index="20" label="Uwaga 3" />
+        <field name="note4" index="21" label="Uwaga 4" />
+        <field name="note5" index="22" label="Uwaga 5" />
+    </section>
+</bt>
+</templates>

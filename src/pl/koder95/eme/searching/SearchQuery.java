@@ -17,65 +17,58 @@
 package pl.koder95.eme.searching;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.InputMismatchException;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
-import pl.koder95.eme.idf.ActNumber;
+import pl.koder95.eme.dfs.ActNumber;
 
 /**
  * Klasa reprezentuje kwerendę wyszukującą.
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.0.202, 2017-08-23
+ * @version 0.1.13-alt, 2018-08-04
  * @since 0.0.201
  */
 public class SearchQuery extends AbstractSearchQuery {
     
+    private final List<String> names; // lista nazw danych do przeszukania
     private final SearchPhrase phrase;
 
     /**
      * Podstawowy konstruktor.
      * 
+     * @param enteredText wprowadzony tekst
+     * @param names lista nazw danych do przeszukania
      * @param phrase fraza wyszukiwania
      */
-    public SearchQuery(SearchPhrase phrase) {
+    public SearchQuery(String enteredText, List<String> names, SearchPhrase phrase) {
+        super(enteredText);
+        this.names = names;
         this.phrase = phrase;
     }
 
     /**
      * Alternatywny konstruktor.
      * 
+     * @param names lista nazw danych do przeszukania
      * @param value wartość do znalezienia
      */
-    public SearchQuery(String value) {
-        this(SearchPhrase.createDefault(value));
+    public SearchQuery(List<String> names, String value) {
+        this(value, names, SearchPhrase.createDefault(value));
     }
 
     /**
-     * Alternatywny konstruktor.
+     * Tworzy nową kwerendę szukającą numer aktu.
      * 
      * @param an numer aktu do znalezienia
      */
-    public SearchQuery(ActNumber an) {
-        this(an.toString());
-    }
-
-    /**
-     * Alternatywny konstruktor.
-     * 
-     * @param id identyfikator do znalezienia
-     */
-    public SearchQuery(int id) {
-        this("#" + id);
-    }
-
-    @Override
-    int getID() {
-        if (phrase.getIDWordIndex() < 0) return -1;
-        String idWord = phrase.getIDWord();
-        try {
-            return Integer.parseInt(idWord.substring(1));
-        } catch (NumberFormatException ex) { return -1; }
+    public static SearchQuery create(ActNumber an) {
+        List<String> names = new LinkedList<>();
+        names.add("an");
+        return new SearchQuery(names, an.toString());
     }
 
     @Override
@@ -118,67 +111,28 @@ public class SearchQuery extends AbstractSearchQuery {
     }
 
     @Override
-    String[] getData() {
+    Map<String, String> getData() {
+        HashMap<String, String> map = new HashMap<>();
         LinkedList<String> data = new LinkedList<>();
         data.addAll(Arrays.asList(phrase.getWords()));
-        int idIndex = phrase.getIDWordIndex();
-        int anIndex = phrase.getANWordIndex();
         
-        if (idIndex >= 0) {
-            if (anIndex >= 0) {
-                if (idIndex == anIndex) data.remove(idIndex);
-                else if (idIndex > anIndex) {
-                    data.remove(idIndex);
-                    data.remove(anIndex);
-                }
-                else {
-                    data.remove(anIndex);
-                    data.remove(idIndex);
-                }
-            }
-            else data.remove(idIndex);
-        }
-        else if (anIndex >= 0) data.remove(anIndex);
         if (getYear() > 0) data.remove(getYear() + "");
         
-        return data.toArray(new String[data.size()]);
-    }
-
-    @Override
-    String getData(int i) {
-        return getData()[i];
-    }
-
-    @Override
-    public SearchFilter getIDFilter() {
-        return (i)-> {
-            return getID() == i.ID;
-        };
-    }
-
-    @Override
-    public SearchFilter getActNumberFilter() {
-        return (i)-> {
-            return getActNumber().compareTo(i.getActNumber()) == 0;
-        };
-    }
-
-    @Override
-    public SearchFilter getYearFilter() {
-        return (i)-> {
-            return getYear() == i.getActNumber().getYear();
-        };
-    }
-
-    @Override
-    public SearchFilter getDataFilter() {
-        return (i)-> {
-            String[] data = getData();
-            boolean accept = true;
-            for (int ii = 0; ii < data.length; ii++) {
-                accept = accept && i.getData(ii).startsWith(data[ii]);
+        names.forEach((name) -> {
+            if (!data.isEmpty()) {
+                String info = data.remove();
+                if (!info.isEmpty()) {
+                    System.out.println(String.format("PUT %s TO KEY [%s]", info, name));
+                    map.put(name, info);
+                }
             }
-            return accept;
-        };
+        });
+        System.out.println("map="+map);
+        return map;
+    }
+
+    @Override
+    String getData(String name) {
+        return getData().get(name);
     }
 }

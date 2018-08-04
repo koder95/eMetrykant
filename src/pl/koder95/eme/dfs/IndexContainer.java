@@ -14,37 +14,48 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package pl.koder95.eme.searching;
 
-import java.util.LinkedList;
+package pl.koder95.eme.dfs;
+
 import java.util.List;
-import pl.koder95.eme.idf.Index;
 
 /**
- * Klasa reprezentuje wyszukiwanie po identyfikatorze (tzw.&nbsp;ID).
+ * Zawiera metody dla klasy, która przechowywać będzie indeksy.
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.0.201, 2017-08-16
- * @since 0.0.201
+ * @version 0.1.11, 2018-03-21
+ * @since 0.1.11
  */
-class IDSearchStrategy extends SearchStrategy {
+public interface IndexContainer {
+    
+    /**
+     * @param id identyfikator > 0
+     * @return indeks
+     */
+    public Index get(int id);
 
-    IDSearchStrategy(AbstractSearchQuery query) {
-        super(query);
-    }
+    /**
+     * @return lista wczytanych indeksów
+     */
+    public List<Index> getLoaded();
 
-    @Override
-    public LinkedList<Index> searchFor(List<Index> list) {
-        if (query == null || query.getID() < 1) return new LinkedList<>();
-        
-        for (Index i: list) {
-            if (i.ID == query.getID()) {
-                LinkedList<Index> result = new LinkedList<>();
-                result.add(i);
-                return result;
-            }
-        }
-        return new LinkedList<>();
-    }
-
+    /**
+     * Usuwa wczytane dane i zwalnia pamięć dla potencjalnie nowych danych.
+     */
+    public void clear();
+    
+    /**
+     * @return liczba indeksów wczytanych oraz ostatni utworzony identyfikator
+     */
+    public int size();
+    
+    /**
+     * @return pierwszy indeks
+     */
+    public Index getFirst();
+    
+    /**
+     * @return ostatni indeks
+     */
+    public Index getLast();
 }

@@ -75,5 +75,11 @@ public class MemoryUtils {
         long releaseMemory = preRuntimeMemory - postRuntimeMemory;
         System.out.println("Zwolniono " + toLabel(releaseMemory));
     }
+    
+    public static void memory() {
+        Runtime r = Runtime.getRuntime();
+        long preRuntimeMemory = r.totalMemory() - r.freeMemory();
+        System.out.println("Stan pamięci: " + toLabel(preRuntimeMemory));
+    }
 
 }

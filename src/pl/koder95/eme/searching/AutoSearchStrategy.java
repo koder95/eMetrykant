@@ -16,10 +16,10 @@
  */
 package pl.koder95.eme.searching;
 
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
-import pl.koder95.eme.idf.Index;
+import java.util.Map;
+import pl.koder95.eme.dfs.Index;
 
 /**
  * Klasa reprezentuje strategię automatyczną wyszukiwania, czyli taką, która
@@ -27,22 +27,24 @@ import pl.koder95.eme.idf.Index;
  * możliwości należy unikać zastosowania tej strategii, gdyż jest mało wydajna.
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.0.201, 2017-08-16
+ * @version 0.1.12-alt, 2018-08-04
  * @since 0.0.201
  */
 class AutoSearchStrategy extends SearchStrategy {
     
-    private final ANSearchStrategy an;
-    private final DataSearchStrategy data;
-    private final IDSearchStrategy id;
     private final YearSearchStrategy year;
+    private final SearchQueue queue; // kolejka wyszukiwania - strategia
 
     public AutoSearchStrategy(AbstractSearchQuery query) {
         super(query);
-        an = new ANSearchStrategy(query);
-        data = new DataSearchStrategy(query);
-        id = new IDSearchStrategy(query);
         year = new YearSearchStrategy(query);
+        queue = new SearchQueue(query);
+        // określa kolejność przeszukiwania danych w każdym indeksie:
+        queue.addNameGroup("surname", "husband-surname", "wife-surname", "an");
+        queue.addNameGroup("wife-surname", "name", "husband-name", "wife-name", "an");
+        queue.addNameGroup("husband-name", "wife-name", "an");
+        queue.addNameGroup("wife-name", "an");
+        queue.addNameGroup("an");
     }
 
     @Override
@@ -50,20 +52,11 @@ class AutoSearchStrategy extends SearchStrategy {
         if (query == null) return new LinkedList<>();
         setQuery(query);
         
-        if (query.getID() > 0) return this.id.searchFor(list);
-        if (query.getActNumber() != null) return this.an.searchFor(list);
-        
-        String[] data = query.getData();
+        Map<String, String> data = query.getData();
         int year = query.getYear();
-        System.out.println("data=" + Arrays.toString(data));
-        System.out.println("year=" + year);
-        if (data != null && data.length != 0) {
-            LinkedList<Index> listL;
-            
-            if (year > 0) listL = this.year.searchFor(list);
-            else return this.data.searchFor(list);
-            
-            return this.data.searchFor(listL);
+        if (data != null && !data.isEmpty()) {
+            if (list == null) System.err.println("list == null");
+            return this.queue.searchFor(list);
         }
         if (year > 0) return this.year.searchFor(list);
         return new LinkedList<>();
@@ -72,9 +65,7 @@ class AutoSearchStrategy extends SearchStrategy {
     @Override
     public void setQuery(AbstractSearchQuery query) {
         this.query = query;
-        an.query = query;
-        data.query = query;
-        id.query = query;
         year.query = query;
+        queue.query = query;
     }
 }
