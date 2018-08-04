@@ -34,7 +34,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 /**
  * Klasa uruchamiająca i inicjalizująca podstawowe elementy aplikacji.
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.1.11, 2018-03-21
+ * @version 0.1.12-alt, 2018-08-04
  * @since 0.0.201
  */
 public class Main implements LaunchMethod {
@@ -66,6 +66,10 @@ public class Main implements LaunchMethod {
     public static final Collator DEFAULT_COLLATOR
             = Collator.getInstance(POLISH); //NOI18N
     private static final String FAV_PATH_START = "pl/koder95/eme/favicon";
+    /**
+     * Ścieżka ikony dla okienek.
+     */
+    public static final String FAVICON_PATH = FAV_PATH_START + ".png";
     /**
      * Ikona dla okienek.
      */
@@ -112,7 +116,9 @@ public class Main implements LaunchMethod {
                 instance.setNextLaunchMethod(new AbstractDefaultLaunch() {
                     @Override
                     public void launch(List<String> args) {
-                        pl.koder95.eme.fx.Main.main(args);
+                        javafx.application.Application
+                                .launch(pl.koder95.eme.fx.Main.class,
+                                        args.toArray(new String[args.size()]));
                     }
                 });
         }

@@ -17,12 +17,14 @@
 
 package pl.koder95.eme;
 
+import java.util.List;
+
 /**
  * Klasa reprezentuje uruchamianie domyślne, które nie posiada odniesień do
  * jakiegoś innego sposobu uruchamiania.
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.1.10, 2018-03-18
+ * @version 0.1.12-alt, 2018-08-04
  * @since 0.1.10
  */
 public abstract class AbstractDefaultLaunch implements LaunchMethod {
@@ -36,5 +38,8 @@ public abstract class AbstractDefaultLaunch implements LaunchMethod {
     public void setNextLaunchMethod(LaunchMethod next) {
         // do nothing
     }
+
+    @Override
+    public abstract void launch(List<String> args);
 
 }

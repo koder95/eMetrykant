@@ -22,7 +22,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Arrays;
 import java.util.List;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -45,7 +44,7 @@ import pl.koder95.eme.idf.IndexTemplate;
  * Umożliwia przekonwertowanie plików o rozszerzeniu CSV na plik XML.
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.1.11, 2018-03-21
+ * @version 0.1.12-alt, 2018-08-04
  * @since 0.1.1
  */
 public final class ConverterCSV implements LaunchMethod {
@@ -53,7 +52,7 @@ public final class ConverterCSV implements LaunchMethod {
     private final LaunchMethod next = new AbstractDefaultLaunch() {
         @Override
         public void launch(List<String> args) {
-            pl.koder95.eme.fx.Main.main(args);
+            pl.koder95.eme.fx.Main.launch(args.toArray(new String[args.size()]));
         }
     };
     private File out;
@@ -192,7 +191,7 @@ public final class ConverterCSV implements LaunchMethod {
 
     @Override
     public void launch(List<String> args) {
-        System.out.println(Arrays.asList(args));
+        System.out.println(args);
         if (args.get(0).equalsIgnoreCase("-c")) {
             try {
                 String[] csvFileNames = pl.koder95.eme.Files.CSV_DIR.list(
