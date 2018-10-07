@@ -15,23 +15,22 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package pl.koder95.eme.idf;
+package pl.koder95.eme.dfs;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-import pl.koder95.eme.dfs.ActNumber;
 
 /**
  * Szablon dla indeksów, który pozwala utworzyć indeks według określonych reguł
  * układania danych.
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.1.11, 2018-03-21
- * @since 0.1.4
+ * @version 0.2.0, 2018-10-07
+ * @since 0.2.0
  */
 public class IndexTemplate {
 
@@ -55,17 +54,6 @@ public class IndexTemplate {
      */
     public IndexTemplate() {
         this(new HashMap<>(), new HashMap<>());
-    }
-    
-    /**
-     * Pobiera określoną informacje z indeksu.
-     * 
-     * @param i indeks, z którego pobrana ma być informacja
-     * @param attr atrybut, odnosi się do konkretnego miejsca w tablicy z danymi
-     * @return informacja, wartość atrybutu
-     */
-    public String getData(Index i, String attr) {
-        return i.getData(attr_data.get(attr));
     }
     
     /**
@@ -117,38 +105,17 @@ public class IndexTemplate {
         attr_data.put(attr, data_index);
         if (data_index+1 > data_length) data_length = data_index+1;
     }
-    
-    RealIndex create(int id, Node index) {
-        String[] data = new String[data_length];
-        for (int i = 0; i < data.length; i++) {
-            data[i] = "";
-        }
-        NamedNodeMap attrs = index.getAttributes();
-        String ans = attrs.removeNamedItem("an").getTextContent();
-        if (ans == null || ans.isEmpty()) return null;
-        
-        ActNumber an = ActNumber.parseActNumber(ans);
-        for (int i = 0; i < attrs.getLength(); i++) {
-            Node n = attrs.item(i);
-            int data_index = attr_data.get(n.getNodeName());
-            if (data_index >= 0) data[data_index] = n.getTextContent();
-        }
-        return RealIndex.create(id, an, data);
-    }
 
     /**
      * Tworzy tablicę pustych atrybutów.
      * 
      * @param doc dokument XML
-     * @return tablica atrybutów, wartości nie ustawione
+     * @return lista atrybutów, wartości nie ustawione
      * @since 0.1.5
      */
-    public Attr[] createAttrXMLArray(Document doc) {
-        Attr[] attrs = new Attr[attr_data.size()];
-        int i = 0;
-        for (String a : attr_data.keySet()) {
-            attrs[i++] = doc.createAttribute(a);
-        }
+    public List<Attr> createAttrXMLArray(Document doc) {
+        List<Attr> attrs = new ArrayList<>();
+        attr_data.keySet().forEach((a) -> attrs.add(doc.createAttribute(a)));
         return attrs;
     }
 
@@ -157,5 +124,11 @@ public class IndexTemplate {
      */
     public int getDataLength() {
         return data_length;
+    }
+
+    @Override
+    public String toString() {
+        return "IndexTemplate{" + "attr_data=" + attr_data + ", label_attr="
+                + label_attr + ", data_length=" + data_length + '}';
     }
 }

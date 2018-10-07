@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package pl.koder95.eme.idf;
+package pl.koder95.eme.dfs;
 
 import java.io.File;
 import java.io.IOException;
@@ -24,7 +24,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import static pl.koder95.eme.idf.BookTemplate.Section;
+import static pl.koder95.eme.dfs.BookTemplate.Section;
 import org.xml.sax.SAXException;
 import pl.koder95.eme.xml.XMLLoader;
 
@@ -32,8 +32,8 @@ import pl.koder95.eme.xml.XMLLoader;
  * Pozwala wczytać szablon księgi lub ksiąg.
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.1.7, 2018-01-30
- * @since 0.1.4
+ * @version 0.2.0, 2018-10-07
+ * @since 0.2.0
  */
 public class BookTemplateLoader {
     
@@ -80,6 +80,7 @@ public class BookTemplateLoader {
     private static BookTemplate load(Node btTag) {
         if (btTag == null) return null;
         if (!btTag.getNodeName().equalsIgnoreCase("bt")) return null;
+        System.out.println("Book template loading...");
         
         BookTemplate tmpl = new BookTemplate(XMLLoader.getAttrV(btTag, "name"));
         if (btTag.hasChildNodes()) {

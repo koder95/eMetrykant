@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<TitledPane fx:id="liberDefunctorum" animated="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" text="Księga zmarłych" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pl.koder95.eme.fx.LiberDefunctorumController">
+<TitledPane fx:id="liberDefunctorum" animated="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" text="Księga zmarłych" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pl.koder95.eme.fx.LiberDefunctorumController">
   <content>
     <AnchorPane minHeight="200.0" minWidth="300.0">
          <children>

@@ -11,9 +11,9 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<TitledPane fx:id="liberBaptismorum" animated="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" text="Księga ochrzczonych" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pl.koder95.eme.fx.LiberBaptismorumController">
+<TitledPane fx:id="liberBaptismorum" animated="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" text="Księga ochrzczonych" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pl.koder95.eme.fx.LiberBaptismorumController">
   <content>
-    <AnchorPane minHeight="200.0" minWidth="300.0">
+    <AnchorPane fx:id="main" minHeight="200.0" minWidth="300.0">
          <children>
             <TextField fx:id="searcher" layoutX="199.0" layoutY="14.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0">
                <font>

@@ -44,7 +44,7 @@ import pl.koder95.eme.dfs.Index;
  * </ol>
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.1.13-alt, 2018-08-04
+ * @version 0.2.0, 2018-10-07
  * @since 0.0.201
  */
 public class SearchContext {
@@ -69,7 +69,18 @@ public class SearchContext {
      */
     public Index[] search(List<Index> loaded) {
         constantQuery();
-        if (strategy == null) System.err.println("strategy == null");
+        if (strategy == null) {
+            System.err.println("strategy == null");
+            return new Index[0];
+        }
+        loaded = new LinkedList<>(loaded);
+        loaded.removeIf(i -> {
+            boolean remove = false;
+            for (String word : strategy.query.getEnteredText().split(" ")) {
+                if (!i.toString().toUpperCase().contains(word)) remove = true;
+            }
+            return remove;
+        });
         LinkedList<Index> search = strategy.searchFor(loaded);
         Index[] array = search.toArray(new Index[search.size()]);
         for (Index i: array) {
@@ -109,7 +120,6 @@ public class SearchContext {
     
     private Index better(Index i0, Index i1) {
         double s0 = similarity(i0), s1 = similarity(i1);
-        System.out.println(i0 + " => s0 = " + s0 + "; s1 = " + s1 + " <= " + i1);
         return s0 > s1? i0 : i1;
     }
     
@@ -122,37 +132,44 @@ public class SearchContext {
         double similarity = 1d;
         Map<String, String> strData = strategy.query.getData();
         for (String name : strData.keySet()) {
-            System.out.println("name: " + name);
-            if (strData.get(name) != null && i.getData(name) != null)
-            similarity*= similarity(strData.get(name).toUpperCase(),
-                    i.getData(name).toUpperCase());
+            if (strData.get(name) != null && i.getData(name) != null) {
+                similarity*= similarity(strData.get(name).toUpperCase(),
+                        i.getData(name).toUpperCase());
+                System.out.print("name: " + name);
+                System.out.println(" similarity: " + similarity);
+                if (similarity == 0) return 0;
+            }
         }
         return similarity;
     }
     
     private double similarity(String s0, String s1) {
         if (s0.equals(s1)) return 1f;
-        else if (s0.contains(s1)) {
-            System.out.println("CONTAINS");
-            return s1.length() / s0.length();
-        }
-        else if (s1.contains(s0)) {
-            System.out.println("CONTAINS");
-            return s0.length() / s1.length();
-        }
-        else {
-            System.out.println("SIMILARITY " + s0 + " &=& " + s1);
-            int length = s0.length() > s1.length()? s1.length() : s0.length();
-            double similar = 0;
-            if (s0.contains(s1)) {
-
+        
+        int prefixLength = 0;
+        int sufixLength = 0;
+        int begin = 0, end0 = s0.length()-1, end1 = s1.length()-1;
+        while (begin >= end0 || begin >= end1) {
+            if (prefixLength == 0) {
+                if (begin < Math.min(s0.length(), s1.length()))
+                    if (s0.charAt(begin) != s1.charAt(begin))
+                        prefixLength = begin;
             }
-            for (int i = 0; i < length; i++) {
-                if (s0.charAt(i) != s1.charAt(i)) break;
-                similar++;
+            if (sufixLength == 0) {
+                if (Math.min(end0, end1) >= 0)
+                    if (s0.charAt(end0) != s1.charAt(end1))
+                        prefixLength = s0.length() - end0;
             }
-            return (s1.length() == s0.length()? 1 : 0.5)*(similar/length);
+            begin++;
+            end0--;
+            end1--;
         }
+        String s0d = s0.substring(prefixLength, s0.length()-sufixLength);
+        String s1d = s1.substring(prefixLength, s1.length()-sufixLength);
+        System.out.println("s0d = " + s0d);
+        System.out.println("s1d = " + s1d);
+        double s = (prefixLength + sufixLength) / (Math.max(s0.length(), s1.length()));
+        return s;
     }
 
     /**

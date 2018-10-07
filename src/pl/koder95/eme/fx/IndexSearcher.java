@@ -17,10 +17,8 @@
 package pl.koder95.eme.fx;
 
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 import pl.koder95.eme.dfs.IndexList;
 import pl.koder95.eme.dfs.Index;
 import pl.koder95.eme.searching.AbstractSearchQuery;
@@ -31,7 +29,7 @@ import pl.koder95.eme.searching.SearchQuery;
  * Klasa pomagająca wyszukiwanie indeksów.
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.1.13-alt, 2018-08-04
+ * @version 0.2.0, 2018-10-07
  * @since 0.0.201
  */
 public class IndexSearcher {
@@ -125,10 +123,9 @@ public class IndexSearcher {
      * @return tablica indeksów pasujących do tekstu
      */
     public Index[] find(String label) {
-        String[] words = label.split(" ");
         System.out.println("find=" + label);
         context.setAutoSearch();
-        return find(new SearchQuery(names, String.join(" ", words)));
+        return find(new SearchQuery(names, label));
     }
 
     /**

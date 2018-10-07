@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Kamil Jan Mularski [@koder95]
+ * Copyright (C) 2018 Kamil Jan Mularski [@koder95]
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package pl.koder95.eme.idf;
+package pl.koder95.eme.dfs;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -24,8 +24,8 @@ import java.util.List;
  * Przechowuje informacje o szablonie księgi.
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.1.4, 2017-09-06
- * @since 0.1.4
+ * @version 0.2.0, 2018-10-07
+ * @since 0.2.0
  */
 public class BookTemplate {
 

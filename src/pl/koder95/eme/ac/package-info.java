@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Kamil Jan Mularski [@koder95]
+ * Copyright (C) 2018 Kamil Jan Mularski [@koder95]
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,8 +16,6 @@
  */
 
 /**
- * Paczka zawiera klasy, które przechowują informacje o indeksach, jak i same
- * indeksy. Niektóre z nich posiadają również metody wczytujące indeksy zapisane
- * w plikach na dysku.
+ * Paczka zawiera klasy obsługujące system autouzupełniania.
  */
-package pl.koder95.eme.idf;
+package pl.koder95.eme.ac;

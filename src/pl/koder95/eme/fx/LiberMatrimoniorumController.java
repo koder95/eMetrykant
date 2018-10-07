@@ -29,7 +29,10 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
 import javafx.scene.control.TitledPane;
 import javafx.scene.layout.GridPane;
+import org.controlsfx.control.textfield.AutoCompletionBinding;
 import org.controlsfx.control.textfield.TextFields;
+import pl.koder95.eme.ac.ACCallback;
+import pl.koder95.eme.ac.StringConverter;
 import pl.koder95.eme.dfs.Index;
 import pl.koder95.eme.dfs.IndexList;
 
@@ -37,7 +40,7 @@ import pl.koder95.eme.dfs.IndexList;
  * FXML Controller class
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.1.12-alt, 2018-08-04
+ * @version 0.2.0, 2018-10-07
  * @since 0.1.12-alt
  */
 public class LiberMatrimoniorumController implements Initializable {
@@ -59,8 +62,6 @@ public class LiberMatrimoniorumController implements Initializable {
     @FXML
     private Label wifeSurname;
     
-    private Collection<String> possibleSuggestions;
-    
     private static final IndexList LIST = IndexList.LIBER_MATRIMONIORUM;
 
     /**
@@ -68,20 +69,13 @@ public class LiberMatrimoniorumController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        if (LIST.getLoaded() == null || LIST.getLoaded().isEmpty()) {
+            LIST.load();
+        }
         searcher.setTextFormatter(new TextFormatter<>((change) -> {
             change.setText(change.getText().toUpperCase());
             return change;
         }));
-        if (LIST.getLoaded() == null || LIST.getLoaded().isEmpty()) {
-            LIST.load();
-            Collection<String> pc = new LinkedList<>();
-            LIST.getLoaded().forEach((index) -> {
-                pc.add(LIST.getSCM().createSuggestion(index));
-            });
-            this.possibleSuggestions = new ArrayList<>(pc);
-            pc.clear();
-        }
         searcher.setOnAction((event) -> {
             IndexSearcher isearcher = new IndexSearcher(LIST);
             Index[] result = isearcher.find(searcher.getText());
@@ -89,7 +83,15 @@ public class LiberMatrimoniorumController implements Initializable {
             else Toolkit.getDefaultToolkit().beep();
             pl.koder95.eme.Main.releaseMemory();
         });
-        TextFields.bindAutoCompletion(searcher, possibleSuggestions);
+        AutoCompletionBinding binding = TextFields.bindAutoCompletion(
+                searcher,
+                new ACCallback(LIST.getLoaded()),
+                new StringConverter(LIST.getSCM())
+        );
+        binding.maxWidthProperty().bind(searcher.widthProperty());
+        binding.minWidthProperty().bind(searcher.widthProperty());
+        binding.prefWidthProperty().bind(searcher.widthProperty());
+        binding.setVisibleRowCount(8);
     }
 
     public String getHusbandName() {
@@ -101,11 +103,11 @@ public class LiberMatrimoniorumController implements Initializable {
     }
 
     public void setHusbandName(String name) {
-        this.husbandName.setText(name);
+        this.husbandName.setText(prepare(name));
     }
 
     public void setHusbandSurname(String surname) {
-        this.husbandSurname.setText(surname);
+        this.husbandSurname.setText(prepare(surname));
     }
 
     public String getWifeName() {
@@ -117,11 +119,11 @@ public class LiberMatrimoniorumController implements Initializable {
     }
 
     public void setWifeName(String name) {
-        this.wifeName.setText(name);
+        this.wifeName.setText(prepare(name));
     }
 
     public void setWifeSurname(String surname) {
-        this.wifeSurname.setText(surname);
+        this.wifeSurname.setText(prepare(surname));
     }
 
     public String getAct() {
@@ -129,7 +131,7 @@ public class LiberMatrimoniorumController implements Initializable {
     }
 
     public void setAct(String act) {
-        this.act.setText(act);
+        this.act.setText(prepare(act));
     }
     
     private void setIndex(Index i) {
@@ -139,5 +141,9 @@ public class LiberMatrimoniorumController implements Initializable {
         setWifeSurname(i!= null? i.getData("wife-surname"): "-");
         setAct(i!= null? i.getData("an"): "-");
         searcher.setText("");
+    }
+    
+    private String prepare(String value) {
+        return value.replaceAll("_", " ");
     }
 }

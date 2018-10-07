@@ -17,7 +17,6 @@
 package pl.koder95.eme.dfs;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -27,10 +26,6 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
 import pl.koder95.eme.Files;
 import pl.koder95.eme.Main;
-import static pl.koder95.eme.Main.BUNDLE;
-import static pl.koder95.eme.Main.READ_DATA_ERR_MESSAGE;
-import static pl.koder95.eme.Main.READ_DATA_ERR_TITLE;
-import static pl.koder95.eme.Main.showErrorMessage;
 import pl.koder95.eme.MemoryUtils;
 import pl.koder95.eme.fx.SuggestCreatingMethod;
 import pl.koder95.eme.fx.SuggestCreator;
@@ -41,7 +36,7 @@ import pl.koder95.eme.searching.SearchContext;
  * Zawiera wszystkie typy ksiąg i zawierających się w nich zbiorach indeksów.
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.1.11, 2018-03-21
+ * @version 0.2.0, 2018-10-07
  * @since 0.1.11
  */
 public enum IndexList implements IndexContainer {
@@ -193,11 +188,8 @@ public enum IndexList implements IndexContainer {
     private static void loadBooks() {
         try {
             BOOKS = Book.load(new File(Files.XML_DIR, "indices.xml"));
-        } catch (FileNotFoundException ex) {
-            showErrorMessage(READ_DATA_ERR_MESSAGE, READ_DATA_ERR_TITLE, true);
         } catch (IOException | SAXException | ParserConfigurationException ex) {
-            showErrorMessage(BUNDLE.getString("ERR_EX_IO"),
-                    BUNDLE.getString("ERR_EX_IO_TITLE"), true);
+            System.err.println(ex);
         }
     }
     

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 Kamil Jan Mularski [@koder95]
+ * Copyright (C) 2018 Kamil Jan Mularski [@koder95]
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,28 +16,29 @@
  */
 package pl.koder95.eme;
 
-import java.awt.Image;
+import com.sun.javafx.application.LauncherImpl;
 import java.awt.Toolkit;
 import java.io.File;
-import java.io.IOException;
 import java.nio.charset.Charset;
 import java.text.Collator;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.regex.Pattern;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.image.Image;
+import javafx.stage.Stage;
+import pl.koder95.eme.fx.Preloader;
 
 /**
  * Klasa uruchamiająca i inicjalizująca podstawowe elementy aplikacji.
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.1.12-alt, 2018-08-04
+ * @version 0.2.0, 2018-10-07
  * @since 0.0.201
  */
-public class Main implements LaunchMethod {
+public class Main extends Application {
     /**
      * Domyślny pakiet językowy.
      */
@@ -73,17 +74,17 @@ public class Main implements LaunchMethod {
     /**
      * Ikona dla okienek.
      */
-    public static final Image FAVICON = Toolkit.getDefaultToolkit()
+    public static final java.awt.Image FAVICON = Toolkit.getDefaultToolkit()
            .createImage(ClassLoader.getSystemResource(FAV_PATH_START + ".png"));
     /**
      * Ikona dla zasobnika systemowego w rozmiarze 16x16.
      */
-    public static final Image FAVICON16 = Toolkit.getDefaultToolkit()
+    public static final java.awt.Image FAVICON16 = Toolkit.getDefaultToolkit()
          .createImage(ClassLoader.getSystemResource(FAV_PATH_START + "16.png"));
     /**
      * Ikona dla zasobnika systemowego w rozmiarze 24x24.
      */
-    public static final Image FAVICON24 = Toolkit.getDefaultToolkit()
+    public static final java.awt.Image FAVICON24 = Toolkit.getDefaultToolkit()
          .createImage(ClassLoader.getSystemResource(FAV_PATH_START + "24.png"));
     /**
      * Komunikat błędu braku danych, które powinny zostać wczytane.
@@ -101,112 +102,8 @@ public class Main implements LaunchMethod {
     public static final Pattern DIGITS_STRING_PATTERN
             = Pattern.compile("([0-9]*)");
 
-    /**
-     * Uruchamia program.
-     * 
-     * @param args jeśli tablica jest pusta, uruchamia program standardowo;
-     * jeśli tablica zawiera {@code "-c"}, zostanie uruchomiony konwerter plików
-     * CSV na XML
-     */
     public static void main(String[] args) {
-        LinkedList<String> arg = new LinkedList<>(Arrays.asList(args));
-        Main instance = new Main(Files.CSV_DIR, Files.XML_DIR, "indices.xml");
-        if (args == null || args.length == 0) {
-            if (Files.XML_DIR != null || Files.XML_DIR.list() != null)
-                instance.setNextLaunchMethod(new AbstractDefaultLaunch() {
-                    @Override
-                    public void launch(List<String> args) {
-                        javafx.application.Application
-                                .launch(pl.koder95.eme.fx.Main.class,
-                                        args.toArray(new String[args.size()]));
-                    }
-                });
-        }
-        instance.launch(arg);
-    }
-    
-    /**
-     * Odtwarza sygnał dźwiękowy błędu i wyświetla o nim komunikat, generując
-     * status.
-     * 
-     * @param parentComponent komponent-rodzic
-     * @param message komunikat
-     * @param title tytuł komunikatu
-     * @return status (patrz: {@link System#exit(int) exit status})
-     */
-    public static int showErrorMessage(java.awt.Component parentComponent,
-            Object message, String title) {
-        java.awt.Toolkit.getDefaultToolkit().beep();
-        javax.swing.JOptionPane.showMessageDialog(parentComponent, message,
-                title, javax.swing.JOptionPane.ERROR_MESSAGE);
-        return -1;
-    }
-    
-    /**
-     * Pokazuje wiadomość o błędzie w formie okienka dialogowego. Wywoływana
-     * jest metoda {@link #showErrorMessage(java.awt.Component,
-     * java.lang.Object, java.lang.String)} i jeśli {@code exit == true} to
-     * zamykana jest aplikacja ze statusem zwróconym przez wywołaną metodę.
-     * 
-     * @param parentComponent komponent-rodzic
-     * @param message komunikat
-     * @param title tytuł komunikatu
-     * @param exit jeśli {@code true} to po zamknięciu komunikatu, zamknie się
-     * również aplikacja
-     */
-    public static void showErrorMessage(java.awt.Component parentComponent,
-            Object message, String title, boolean exit) {
-        int status = showErrorMessage(parentComponent, message, title);
-        if (exit) System.exit(status);
-    }
-    
-    /**
-     * Uproszczona wersja metody {@link #showErrorMessage(java.awt.Component,
-     * java.lang.Object, java.lang.String)}.
-     * Metoda wywołuje {@link #showErrorMessage(java.awt.Component,
-     * java.lang.Object, java.lang.String)} z pierwszym argumentem równym
-     * {@code null}.
-     * 
-     * @param message komunikat
-     * @param title tytuł komunikatu
-     * @return status (patrz: {@link System#exit(int) exit status})
-     */
-    public static int showErrorMessage(Object message, String title) {
-        return showErrorMessage(null, message, title);
-    }
-    
-    /**
-     * Pokazuje wiadomość o błędzie w formie okienka dialogowego. Wywoływana
-     * jest metoda {@link #showErrorMessage(java.lang.Object, java.lang.String)}
-     * i jeśli {@code exit == true} to zamykana jest aplikacja ze statusem
-     * zwróconym przez wywołaną metodę.
-     * 
-     * @param message komunikat
-     * @param title tytuł komunikatu
-     * @param exit jeśli {@code true} to po zamknięciu komunikatu, zamknie się
-     * również aplikacja
-     */
-    public static void showErrorMessage(Object message, String title,
-            boolean exit) {
-        int status = showErrorMessage(message, title);
-        if (exit) System.exit(status);
-    }
-    
-    /**
-     * Ustawia systemowy wygląd interfejsu użytkownika.
-     * 
-     * @throws ClassNotFoundException jeśli nie znaleziono wyglądu
-     * @throws InstantiationException jeśli nowa instancja wyglądu nie może
-     * zostać utworzona
-     * @throws IllegalAccessException jeśli odmówiono dostępu
-     * @throws UnsupportedLookAndFeelException jeśli system nie wspiera
-     * możliwości zmiany wyglądu
-     * @see UIManager#setLookAndFeel(java.lang.String) 
-     */
-    public static void setSystemLookAndFeel() throws ClassNotFoundException,
-            InstantiationException, IllegalAccessException,
-            UnsupportedLookAndFeelException {
-        UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        LauncherImpl.launchApplication(Main.class, Preloader.class, args);
     }
     
     /**
@@ -216,41 +113,26 @@ public class Main implements LaunchMethod {
     public static void releaseMemory() {
         MemoryUtils.releaseMemory();
     }
+
+    private Parent root = null;
     
-    private LaunchMethod next;
-
-    public Main(File csvDir, File xmlDir, String xmlFileName) {
-        this.next = ConverterCSV.create(csvDir, xmlDir, xmlFileName);
+    @Override
+    public void init() throws Exception {
+        super.init();
+        notifyPreloader(new Preloader.ProgressNotification(0));
+        root = FXMLLoader.load(FXMLLoader.getDefaultClassLoader()
+                .getResource("pl/koder95/eme/fx/Main.fxml"));
+        System.out.println(System.currentTimeMillis());
     }
 
     @Override
-    public void launch(List<String> args) {
-        LinkedList<String> argL = new LinkedList<>();
-        argL.addAll(Files.createNotExistDirs(args));
-        try {
-            argL.addAll(Files.createNotExistFiles(args));
-        } catch (IOException ex) {
-            showErrorMessage(BUNDLE.getString("ERR_CANNOT_CREATE_NEW_FILE"),
-                    BUNDLE.getString("ERR_CANNOT_CREATE_NEW_FILE_TITLE"));
-        }
-        try {
-            setSystemLookAndFeel();
-        } catch (ClassNotFoundException | InstantiationException 
-                | IllegalAccessException | UnsupportedLookAndFeelException ex) {
-            showErrorMessage(ex.getLocalizedMessage(),
-                    BUNDLE.getString("ERR_GUI_TITLE"), true);
-        } finally {
-            nextMethod().launch(argL);
-        }
-    }
-
-    @Override
-    public void setNextLaunchMethod(LaunchMethod next) {
-        this.next = next;
-    }
-
-    @Override
-    public LaunchMethod nextMethod() {
-        return next;
+    public void start(Stage primaryStage) {
+        primaryStage.getIcons().add(new Image(FAVICON_PATH));
+        primaryStage.setTitle("eMetrykant " + Version.get());
+        primaryStage.setScene(new Scene(root));
+        primaryStage.setOnCloseRequest(event -> {
+            System.exit(0);
+        });
+        primaryStage.show();
     }
 }
