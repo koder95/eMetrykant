@@ -17,8 +17,17 @@
 
 package pl.koder95.eme.dfs;
 
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Collectors;
+import pl.koder95.eme.data.IHeadered;
+import pl.koder95.eme.data.INamed;
+import pl.koder95.eme.data.IReadOnlyLabel;
+import pl.koder95.eme.data.app.IBookTemplate;
 
 /**
  * Przechowuje informacje o szablonie księgi.
@@ -27,12 +36,12 @@ import java.util.List;
  * @version 0.2.0, 2018-10-07
  * @since 0.2.0
  */
-public class BookTemplate {
+public class BookTemplate implements IBookTemplate {
 
     /**
      * Przechowuje informacje dla sekcji. Każda sekcja zawiera listę pól.
      */
-    public static class Section {
+    public static class Section implements IHeadered {
         
         final String header;
         final List<Field> fields = new LinkedList<>();
@@ -53,12 +62,31 @@ public class BookTemplate {
                     .reduce(fields, String::concat);
             return "Section \"" + header + "\": " + fields;
         }
+
+        @Override
+        public String getHeader() {
+            return header;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            return obj instanceof IHeadered?
+                    getHeader().equals(((IHeadered) obj).getHeader())
+                    : super.equals(obj);
+        }
+
+        @Override
+        public int hashCode() {
+            int hash = 7;
+            hash = 97 * hash + Objects.hashCode(this.header);
+            return hash;
+        }
     }
 
     /**
      * Przechowuje informacje o polach, takie jak nazwa, indeks i etykieta.
      */
-    public static class Field {
+    public static class Field implements INamed, IReadOnlyLabel{
         
         final String name;
         final String label;
@@ -83,6 +111,30 @@ public class BookTemplate {
         public String toString() {
             return "Field \"" + name + "\" in index=" + index + " and labeled="
                     + '"' + label + '"';
+        }
+
+        @Override
+        public String getName() {
+            return name;
+        }
+
+        @Override
+        public String getLabel() {
+            return label;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            return obj instanceof INamed?
+                    getName().equals(((INamed) obj).getName())
+                    : super.equals(obj);
+        }
+
+        @Override
+        public int hashCode() {
+            int hash = 3;
+            hash = 53 * hash + Objects.hashCode(this.name);
+            return hash;
         }
     }
     
@@ -119,4 +171,25 @@ public class BookTemplate {
     public String toString() {
         return "Template has got " + sections.size() + " sections.";
     }
+    
+    @Override
+    public Map<INamed, IHeadered> getHeaderToDataNameMap() {
+        Map<INamed, IHeadered> dataNameMap = new HashMap<>();
+        sections.forEach(s -> s.fields.forEach(f -> dataNameMap.put(f, s)));
+        return dataNameMap;
+    }
+
+    @Override
+    public Collection<INamed> getDataNameCollection(IHeadered headered) {
+        return sections.stream()
+                .reduce(null, (r, c) -> c.equals(headered)? c : r).fields
+                .stream().map(f -> (INamed) f).collect(Collectors.toList());
+    }
+
+    @Override
+    public IReadOnlyLabel getLabel(INamed dataName) {
+        return sections.stream().flatMap(s -> s.fields.stream())
+                .reduce(null, (r, c) -> c.equals(dataName)? c : r);
+    }
+
 }
