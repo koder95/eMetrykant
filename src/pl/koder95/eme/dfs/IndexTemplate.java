@@ -29,19 +29,19 @@ import org.w3c.dom.Document;
  * układania danych.
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.2.0, 2018-10-07
+ * @version 0.3.0, 2018-11-03
  * @since 0.2.0
  */
 public class IndexTemplate {
 
     private final Map<String, Integer> attr_data;
-    private final Map<String, String> label_attr;
+    private final Map<String, String> attr_label;
     private int data_length;
 
     private IndexTemplate(Map<String, Integer> attr_data,
             Map<String, String> label_attr) {
         this.attr_data = attr_data;
-        this.label_attr = label_attr;
+        this.attr_label = label_attr;
         int max = -1;
         for (Integer i: attr_data.values()) {
             if (i > max) max = i;
@@ -75,7 +75,10 @@ public class IndexTemplate {
      * @return nazwa atrybutu przypisanego do etykiety
      */
     public String getAttr(String label) {
-        return label_attr.get(label);
+        for (String key: attr_label.keySet()) {
+            if (attr_label.get(key).equalsIgnoreCase(label)) return key;
+        }
+        return null;
     }
     
     /**
@@ -86,10 +89,7 @@ public class IndexTemplate {
      * @return etykieta wyświetlana w formularzach
      */
     public String getLabel(String attr) {
-        for (String key: label_attr.keySet()) {
-            if (label_attr.get(key).equalsIgnoreCase(attr)) return key;
-        }
-        return null;
+        return attr_label.get(attr);
     }
     
     /**
@@ -101,7 +101,7 @@ public class IndexTemplate {
      * @param label etykieta
      */
     public void createAttr(String attr, int data_index, String label) {
-        label_attr.put(label, attr);
+        attr_label.put(attr, label);
         attr_data.put(attr, data_index);
         if (data_index+1 > data_length) data_length = data_index+1;
     }
@@ -129,6 +129,6 @@ public class IndexTemplate {
     @Override
     public String toString() {
         return "IndexTemplate{" + "attr_data=" + attr_data + ", label_attr="
-                + label_attr + ", data_length=" + data_length + '}';
+                + attr_label + ", data_length=" + data_length + '}';
     }
 }

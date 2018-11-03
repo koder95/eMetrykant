@@ -17,15 +17,20 @@
 
 package pl.koder95.eme.ac;
 
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.LinkedList;
+import java.util.ListIterator;
 import javafx.util.Callback;
 import org.controlsfx.control.textfield.AutoCompletionBinding.ISuggestionRequest;
+import pl.koder95.eme.dfs.ActNumber;
 import pl.koder95.eme.dfs.Index;
+import pl.koder95.eme.searching.SearchMethod;
 
 /**
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.2.0, 2018-10-07
+ * @version 0.3.0, 2018-11-03
  * @since 0.2.0
  */
 public class ACCallback implements Callback
@@ -44,29 +49,93 @@ public class ACCallback implements Callback
         list.removeIf(i -> {
             boolean remove = false;
             for (String word : words) {
-                if (!i.toString().toUpperCase().contains(word)) remove = true;
+                if (!i.toString().toUpperCase().contains("=" + word))
+                    remove = true;
             }
             return remove;
         });
-        list.sort((o1, o2) -> {
-            double[][] similarity = new double[2][words.length];
-            int w = 0;
-            for (String word : words) {
-                String s1 = o1.toString().toUpperCase();
-                String s2 = o2.toString().toUpperCase();
-                similarity[0][w] = s1.contains(word)? 1 : 0; // - ile wspólnych
-                similarity[1][w] = s2.contains(word)? 1 : 0; // - ile wspólnych
-                w++;
+        list.sort((i1, i2)-> {
+            String n1 = i1.getDataNames().stream()
+                    .reduce(null, (r, c) -> c.contains("surname")? c : r);
+            String n2 = i2.getDataNames().stream()
+                    .reduce(null, (r, c) -> c.contains("surname")? c : r);
+            int c1 = i1.getData(n1).compareTo(i2.getData(n1));
+            int c2 = i1.getData(n2).compareTo(i2.getData(n2));
+            if (c1 == c2) {
+                int compare = c1;
+                if (compare != 0) return compare;
+                
+                n1 = i1.getDataNames().stream()
+                        .reduce(null, (r, c) -> c.contains("name")? c : r);
+                n2 = i2.getDataNames().stream()
+                        .reduce(null, (r, c) -> c.contains("name")? c : r);
+                c1 = i1.getData(n1).compareTo(i2.getData(n1));
+                c2 = i1.getData(n2).compareTo(i2.getData(n2));
+                if (c1 == c2) return c1;
+                if (c1 == 0) return c2;
+                if (c2 == 0) return c1;
+                int c3 = n1.compareTo(n2);
+                return c3 > 0? c1 : c3 < 0? c2 : c1;
             }
-            double[] sim = new double[2];
-            for (int i = 0; i < sim.length; i++) {
-                for (w = 0; w < similarity[i].length; w++) {
-                    sim[i] += similarity[i][w];
+            int compare = i1.getData(n1).compareTo(i2.getData(n2));
+            if (compare != 0) return compare;
+            n1 = i1.getDataNames().stream()
+                    .reduce(null, (r, c) -> c.contains("name")? c : r);
+            n2 = i2.getDataNames().stream()
+                    .reduce(null, (r, c) -> c.contains("name")? c : r);
+            c1 = i1.getData(n1).compareTo(i2.getData(n1));
+            c2 = i1.getData(n2).compareTo(i2.getData(n2));
+            if (c1 == c2) return c1;
+            if (c1 == 0) return c2;
+            if (c2 == 0) return c1;
+            int c3 = n1.compareTo(n2);
+            return c3 > 0? c1 : c3 < 0? c2 : c1;
+        });
+        list.sort(comparator(words));
+        return list;
+    }
+    
+    private Comparator<Index> comparator(String[] words) {
+        ListIterator<String> iterator
+                = new LinkedList<>(Arrays.asList("surname", "name"))
+                        .listIterator();
+        return (i1, i2) -> {
+            for (String word : words) {
+                ActNumber an = ActNumber.parseActNumber(word);
+                if (an != null) {
+                    int c1 = i1.getActNumber().compareTo(an);
+                    int c2 = i2.getActNumber().compareTo(an);
+                    if (c1 == 0) return 1;
+                    if (c2 == 0) return -1;
+                    return 0;
+                }
+                else {
+                    String next;
+                    if (iterator.hasNext()) next = iterator.next();
+                    else {
+                        while(iterator.hasPrevious()) iterator.previous();
+                        next = iterator.next();
+                    }
+                    final String namePart = next;
+                    String name1 = i1.getDataNames().stream().reduce(null,
+                            (r, c) -> c.contains(namePart) || r == null?
+                                    c : r.equalsIgnoreCase(namePart)? r : c);
+                    String name2 = i2.getDataNames().stream().reduce(null,
+                            (r, c) -> c.contains(namePart) || r == null?
+                                    c : r.equalsIgnoreCase(namePart)? r : c);
+                    String value1 = i1.getData(name1);
+                    String value2 = i2.getData(name2);
+                    SearchMethod method = SearchMethod.STARTS_WITH;
+                    if (!value1.equalsIgnoreCase(value2)) {
+                        double sim1 = method.similarity(value1, word);
+                        double sim2 = method.similarity(value2, word);
+                        if (sim1 > sim2) return 1;
+                        else if (sim2 > sim1) return -1;
+                    }
                 }
             }
-            return sim[0] > sim[1]? 1 : sim[1] > sim[0]? -1 : 0;
-        });
-        return list;
+            return 0;
+        };
     }
     
 }

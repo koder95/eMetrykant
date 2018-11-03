@@ -31,7 +31,7 @@ import pl.koder95.eme.dfs.Index;
  * każdego indeksu.
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.1.12-alt, 2018-08-04
+ * @version 0.3.0, 2018-11-03
  * @since 0.1.11
  */
 public class SearchQueue extends SearchStrategy {
@@ -87,15 +87,12 @@ public class SearchQueue extends SearchStrategy {
             String text) {
         LinkedList<Index> found = new LinkedList<>();
         LinkedList<Index> tmp = new LinkedList<>(list);
-        tmp.removeIf((i)->{
-            return !i.getDataNames().contains(name);
-        });
+        tmp.removeIf((i)->!i.getDataNames().contains(name));
         
-        tmp.stream().filter((index) -> !(found.contains(index)))
-                .forEach((index) -> {
+        tmp.stream().forEach((index) -> {
             String data = index.getData(name);
             if (data.toUpperCase().startsWith(text.toUpperCase())) {
-                found.offer(index);
+                if (!found.contains(index)) found.offer(index);
             }
         });
         System.out.println(name + " found(" + found.size() + ")=" + found);

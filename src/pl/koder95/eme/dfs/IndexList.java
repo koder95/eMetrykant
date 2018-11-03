@@ -36,7 +36,7 @@ import pl.koder95.eme.searching.SearchContext;
  * Zawiera wszystkie typy ksiąg i zawierających się w nich zbiorach indeksów.
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.2.0, 2018-10-07
+ * @version 0.3.0, 2018-11-03
  * @since 0.1.11
  */
 public enum IndexList implements IndexContainer {
@@ -165,6 +165,7 @@ public enum IndexList implements IndexContainer {
 
     @Override
     public void clear() {
+        if (loaded == null) return;
         loaded.clear();
         Main.releaseMemory();
     }

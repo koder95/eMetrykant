@@ -25,17 +25,16 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.regex.Pattern;
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import pl.koder95.eme.fx.Preloader;
+import pl.koder95.eme.views.fx.BookRepositoryView;
 
 /**
  * Klasa uruchamiająca i inicjalizująca podstawowe elementy aplikacji.
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.2.0, 2018-10-07
+ * @version 0.3.0, 2018-11-03
  * @since 0.0.201
  */
 public class Main extends Application {
@@ -114,14 +113,13 @@ public class Main extends Application {
         MemoryUtils.releaseMemory();
     }
 
-    private Parent root = null;
+    private BookRepositoryView root = null;
     
     @Override
     public void init() throws Exception {
         super.init();
         notifyPreloader(new Preloader.ProgressNotification(0));
-        root = FXMLLoader.load(FXMLLoader.getDefaultClassLoader()
-                .getResource("pl/koder95/eme/fx/Main.fxml"));
+        root = BookRepositoryView.loadAndCreateLater(Files.TEMPLATE_XML);
         System.out.println(System.currentTimeMillis());
     }
 
@@ -130,6 +128,7 @@ public class Main extends Application {
         primaryStage.getIcons().add(new Image(FAVICON_PATH));
         primaryStage.setTitle("eMetrykant " + Version.get());
         primaryStage.setScene(new Scene(root));
+        root.displayBooks();
         primaryStage.setOnCloseRequest(event -> {
             System.exit(0);
         });
