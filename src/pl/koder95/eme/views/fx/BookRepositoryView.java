@@ -75,7 +75,7 @@ public class BookRepositoryView extends VBox implements IBookRepositoryView {
         HBox.setHgrow(box, ALWAYS);
         super.getChildren().addAll(box, books, this.bookView);
         setVgrow(this.bookView, ALWAYS);
-        super.getStylesheets().add(getClass().getResource("./view.css")
+        super.getStylesheets().add(getClass().getResource("view.css")
                 .toExternalForm());
         super.getStyleClass().add("book-repository-view");
     }
