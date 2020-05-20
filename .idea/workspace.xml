@@ -2,200 +2,107 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="9d48ef3f-1923-4d36-88a6-1570f502ce31" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/controlsfx_9_0_0.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/nbproject/build-impl.xml" beforeDir="false" afterPath="$PROJECT_DIR$/nbproject/build-impl.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/nbproject/genfiles.properties" beforeDir="false" afterPath="$PROJECT_DIR$/nbproject/genfiles.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/nbproject/private/private.properties" beforeDir="false" afterPath="$PROJECT_DIR$/nbproject/private/private.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/nbproject/project.properties" beforeDir="false" afterPath="$PROJECT_DIR$/nbproject/project.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/nbproject/project.xml" beforeDir="false" afterPath="$PROJECT_DIR$/nbproject/project.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pl/koder95/eme/AbstractDefaultLaunch.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pl/koder95/eme/AutoComplete.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pl/koder95/eme/ConverterCSV.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pl/koder95/eme/Files.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pl/koder95/eme/Files.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pl/koder95/eme/LaunchMethod.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pl/koder95/eme/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pl/koder95/eme/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pl/koder95/eme/dfs/IndexList.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pl/koder95/eme/dfs/IndexList.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pl/koder95/eme/fx/IndexSearcher.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pl/koder95/eme/fx/IndexSearcher.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pl/koder95/eme/fx/LiberBaptismorum.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/pl/koder95/eme/fx/LiberBaptismorum.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pl/koder95/eme/fx/LiberBaptismorumController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pl/koder95/eme/fx/LiberBaptismorumController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pl/koder95/eme/fx/LiberConfirmatorum.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/pl/koder95/eme/fx/LiberConfirmatorum.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pl/koder95/eme/fx/LiberConfirmatorumController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pl/koder95/eme/fx/LiberConfirmatorumController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pl/koder95/eme/fx/LiberDefunctorum.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/pl/koder95/eme/fx/LiberDefunctorum.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pl/koder95/eme/fx/LiberDefunctorumController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pl/koder95/eme/fx/LiberDefunctorumController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pl/koder95/eme/fx/LiberMatrimoniorum.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/pl/koder95/eme/fx/LiberMatrimoniorum.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pl/koder95/eme/fx/LiberMatrimoniorumController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pl/koder95/eme/fx/LiberMatrimoniorumController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pl/koder95/eme/fx/Main.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/pl/koder95/eme/fx/Main.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pl/koder95/eme/fx/Main.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pl/koder95/eme/idf/BookLoader.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pl/koder95/eme/idf/BookTemplate.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pl/koder95/eme/dfs/BookTemplate.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pl/koder95/eme/idf/BookTemplateLoader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pl/koder95/eme/dfs/BookTemplateLoader.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pl/koder95/eme/idf/Index.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pl/koder95/eme/idf/IndexContainer.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pl/koder95/eme/idf/IndexTemplate.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pl/koder95/eme/dfs/IndexTemplate.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pl/koder95/eme/idf/Indices.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pl/koder95/eme/idf/IndicesLoader.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pl/koder95/eme/idf/RealIndex.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pl/koder95/eme/idf/RealIndexContainer.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pl/koder95/eme/idf/VirtualIndex.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pl/koder95/eme/idf/package-info.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pl/koder95/eme/searching/SearchContext.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pl/koder95/eme/searching/SearchContext.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates.xml" beforeDir="false" afterPath="$PROJECT_DIR$/templates.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_controlsfx_controlsfx_8_40_16.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/controlsfx_9_0_0.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eMetrykant.iml" beforeDir="false" afterPath="$PROJECT_DIR$/eMetrykant.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pl/koder95/eme/Files.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/koder95/eme/Files.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pl/koder95/eme/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/koder95/eme/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pl/koder95/eme/MemoryUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/koder95/eme/MemoryUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pl/koder95/eme/Version.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/koder95/eme/Version.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pl/koder95/eme/Visitor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/koder95/eme/Visitor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pl/koder95/eme/ac/ACCallback.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/koder95/eme/ac/ACCallback.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pl/koder95/eme/ac/StringConverter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/koder95/eme/ac/StringConverter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pl/koder95/eme/ac/package-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/koder95/eme/ac/package-info.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pl/koder95/eme/dfs/ActNumber.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/koder95/eme/dfs/ActNumber.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pl/koder95/eme/dfs/Book.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/koder95/eme/dfs/Book.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pl/koder95/eme/dfs/BookTemplate.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/koder95/eme/dfs/BookTemplate.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pl/koder95/eme/dfs/BookTemplateLoader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/koder95/eme/dfs/BookTemplateLoader.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pl/koder95/eme/dfs/Index.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/koder95/eme/dfs/Index.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pl/koder95/eme/dfs/IndexContainer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/koder95/eme/dfs/IndexContainer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pl/koder95/eme/dfs/IndexList.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/koder95/eme/dfs/IndexList.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pl/koder95/eme/dfs/IndexTemplate.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/koder95/eme/dfs/IndexTemplate.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pl/koder95/eme/dfs/package-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/koder95/eme/dfs/package-info.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pl/koder95/eme/favicon.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/pl/koder95/eme/favicon.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pl/koder95/eme/favicon16.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/pl/koder95/eme/favicon16.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pl/koder95/eme/favicon24.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/pl/koder95/eme/favicon24.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pl/koder95/eme/fx/Preloader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/koder95/eme/fx/Preloader.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pl/koder95/eme/fx/SuggestCreatingMethod.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/koder95/eme/fx/SuggestCreatingMethod.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pl/koder95/eme/fx/SuggestCreator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/koder95/eme/fx/SuggestCreator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pl/koder95/eme/package-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/koder95/eme/package-info.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pl/koder95/eme/searching/AbstractSearchQuery.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/koder95/eme/searching/AbstractSearchQuery.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pl/koder95/eme/searching/AutoSearchStrategy.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/koder95/eme/searching/AutoSearchStrategy.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pl/koder95/eme/searching/ConstantSearchQuery.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/koder95/eme/searching/ConstantSearchQuery.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pl/koder95/eme/searching/ISearchingRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/koder95/eme/searching/ISearchingRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pl/koder95/eme/searching/SearchContext.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/koder95/eme/searching/SearchContext.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pl/koder95/eme/searching/SearchMethod.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/koder95/eme/searching/SearchMethod.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pl/koder95/eme/searching/SearchPhrase.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/koder95/eme/searching/SearchPhrase.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pl/koder95/eme/searching/SearchQuery.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/koder95/eme/searching/SearchQuery.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pl/koder95/eme/searching/SearchQueue.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/koder95/eme/searching/SearchQueue.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pl/koder95/eme/searching/SearchStrategy.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/koder95/eme/searching/SearchStrategy.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pl/koder95/eme/searching/Searching.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/koder95/eme/searching/Searching.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pl/koder95/eme/searching/YearSearchStrategy.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/koder95/eme/searching/YearSearchStrategy.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pl/koder95/eme/searching/package-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/koder95/eme/searching/package-info.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pl/koder95/eme/strings.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/pl/koder95/eme/strings.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pl/koder95/eme/views/IBookRepositoryView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/koder95/eme/views/IBookRepositoryView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pl/koder95/eme/views/IBookView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/koder95/eme/views/IBookView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pl/koder95/eme/views/IIndexView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/koder95/eme/views/IIndexView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pl/koder95/eme/views/IYearView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/koder95/eme/views/IYearView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pl/koder95/eme/views/fx/BookRepositoryView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/koder95/eme/views/fx/BookRepositoryView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pl/koder95/eme/views/fx/BookView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/koder95/eme/views/fx/BookView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pl/koder95/eme/views/fx/IndexView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/koder95/eme/views/fx/IndexView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pl/koder95/eme/views/fx/YearView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/koder95/eme/views/fx/YearView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pl/koder95/eme/views/fx/view.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/pl/koder95/eme/views.fx/view.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pl/koder95/eme/xml/XMLLoader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/koder95/eme/xml/XMLLoader.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pl/koder95/eme/xml/XMLType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/koder95/eme/xml/XMLType.java" afterDir="false" />
     </list>
-    <ignored path="$PROJECT_DIR$/out/" />
-    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="FUSProjectUsageTrigger">
-    <session id="1710652075">
-      <usages-collector id="statistics.lifecycle.project">
-        <counts>
-          <entry key="project.closed" value="3" />
-          <entry key="project.open.time.2" value="1" />
-          <entry key="project.open.time.4" value="1" />
-          <entry key="project.open.time.49" value="1" />
-          <entry key="project.opened" value="3" />
-        </counts>
-      </usages-collector>
-      <usages-collector id="statistics.file.extensions.open">
-        <counts>
-          <entry key="java" value="4" />
-          <entry key="xml" value="1" />
-        </counts>
-      </usages-collector>
-      <usages-collector id="statistics.file.types.open">
-        <counts>
-          <entry key="JAVA" value="4" />
-          <entry key="XML" value="1" />
-        </counts>
-      </usages-collector>
-      <usages-collector id="statistics.file.extensions.edit">
-        <counts>
-          <entry key="java" value="4" />
-        </counts>
-      </usages-collector>
-      <usages-collector id="statistics.file.types.edit">
-        <counts>
-          <entry key="JAVA" value="4" />
-        </counts>
-      </usages-collector>
-    </session>
-  </component>
-  <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/pl/koder95/eme/Version.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1513">
-              <caret line="90" column="19" selection-start-line="90" selection-start-column="19" selection-end-line="90" selection-end-column="19" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/pl/koder95/eme/fx/LiberMatrimoniorumController.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="289">
-              <caret line="47" column="9" selection-start-line="47" selection-start-column="9" selection-end-line="47" selection-end-column="9" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/pl/koder95/eme/fx/LiberBaptismorumController.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1088">
-              <caret line="81" selection-start-line="81" selection-end-line="81" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/pl/koder95/eme/Main.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1127">
-              <caret line="122" selection-start-line="122" selection-end-line="122" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
-  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="IdeDocumentHistory">
-    <option name="CHANGED_PATHS">
-      <list>
-        <option value="$PROJECT_DIR$/src/pl/koder95/eme/Version.java" />
-      </list>
+  <component name="MavenImportPreferences">
+    <option name="importingSettings">
+      <MavenImportingSettings>
+        <option name="importAutomatically" value="true" />
+      </MavenImportingSettings>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="10" />
-    <option name="y" value="20" />
-    <option name="width" value="1346" />
-    <option name="height" value="728" />
+  <component name="ProjectId" id="1bvyJP1puuIiYXEaovxngxm3ebh" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
   </component>
-  <component name="ProjectView">
-    <navigator proportions="" version="1">
-      <foldersAlwaysOnTop value="true" />
-    </navigator>
-    <panes>
-      <pane id="PackagesPane" />
-      <pane id="AndroidView" />
-      <pane id="ProjectPane">
-        <subPane>
-          <expand>
-            <path>
-              <item name="eMetrykant" type="b2602c69:ProjectViewProjectNode" />
-              <item name="eMetrykant" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="eMetrykant" type="b2602c69:ProjectViewProjectNode" />
-              <item name="eMetrykant" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="eMetrykant" type="b2602c69:ProjectViewProjectNode" />
-              <item name="eMetrykant" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="eme" type="462c0819:PsiDirectoryNode" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
-      <pane id="Scope" />
-    </panes>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1536835702618" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../#LIBS/ControlsFX/9.0.0/fxsampler-1.0.10.jar!/" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="project.structure.last.edited" value="Modules" />
-    <property name="project.structure.proportion" value="0.0" />
+    <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
+    <property name="settings.editor.selected.configurable" value="MavenSettings" />
   </component>
-  <component name="RunDashboard">
-    <option name="ruleStates">
-      <list>
-        <RuleState>
-          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
-        </RuleState>
-        <RuleState>
-          <option name="name" value="StatusDashboardGroupingRule" />
-        </RuleState>
-      </list>
-    </option>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Koder95 Studio\Documents\GitHub\eMetrykant\src\main\resources\pl\koder95\eme\views.fx" />
+      <recent name="C:\Users\Koder95 Studio\Documents\GitHub\eMetrykant\src\main\resources\pl\koder95\eme" />
+    </key>
   </component>
   <component name="RunManager">
     <configuration name="Basic" type="Application" factoryName="Application">
-      <option name="ALTERNATIVE_JRE_PATH" value="C:/Program Files/Java/jre-10.0.2" />
+      <option name="ALTERNATIVE_JRE_PATH" value="1.8" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
       <option name="MAIN_CLASS_NAME" value="pl.koder95.eme.Main" />
       <module name="eMetrykant" />
@@ -236,159 +143,38 @@
       <is-autoscroll-to-source value="true" />
     </todo-panel>
   </component>
-  <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1382" height="784" extended-state="6" />
-    <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.2526475" />
-      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
-      <window_info id="Image Layers" order="2" />
-      <window_info id="Designer" order="3" />
-      <window_info id="UI Designer" order="4" />
-      <window_info id="Capture Tool" order="5" />
-      <window_info id="Favorites" order="6" side_tool="true" />
-      <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.32923076" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
-      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
-      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
-      <window_info anchor="bottom" id="TODO" order="6" weight="0.32923076" />
-      <window_info anchor="bottom" id="Terminal" order="7" weight="0.3276923" />
-      <window_info anchor="bottom" id="Event Log" order="8" side_tool="true" />
-      <window_info anchor="bottom" id="Version Control" order="9" />
-      <window_info anchor="bottom" id="Messages" order="10" weight="0.3276923" />
-      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
-      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
-      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info anchor="right" id="Palette" order="3" />
-      <window_info anchor="right" id="Capture Analysis" order="4" />
-      <window_info anchor="right" id="Theme Preview" order="5" />
-      <window_info anchor="right" id="Palette&#9;" order="6" />
-      <window_info anchor="right" id="Maven Projects" order="7" />
-    </layout>
-  </component>
-  <component name="VcsContentAnnotationSettings">
-    <option name="myLimit" value="2678400000" />
-  </component>
-  <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/.idea/dictionaries/Kamil.xml" />
-    <entry file="file://$PROJECT_DIR$/src/pl/koder95/eme/Version.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1513">
-          <caret line="90" column="19" selection-start-line="90" selection-start-column="19" selection-end-line="90" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/pl/koder95/eme/fx/LiberMatrimoniorumController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="289">
-          <caret line="47" column="9" selection-start-line="47" selection-start-column="9" selection-end-line="47" selection-end-column="9" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/pl/koder95/eme/fx/LiberBaptismorumController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1088">
-          <caret line="81" selection-start-line="81" selection-end-line="81" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/pl/koder95/eme/Main.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1127">
-          <caret line="122" selection-start-line="122" selection-end-line="122" />
-        </state>
-      </provider>
-    </entry>
-  </component>
-  <component name="masterDetails">
-    <states>
-      <state key="ArtifactsStructureConfigurable.UI">
-        <settings>
-          <artifact-editor />
-          <splitter-proportions>
-            <option name="proportions">
-              <list>
-                <option value="0.2" />
-              </list>
-            </option>
-          </splitter-proportions>
-        </settings>
-      </state>
-      <state key="FacetStructureConfigurable.UI">
-        <settings>
-          <last-edited>No facets are configured</last-edited>
-          <splitter-proportions>
-            <option name="proportions">
-              <list>
-                <option value="0.2" />
-              </list>
-            </option>
-          </splitter-proportions>
-        </settings>
-      </state>
-      <state key="GlobalLibrariesConfigurable.UI">
-        <settings>
-          <splitter-proportions>
-            <option name="proportions">
-              <list>
-                <option value="0.2" />
-              </list>
-            </option>
-          </splitter-proportions>
-        </settings>
-      </state>
-      <state key="JdkListConfigurable.UI">
-        <settings>
-          <last-edited>1.8</last-edited>
-          <splitter-proportions>
-            <option name="proportions">
-              <list>
-                <option value="0.2" />
-              </list>
-            </option>
-          </splitter-proportions>
-        </settings>
-      </state>
-      <state key="ModuleStructureConfigurable.UI">
-        <settings>
-          <last-edited>eMetrykant</last-edited>
-          <splitter-proportions>
-            <option name="proportions">
-              <list>
-                <option value="0.2" />
-              </list>
-            </option>
-          </splitter-proportions>
-        </settings>
-      </state>
-      <state key="ProjectJDKs.UI">
-        <settings>
-          <last-edited>1.8</last-edited>
-          <splitter-proportions>
-            <option name="proportions">
-              <list>
-                <option value="0.2" />
-              </list>
-            </option>
-          </splitter-proportions>
-        </settings>
-      </state>
-      <state key="ProjectLibrariesConfigurable.UI">
-        <settings>
-          <last-edited>controlsfx-9.0.0</last-edited>
-          <splitter-proportions>
-            <option name="proportions">
-              <list>
-                <option value="0.2" />
-              </list>
-            </option>
-          </splitter-proportions>
-        </settings>
-      </state>
-    </states>
+  <component name="WindowStateProjectService">
+    <state x="414" y="195" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1589968819381">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state x="414" y="195" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1080@0.0.1920.1080" timestamp="1589968819381" />
+    <state x="683" y="229" key="#com.intellij.ide.util.frameworkSupport.AddFrameworkSupportDialog" timestamp="1589967707468">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state x="683" y="229" key="#com.intellij.ide.util.frameworkSupport.AddFrameworkSupportDialog/0.0.1920.1080@0.0.1920.1080" timestamp="1589967707468" />
+    <state width="1877" height="294" key="GridCell.Tab.0.bottom" timestamp="1589990757963">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state width="1877" height="294" key="GridCell.Tab.0.bottom/0.0.1920.1080@0.0.1920.1080" timestamp="1589990757963" />
+    <state width="1877" height="294" key="GridCell.Tab.0.center" timestamp="1589990757963">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state width="1877" height="294" key="GridCell.Tab.0.center/0.0.1920.1080@0.0.1920.1080" timestamp="1589990757963" />
+    <state width="1877" height="294" key="GridCell.Tab.0.left" timestamp="1589990757963">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state width="1877" height="294" key="GridCell.Tab.0.left/0.0.1920.1080@0.0.1920.1080" timestamp="1589990757963" />
+    <state width="1877" height="294" key="GridCell.Tab.0.right" timestamp="1589990757963">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state width="1877" height="294" key="GridCell.Tab.0.right/0.0.1920.1080@0.0.1920.1080" timestamp="1589990757963" />
+    <state x="440" y="114" key="SettingsEditor" timestamp="1589983958116">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state x="440" y="114" key="SettingsEditor/0.0.1920.1080@0.0.1920.1080" timestamp="1589983958116" />
+    <state x="342" y="242" key="new project wizard" timestamp="1589526903367">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state x="342" y="242" key="new project wizard/0.0.1920.1080@0.0.1920.1080" timestamp="1589526903367" />
   </component>
 </project>

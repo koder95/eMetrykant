@@ -3,5 +3,6 @@
 /media/
 /dist/
 /out/
+/target/
 /nbproject/private/private.xml
 nbproject/private/private.properties
