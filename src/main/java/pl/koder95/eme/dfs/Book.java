@@ -37,7 +37,7 @@ import pl.koder95.eme.xml.XMLLoader;
  * Klasa reprezentuje księgę zawierającą indeksy z danymi osobowymi.
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.1.11, 2018-03-21
+ * @version 0.3.1, 2020-05-21
  * @since 0.1.10
  */
 public class Book {

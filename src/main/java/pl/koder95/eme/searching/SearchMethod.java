@@ -24,7 +24,7 @@ import java.util.function.BiFunction;
  * znaków podczas wyszukiwania i określania podobieństwa.
  * 
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.3.0, 2020-05-20
+ * @version 0.3.1, 2020-05-21
  * @since 0.3.0
  */
 public enum SearchMethod {

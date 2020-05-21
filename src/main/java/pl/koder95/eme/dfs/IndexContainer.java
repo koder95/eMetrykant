@@ -23,39 +23,39 @@ import java.util.List;
  * Zawiera metody dla klasy, która przechowywać będzie indeksy.
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.3.1, 2018-03-21
+ * @version 0.3.1, 2020-05-20
  * @since 0.1.11
  */
 public interface IndexContainer {
 
     /**
-     * @param id identyfikator > 0
+     * @param id identyfikator {@literal >} 0
      * @return indeks
      */
-    public Index get(int id);
+    Index get(int id);
 
     /**
      * @return lista wczytanych indeksów
      */
-    public List<Index> getLoaded();
+    List<Index> getLoaded();
 
     /**
      * Usuwa wczytane dane i zwalnia pamięć dla potencjalnie nowych danych.
      */
-    public void clear();
+    void clear();
     
     /**
      * @return liczba indeksów wczytanych oraz ostatni utworzony identyfikator
      */
-    public int size();
+    int size();
     
     /**
      * @return pierwszy indeks
      */
-    public Index getFirst();
+    Index getFirst();
     
     /**
      * @return ostatni indeks
      */
-    public Index getLast();
+    Index getLast();
 }

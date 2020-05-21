@@ -24,7 +24,7 @@ import java.util.List;
  * Przechowuje informacje o szablonie księgi.
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.2.0, 2018-10-07
+ * @version 0.3.1, 2020-05-21
  * @since 0.2.0
  */
 public class BookTemplate {

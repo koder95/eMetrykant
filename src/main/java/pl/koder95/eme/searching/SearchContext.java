@@ -39,7 +39,7 @@ import pl.koder95.eme.dfs.Index;
  * </ol>
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.3.0, 2020-05-20
+ * @version 0.3.1, 2020-05-21
  * @since 0.0.201
  */
 public class SearchContext {

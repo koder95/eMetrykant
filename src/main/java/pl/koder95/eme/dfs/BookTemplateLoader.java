@@ -32,7 +32,7 @@ import pl.koder95.eme.xml.XMLLoader;
  * Pozwala wczytać szablon księgi lub ksiąg.
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.2.0, 2018-10-07
+ * @version 0.3.1, 2020-05-21
  * @since 0.2.0
  */
 public class BookTemplateLoader {
@@ -67,9 +67,9 @@ public class BookTemplateLoader {
      * @param xml plik XML
      * @param bookName nazwa księgi
      * @return szablon księgi wczytany z pliku XML
-     * @throws IOException
-     * @throws SAXException
-     * @throws ParserConfigurationException 
+     * @throws IOException problemy z odczytaniem pliku
+     * @throws SAXException błąd SAX
+     * @throws ParserConfigurationException problemy z konfiguracją parsera XML
      */
     static BookTemplate load(File xml, String bookName)
             throws IOException, SAXException, ParserConfigurationException {

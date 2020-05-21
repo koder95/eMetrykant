@@ -24,6 +24,7 @@ import java.util.Map;
 import java.util.Set;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
+import pl.koder95.eme.Visited;
 import pl.koder95.eme.Visitor;
 
 /**
@@ -32,10 +33,10 @@ import pl.koder95.eme.Visitor;
  * przechowywanych na parafii.
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.1.12, 2018-05-23
+ * @version 0.3.1, 2020-05-21
  * @since 0.1.11
  */
-public class Index {
+public class Index implements Visited {
 
     private final Map<String, String> data = new HashMap<>(); // dane indeksu
     private ActNumber an;
@@ -95,9 +96,5 @@ public class Index {
     @Override
     public String toString() {
        return getActNumber() + " " + data;
-    }
-    
-    public void accept(Visitor<Index> v) {
-        v.visit(this);
     }
 }

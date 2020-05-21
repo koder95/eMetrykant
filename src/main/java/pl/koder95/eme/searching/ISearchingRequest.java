@@ -25,14 +25,14 @@ import org.controlsfx.control.textfield.AutoCompletionBinding;
  * wartość {@code false}.
  * 
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.3.0, 2018-11-03
+ * @version 0.3.1, 2020-05-21
  * @since 0.3.0
  */
 public interface ISearchingRequest extends AutoCompletionBinding
         .ISuggestionRequest {
 
     @Override
-    public default boolean isCancelled() {
+    default boolean isCancelled() {
         return false;
     }
 }

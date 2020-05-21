@@ -18,10 +18,18 @@
 package pl.koder95.eme;
 
 /**
+ * Interfejs dla wzorca Odwiedzający.
+ * Odwiedzający ({@link Visitor}) odwiedza odwiedzanego ({@link Visited}).
  *
  * @author Kamil Jan Mularski [@koder95]
+ * @version 0.3.1, 2020-05-20
+ * @since 0.3.0
  */
-public interface Visitor<Type> {
+public interface Visitor<T extends Visited> {
 
-    public void visit(Type t);
+    /**
+     * Odwiedzający udaje się do odwiedzanego.
+     * @param t odwiedzany obiekt typu {@link Visited}
+     */
+    void visit(T t);
 }

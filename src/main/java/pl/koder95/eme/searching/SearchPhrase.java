@@ -61,7 +61,7 @@ package pl.koder95.eme.searching;
  * spacji.
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.3.0, 2020-05-20
+ * @version 0.3.1, 2020-05-21
  * @since 0.0.201
  */
 public class SearchPhrase {
@@ -89,7 +89,7 @@ public class SearchPhrase {
     }
 
     /**
-     * @param index liczba porządkowa \>= 0
+     * @param index liczba porządkowa {@literal >}= 0
      * @return słowo z tablicy słów, {@code null} jeśli {@code index < 0} lub
      * {@code index >= }liczba słów
      */

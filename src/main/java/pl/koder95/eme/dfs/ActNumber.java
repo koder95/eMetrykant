@@ -27,7 +27,7 @@ import static pl.koder95.eme.Main.DIGITS_STRING_PATTERN;
  * danego roku ciąg znaków (zwykle liczbę naturalną), oraz rok.
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.1.11, 2018-03-21
+ * @version 0.3.1, 2020-05-21
  * @since 0.1.11
  */
 public class ActNumber implements Comparable<ActNumber> {
@@ -85,6 +85,7 @@ public class ActNumber implements Comparable<ActNumber> {
 
     /**
      * @return właściwość: sygnatura
+     * @since 0.3.1
      */
     public ReadOnlyStringProperty signProperty() {
         return sign.getReadOnlyProperty();
@@ -92,6 +93,7 @@ public class ActNumber implements Comparable<ActNumber> {
 
     /**
      * @return właściwość: rok
+     * @since 0.3.1
      */
     public ReadOnlyIntegerProperty yearProperty() {
         return year.getReadOnlyProperty();

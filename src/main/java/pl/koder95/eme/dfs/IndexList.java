@@ -86,8 +86,8 @@ public enum IndexList implements IndexContainer {
     private final Queue<String> nameQueue;
     private final SuggestCreatingMethod scm;
 
-    private IndexList(String name, Queue<String> nameQueue,
-            SuggestCreatingMethod scm) {
+    IndexList(String name, Queue<String> nameQueue,
+              SuggestCreatingMethod scm) {
         this.name = name;
         this.nameQueue = nameQueue;
         this.scm = scm;

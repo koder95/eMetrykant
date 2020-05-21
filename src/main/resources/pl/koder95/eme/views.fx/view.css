@@ -15,8 +15,9 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 /* 
-    Created on : 2018-11-02, 21:55:06
-    Author     : Kamil Jan Mularski [@koder95]
+    Created on      : 2018-11-02, 21:55:06
+    Last modified   : 2020-05-21
+    Author          : Kamil Jan Mularski [@koder95]
 */
 .book-repository-view {
     -fx-background-color: #a8b5ff;
@@ -36,41 +37,46 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 }
 
 .book-toggle-button {
-    -fx-background-color: #7085ff;
-    -fx-border-color: #0000ff;
-}
-
-.year-toggle-button {
-    -fx-background-color: #3dff5a;
-    -fx-border-color: #008888;
-}
-
-.sign-toggle-button {
-    -fx-background-color: #fffb3d;
-    -fx-border-color: #ff8800;
-}
-
-.book-toggle-button:hover {
-    -fx-background-color: #a8b5ff;
-}
-
-.year-toggle-button:hover {
-    -fx-background-color: #93ffa3;
-}
-
-.sign-toggle-button:hover {
-    -fx-background-color: #fffda8;
-}
-
-.book-toggle-button:selected {
-    -fx-background-color: #3f52bf;
+    -fx-background-color: #24a;
+    -fx-border-color: #00a;
     -fx-text-fill: #fff;
 }
 
+.book-toggle-button:hover {
+    -fx-background-color: linear-gradient(#002244aa, #24a, #008);
+    -fx-border-color: #000;
+}
+
+.book-toggle-button:selected {
+    -fx-background-color: linear-gradient(#008, #24a, #008);
+}
+
+.year-toggle-button {
+    -fx-background-color: linear-gradient(#030, #030 25%, #2a4 75%, #030);
+    -fx-border-color: #080;
+    -fx-text-fill: #030;
+}
+
+.year-toggle-button:hover {
+    -fx-background-color: linear-gradient(#2a4, #060 15%, #2a4 75%, #030);
+    -fx-border-color: #0a0;
+}
+
 .year-toggle-button:selected {
-    -fx-background-color: #3fbf52;
+    -fx-background-color: linear-gradient(#4c6, #080 15%, #4c6 75%, #030);
+    -fx-border-color: #0a0;
+}
+
+.sign-toggle-button {
+    -fx-background-color: linear-gradient(#880, #880 25%, #ff4 75%, #880);
+    -fx-border-color: #ff8800;
+}
+
+.sign-toggle-button:hover {
+    -fx-background-color: linear-gradient(#ff4, #fff 15%, #ff4 75%, #880);
 }
 
 .sign-toggle-button:selected {
-    -fx-background-color: #bfbc3f;
+    -fx-background-color: linear-gradient(#880, #fff 15%, #ff4 75%, #aa0);
+    -fx-border-color: #ffaa00;
 }

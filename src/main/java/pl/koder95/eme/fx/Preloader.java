@@ -35,6 +35,8 @@ import javafx.stage.StageStyle;
  * Simple Preloader Using the ProgressBar Control
  *
  * @author Kamil Jan Mularski [@koder95]
+ * @version 0.3.1, 2020-05-21
+ * @since 0.3.0
  */
 public class Preloader extends javafx.application.Preloader {
     
@@ -49,8 +51,7 @@ public class Preloader extends javafx.application.Preloader {
         p.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT,
                 CornerRadii.EMPTY, Insets.EMPTY)));
         p.setCenter(indicator);
-        Scene instance = new Scene(p, 200, 200, Color.TRANSPARENT);
-        return instance;
+        return new Scene(p, 200, 200, Color.TRANSPARENT);
     }
     
     @Override
@@ -67,7 +68,7 @@ public class Preloader extends javafx.application.Preloader {
     @Override
     public void handleStateChangeNotification(StateChangeNotification scn) {
         if (scn.getType() == StateChangeNotification.Type.BEFORE_LOAD) {
-            
+
         }
         if (scn.getType() == StateChangeNotification.Type.BEFORE_INIT) {
             

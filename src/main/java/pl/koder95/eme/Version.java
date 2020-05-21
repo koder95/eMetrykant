@@ -290,6 +290,6 @@ public class Version implements Comparable<Version> {
      * @return wersja tego programu
      */
     public static Version get() {
-        return parse("0.3.0");
+        return parse("0.3.1");
     }
 }
