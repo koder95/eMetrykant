@@ -1,28 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="9d48ef3f-1923-4d36-88a6-1570f502ce31" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/pl/koder95/eme/Visited.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pl/koder95/eme/Version.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/koder95/eme/Version.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pl/koder95/eme/Visitor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/koder95/eme/Visitor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eMetrykant.iml" beforeDir="false" afterPath="$PROJECT_DIR$/eMetrykant.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/nbproject/private/private.properties" beforeDir="false" afterPath="$PROJECT_DIR$/nbproject/private/private.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pl/koder95/eme/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/koder95/eme/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/pl/koder95/eme/dfs/ActNumber.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/koder95/eme/dfs/ActNumber.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pl/koder95/eme/dfs/Book.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/koder95/eme/dfs/Book.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pl/koder95/eme/dfs/BookTemplate.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/koder95/eme/dfs/BookTemplate.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pl/koder95/eme/dfs/BookTemplateLoader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/koder95/eme/dfs/BookTemplateLoader.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pl/koder95/eme/dfs/Index.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/koder95/eme/dfs/Index.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pl/koder95/eme/dfs/IndexContainer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/koder95/eme/dfs/IndexContainer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pl/koder95/eme/dfs/IndexList.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/koder95/eme/dfs/IndexList.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pl/koder95/eme/fx/Preloader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/koder95/eme/fx/Preloader.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pl/koder95/eme/searching/ISearchingRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/koder95/eme/searching/ISearchingRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pl/koder95/eme/searching/SearchContext.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/koder95/eme/searching/SearchContext.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pl/koder95/eme/searching/SearchMethod.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/koder95/eme/searching/SearchMethod.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pl/koder95/eme/searching/SearchPhrase.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/koder95/eme/searching/SearchPhrase.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pl/koder95/eme/searching/SearchQuery.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/koder95/eme/searching/SearchQuery.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pl/koder95/eme/searching/Searching.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/koder95/eme/searching/Searching.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/pl/koder95/eme/views.fx/view.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/pl/koder95/eme/views.fx/view.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pl/koder95/eme/views/fx/BookRepositoryView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pl/koder95/eme/views/fx/BookRepositoryView.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -32,6 +20,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
+        <option value="Interface" />
+        <option value="FxmlFile" />
         <option value="Class" />
       </list>
     </option>
@@ -40,10 +30,10 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="MavenImportPreferences">
-    <option name="importingSettings">
-      <MavenImportingSettings>
-        <option name="importAutomatically" value="true" />
-      </MavenImportingSettings>
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="mavenHome" value="$APPLICATION_HOME_DIR$/plugins/maven/lib/maven3" />
+      </MavenGeneralSettings>
     </option>
   </component>
   <component name="ProjectId" id="1bvyJP1puuIiYXEaovxngxm3ebh" />
@@ -52,28 +42,38 @@
   </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
-    <option name="showExcludedFiles" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1536835702618" />
+    <property name="extract.method.default.visibility" value="private" />
+    <property name="last_directory_selection" value="$PROJECT_DIR$/src/main/java/pl/koder95/eme/fx" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="project.structure.last.edited" value="Modules" />
+    <property name="project.structure.last.edited" value="Libraries" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
-    <property name="settings.editor.selected.configurable" value="MavenSettings" />
+    <property name="settings.editor.selected.configurable" value="preferences.keymap" />
   </component>
   <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Kamil\OneDrive\JAVA\GitHub Repositories\eMetrykant\src\main\resources\pl\koder95\eme\dfs\fx" />
+      <recent name="C:\Users\Kamil\OneDrive\JAVA\GitHub Repositories\eMetrykant\src\main\resources\pl\koder95\eme\fx" />
+      <recent name="C:\Users\Kamil\OneDrive\JAVA\GitHub Repositories\eMetrykant\src\main\java\pl\koder95\eme\fx" />
+      <recent name="C:\Users\Kamil\OneDrive\JAVA\GitHub Repositories\eMetrykant\src\main\java\pl\koder95\eme\dfs" />
+      <recent name="C:\Users\Koder95 Studio\Documents\GitHub\eMetrykant\src\main\resources\pl\koder95\eme\views.fx" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="pl.koder95.eme.core" />
+      <recent name="pl.koder95.eme.dfs" />
+    </key>
     <key name="CreateClassDialog.RecentsKey">
       <recent name="pl.koder95.eme" />
     </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\Koder95 Studio\Documents\GitHub\eMetrykant\src\main\resources\pl\koder95\eme\views.fx" />
-      <recent name="C:\Users\Koder95 Studio\Documents\GitHub\eMetrykant\src\main\resources\pl\koder95\eme" />
-    </key>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="JAR Application.eMetrykant-0.3.1.jar">
     <configuration name="Basic" type="Application" factoryName="Application">
       <option name="ALTERNATIVE_JRE_PATH" value="1.8" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
@@ -93,7 +93,17 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="eMetrykant-0.3.1.jar" type="JarApplication" temporary="true">
+      <option name="JAR_PATH" value="$PROJECT_DIR$/target/eMetrykant-0.3.1.jar" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="JAR Application.eMetrykant-0.3.1.jar" />
+      </list>
+    </recent_temporary>
   </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="project-level" UseSingleDictionary="true" transferred="true" />
   <component name="SvnConfiguration">
     <configuration />
   </component>
@@ -117,29 +127,49 @@
     </todo-panel>
   </component>
   <component name="WindowStateProjectService">
+    <state x="0" y="0" key="#Live_Templates" timestamp="1596975783216">
+      <screen x="0" y="0" width="1366" height="768" />
+    </state>
+    <state x="0" y="0" key="#Live_Templates/0.0.1366.768@0.0.1366.768" timestamp="1596975783215" />
+    <state x="399" y="213" key="#com.intellij.codeInsight.template.impl.EditVariableDialog" timestamp="1596975782007">
+      <screen x="0" y="0" width="1366" height="768" />
+    </state>
+    <state x="399" y="213" key="#com.intellij.codeInsight.template.impl.EditVariableDialog/0.0.1366.768@0.0.1366.768" timestamp="1596975782007" />
     <state x="414" y="195" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1589968819381">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state x="414" y="195" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1080@0.0.1920.1080" timestamp="1589968819381" />
+    <state x="488" y="90" key="#com.intellij.ide.util.MemberChooser" timestamp="1597072015158">
+      <screen x="0" y="0" width="1366" height="768" />
+    </state>
+    <state x="488" y="90" key="#com.intellij.ide.util.MemberChooser/0.0.1366.768@0.0.1366.768" timestamp="1597072015158" />
     <state x="683" y="229" key="#com.intellij.ide.util.frameworkSupport.AddFrameworkSupportDialog" timestamp="1589967707468">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state x="683" y="229" key="#com.intellij.ide.util.frameworkSupport.AddFrameworkSupportDialog/0.0.1920.1080@0.0.1920.1080" timestamp="1589967707468" />
-    <state width="1877" height="294" key="GridCell.Tab.0.bottom" timestamp="1590096297714">
-      <screen x="0" y="0" width="1920" height="1080" />
+    <state x="413" y="131" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1597006148266">
+      <screen x="0" y="0" width="1366" height="768" />
     </state>
+    <state x="413" y="131" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1366.768@0.0.1366.768" timestamp="1597006148266" />
+    <state width="1323" height="103" key="GridCell.Tab.0.bottom" timestamp="1597075353964">
+      <screen x="0" y="0" width="1366" height="768" />
+    </state>
+    <state width="1323" height="103" key="GridCell.Tab.0.bottom/0.0.1366.768@0.0.1366.768" timestamp="1597075353964" />
     <state width="1877" height="294" key="GridCell.Tab.0.bottom/0.0.1920.1080@0.0.1920.1080" timestamp="1590096297714" />
-    <state width="1877" height="294" key="GridCell.Tab.0.center" timestamp="1590096297713">
-      <screen x="0" y="0" width="1920" height="1080" />
+    <state width="1323" height="103" key="GridCell.Tab.0.center" timestamp="1597075353964">
+      <screen x="0" y="0" width="1366" height="768" />
     </state>
+    <state width="1323" height="103" key="GridCell.Tab.0.center/0.0.1366.768@0.0.1366.768" timestamp="1597075353964" />
     <state width="1877" height="294" key="GridCell.Tab.0.center/0.0.1920.1080@0.0.1920.1080" timestamp="1590096297713" />
-    <state width="1877" height="294" key="GridCell.Tab.0.left" timestamp="1590096297713">
-      <screen x="0" y="0" width="1920" height="1080" />
+    <state width="1323" height="103" key="GridCell.Tab.0.left" timestamp="1597075353964">
+      <screen x="0" y="0" width="1366" height="768" />
     </state>
+    <state width="1323" height="103" key="GridCell.Tab.0.left/0.0.1366.768@0.0.1366.768" timestamp="1597075353964" />
     <state width="1877" height="294" key="GridCell.Tab.0.left/0.0.1920.1080@0.0.1920.1080" timestamp="1590096297713" />
-    <state width="1877" height="294" key="GridCell.Tab.0.right" timestamp="1590096297714">
-      <screen x="0" y="0" width="1920" height="1080" />
+    <state width="1323" height="103" key="GridCell.Tab.0.right" timestamp="1597075353964">
+      <screen x="0" y="0" width="1366" height="768" />
     </state>
+    <state width="1323" height="103" key="GridCell.Tab.0.right/0.0.1366.768@0.0.1366.768" timestamp="1597075353964" />
     <state width="1877" height="294" key="GridCell.Tab.0.right/0.0.1920.1080@0.0.1920.1080" timestamp="1590096297714" />
     <state width="1877" height="363" key="GridCell.Tab.1.bottom" timestamp="1590082024098">
       <screen x="0" y="0" width="1920" height="1080" />
@@ -157,17 +187,58 @@
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state width="1877" height="363" key="GridCell.Tab.1.right/0.0.1920.1080@0.0.1920.1080" timestamp="1590082024098" />
-    <state x="440" y="114" key="SettingsEditor" timestamp="1589983958116">
-      <screen x="0" y="0" width="1920" height="1080" />
+    <state x="129" y="59" key="MergeDialog" timestamp="1597077476620">
+      <screen x="0" y="0" width="1366" height="768" />
     </state>
+    <state x="129" y="59" key="MergeDialog/0.0.1366.768@0.0.1366.768" timestamp="1597077476620" />
+    <state x="321" y="145" key="MultipleFileMergeDialog" timestamp="1597077478110">
+      <screen x="0" y="0" width="1366" height="768" />
+    </state>
+    <state x="321" y="145" key="MultipleFileMergeDialog/0.0.1366.768@0.0.1366.768" timestamp="1597077478110" />
+    <state x="390" y="86" key="RollbackChangesDialog" timestamp="1597078229465">
+      <screen x="0" y="0" width="1366" height="768" />
+    </state>
+    <state x="390" y="86" key="RollbackChangesDialog/0.0.1366.768@0.0.1366.768" timestamp="1597078229465" />
+    <state x="313" y="0" key="SettingsEditor" timestamp="1597070767835">
+      <screen x="0" y="0" width="1366" height="768" />
+    </state>
+    <state x="313" y="0" key="SettingsEditor/0.0.1366.768@0.0.1366.768" timestamp="1597070767835" />
     <state x="440" y="114" key="SettingsEditor/0.0.1920.1080@0.0.1920.1080" timestamp="1589983958116" />
+    <state x="499" y="162" key="chooseDestDirectoryDialog" timestamp="1597069012457">
+      <screen x="0" y="0" width="1366" height="768" />
+    </state>
+    <state x="499" y="162" key="chooseDestDirectoryDialog/0.0.1366.768@0.0.1366.768" timestamp="1597069012457" />
+    <state x="92" y="92" width="1182" height="584" key="com.intellij.history.integration.ui.views.DirectoryHistoryDialog" timestamp="1597076705344">
+      <screen x="0" y="0" width="1366" height="768" />
+    </state>
+    <state x="92" y="92" width="1182" height="584" key="com.intellij.history.integration.ui.views.DirectoryHistoryDialog/0.0.1366.768@0.0.1366.768" timestamp="1597076705344" />
+    <state x="92" y="92" width="1182" height="584" maximized="true" key="com.intellij.history.integration.ui.views.FileHistoryDialog" timestamp="1597076705345">
+      <screen x="0" y="0" width="1366" height="768" />
+    </state>
+    <state x="92" y="92" width="1182" height="584" maximized="true" key="com.intellij.history.integration.ui.views.FileHistoryDialog/0.0.1366.768@0.0.1366.768" timestamp="1597076705345" />
     <state x="656" y="364" key="com.intellij.ide.util.TipDialog" timestamp="1590092888726">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state x="656" y="364" key="com.intellij.ide.util.TipDialog/0.0.1920.1080@0.0.1920.1080" timestamp="1590092888726" />
+    <state x="413" y="134" key="extract.method.dialog" timestamp="1596975438518">
+      <screen x="0" y="0" width="1366" height="768" />
+    </state>
+    <state x="413" y="134" key="extract.method.dialog/0.0.1366.768@0.0.1366.768" timestamp="1596975438518" />
+    <state x="417" y="283" key="git4idea.ui.GitStashDialog" timestamp="1597077543305">
+      <screen x="0" y="0" width="1366" height="768" />
+    </state>
+    <state x="417" y="283" key="git4idea.ui.GitStashDialog/0.0.1366.768@0.0.1366.768" timestamp="1597077543305" />
+    <state x="408" y="230" width="616" height="307" key="git4idea.ui.GitUnstashDialog" timestamp="1597078295725">
+      <screen x="0" y="0" width="1366" height="768" />
+    </state>
+    <state x="408" y="230" width="616" height="307" key="git4idea.ui.GitUnstashDialog/0.0.1366.768@0.0.1366.768" timestamp="1597078295725" />
     <state x="342" y="242" key="new project wizard" timestamp="1589526903367">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state x="342" y="242" key="new project wizard/0.0.1920.1080@0.0.1920.1080" timestamp="1589526903367" />
+    <state x="346" y="89" width="672" height="678" key="search.everywhere.popup" timestamp="1597073081904">
+      <screen x="0" y="0" width="1366" height="768" />
+    </state>
+    <state x="346" y="89" width="672" height="678" key="search.everywhere.popup/0.0.1366.768@0.0.1366.768" timestamp="1597073081904" />
   </component>
 </project>

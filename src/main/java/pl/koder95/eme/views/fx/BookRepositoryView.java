@@ -21,6 +21,9 @@ import java.io.File;
 import java.io.IOException;
 import static java.lang.Double.MAX_VALUE;
 import java.util.Map;
+
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.TextField;
@@ -111,7 +114,7 @@ public class BookRepositoryView extends VBox implements IBookRepositoryView {
         button.setOnAction(e -> {
             list.clear();
             list.load();
-            this.searching = new Searching(new ACCallback(list.getLoaded()));
+            BookRepositoryView.this.searching = new Searching(new ACCallback(list.getLoaded()));
             bookView.setTemplate(templatesMap.get(name));
             bookView.displayIndexList(list);
             if (searchField.isDisable()) {
@@ -128,7 +131,6 @@ public class BookRepositoryView extends VBox implements IBookRepositoryView {
             binding.minWidthProperty().bind(searchField.widthProperty());
             binding.prefWidthProperty().bind(searchField.widthProperty());
             binding.setVisibleRowCount(8);
-            
         });
         button.getStyleClass().add("book-toggle-button");
         return button;

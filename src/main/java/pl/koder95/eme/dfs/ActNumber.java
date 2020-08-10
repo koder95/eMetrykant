@@ -16,6 +16,7 @@
  */
 package pl.koder95.eme.dfs;
 
+import java.io.Serializable;
 import java.util.regex.Matcher;
 
 import javafx.beans.property.*;
@@ -30,7 +31,7 @@ import static pl.koder95.eme.Main.DIGITS_STRING_PATTERN;
  * @version 0.3.1, 2020-05-21
  * @since 0.1.11
  */
-public class ActNumber implements Comparable<ActNumber> {
+public class ActNumber implements Comparable<ActNumber>, Serializable {
 
     private final ReadOnlyStringWrapper sign;
     private final ReadOnlyIntegerWrapper year;
