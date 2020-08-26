@@ -11,7 +11,8 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * <b>Ogólny analizator szafy</b> definiuje interfejs dostawcy sugestii oraz konwerter ({@link String} <=> {@link PersonalDataModel}).
+ * <b>Ogólny analizator szafy</b> definiuje interfejs dostawcy sugestii
+ * oraz konwerter ({@link String} - {@link PersonalDataModel}).
  * Zlicza również ile zostało wczytanych aktów ze źródła.
  *
  * @author Kamil Jan Mularski [@Koder95]
@@ -31,7 +32,7 @@ public abstract class AbstractCabinetAnalyzer extends AbstractCabinetWorker impl
      * @param source źródło danych
      * @param target cel danych
      * @param suggestionProvider interfejs dostawcy sugestii
-     * @param converter konwerter {@link String} <=> {@link PersonalDataModel}
+     * @param converter konwerter {@link String} - {@link PersonalDataModel}
      */
     public AbstractCabinetAnalyzer(FilingCabinet cabinet, DataSource source, DataTarget target,
                                    Callback<ISuggestionRequest, Collection<PersonalDataModel>> suggestionProvider,
@@ -46,7 +47,7 @@ public abstract class AbstractCabinetAnalyzer extends AbstractCabinetWorker impl
      *
      * @param cabinet szafa aktowa
      * @param suggestionProvider interfejs dostawcy sugestii
-     * @param converter konwerter {@link String} <=> {@link PersonalDataModel}
+     * @param converter konwerter {@link String} - {@link PersonalDataModel}
      */
     public AbstractCabinetAnalyzer(FilingCabinet cabinet,
                                    Callback<ISuggestionRequest, Collection<PersonalDataModel>> suggestionProvider,

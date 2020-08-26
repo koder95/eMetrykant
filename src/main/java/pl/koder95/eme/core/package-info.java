@@ -20,7 +20,7 @@
  * Załączanie automatycznych sugestii:
  * <pre>
  *     CabinetAnalyzer analyzer = CabinetWorkers.get(CabinetAnalyzer.class);
- *     AutoCompletionBinding<PersonalDataModel> autoCompletionBinding = TextFields.bindAutoCompletion(
+ *     AutoCompletionBinding&lt;PersonalDataModel&gt; autoCompletionBinding = TextFields.bindAutoCompletion(
  *          new TextField(),
  *          analyzer.getSuggestionProvider(),
  *          analyzer.getPersonalDataConverter()
