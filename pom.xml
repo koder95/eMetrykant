@@ -9,7 +9,7 @@
     <url>https://github.com/koder95/eMetrykant</url>
     <groupId>pl.koder95</groupId>
     <artifactId>eMetrykant</artifactId>
-    <version>0.3.1</version>
+    <version>0.4.0</version>
     <scm>
         <url>https://github.com/koder95/eMetrykant</url>
         <tag>search, metric, church</tag>
@@ -119,7 +119,7 @@
                         </goals>
                         <configuration>
                             <outputDirectory>
-                                ${project.build.directory}/libs
+                                ${project.build.directory}/lib
                             </outputDirectory>
                         </configuration>
                     </execution>

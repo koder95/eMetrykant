@@ -37,7 +37,7 @@ import pl.koder95.eme.xml.XMLLoader;
  * Klasa reprezentuje księgę zawierającą indeksy z danymi osobowymi.
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.3.1, 2020-05-21
+ * @version 0.4.0, 2020-08-26
  * @since 0.1.10
  */
 public class Book {
@@ -70,7 +70,7 @@ public class Book {
         if (indices == null) return;
         LinkedList<Index> linked = new LinkedList<>();
         for (int i = 0; i < indices.getLength(); i++) {
-            Index ix = Index.create(indices.item(i));
+            Index ix = Index.create(this, indices.item(i));
             if (ix != null) linked.add(ix);
         }
         this.indices.addAll(linked);

@@ -52,10 +52,10 @@
     <property name="extract.method.default.visibility" value="private" />
     <property name="last_directory_selection" value="$PROJECT_DIR$/src/main/java/pl/koder95/eme/fx" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="project.structure.last.edited" value="Libraries" />
+    <property name="project.structure.last.edited" value="SDKs" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
-    <property name="settings.editor.selected.configurable" value="preferences.keymap" />
+    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
@@ -151,25 +151,29 @@
       <screen x="0" y="0" width="1366" height="768" />
     </state>
     <state x="413" y="131" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1366.768@0.0.1366.768" timestamp="1597006148266" />
-    <state width="1323" height="103" key="GridCell.Tab.0.bottom" timestamp="1597075353964">
+    <state x="613" y="139" key="FileChooserDialogImpl" timestamp="1597332311652">
       <screen x="0" y="0" width="1366" height="768" />
     </state>
-    <state width="1323" height="103" key="GridCell.Tab.0.bottom/0.0.1366.768@0.0.1366.768" timestamp="1597075353964" />
+    <state x="613" y="139" key="FileChooserDialogImpl/0.0.1366.768@0.0.1366.768" timestamp="1597332311652" />
+    <state width="1323" height="192" key="GridCell.Tab.0.bottom" timestamp="1597332445175">
+      <screen x="0" y="0" width="1366" height="768" />
+    </state>
+    <state width="1323" height="192" key="GridCell.Tab.0.bottom/0.0.1366.768@0.0.1366.768" timestamp="1597332445175" />
     <state width="1877" height="294" key="GridCell.Tab.0.bottom/0.0.1920.1080@0.0.1920.1080" timestamp="1590096297714" />
-    <state width="1323" height="103" key="GridCell.Tab.0.center" timestamp="1597075353964">
+    <state width="1323" height="192" key="GridCell.Tab.0.center" timestamp="1597332445175">
       <screen x="0" y="0" width="1366" height="768" />
     </state>
-    <state width="1323" height="103" key="GridCell.Tab.0.center/0.0.1366.768@0.0.1366.768" timestamp="1597075353964" />
+    <state width="1323" height="192" key="GridCell.Tab.0.center/0.0.1366.768@0.0.1366.768" timestamp="1597332445175" />
     <state width="1877" height="294" key="GridCell.Tab.0.center/0.0.1920.1080@0.0.1920.1080" timestamp="1590096297713" />
-    <state width="1323" height="103" key="GridCell.Tab.0.left" timestamp="1597075353964">
+    <state width="1323" height="192" key="GridCell.Tab.0.left" timestamp="1597332445175">
       <screen x="0" y="0" width="1366" height="768" />
     </state>
-    <state width="1323" height="103" key="GridCell.Tab.0.left/0.0.1366.768@0.0.1366.768" timestamp="1597075353964" />
+    <state width="1323" height="192" key="GridCell.Tab.0.left/0.0.1366.768@0.0.1366.768" timestamp="1597332445175" />
     <state width="1877" height="294" key="GridCell.Tab.0.left/0.0.1920.1080@0.0.1920.1080" timestamp="1590096297713" />
-    <state width="1323" height="103" key="GridCell.Tab.0.right" timestamp="1597075353964">
+    <state width="1323" height="192" key="GridCell.Tab.0.right" timestamp="1597332445175">
       <screen x="0" y="0" width="1366" height="768" />
     </state>
-    <state width="1323" height="103" key="GridCell.Tab.0.right/0.0.1366.768@0.0.1366.768" timestamp="1597075353964" />
+    <state width="1323" height="192" key="GridCell.Tab.0.right/0.0.1366.768@0.0.1366.768" timestamp="1597332445175" />
     <state width="1877" height="294" key="GridCell.Tab.0.right/0.0.1920.1080@0.0.1920.1080" timestamp="1590096297714" />
     <state width="1877" height="363" key="GridCell.Tab.1.bottom" timestamp="1590082024098">
       <screen x="0" y="0" width="1920" height="1080" />
@@ -199,10 +203,10 @@
       <screen x="0" y="0" width="1366" height="768" />
     </state>
     <state x="390" y="86" key="RollbackChangesDialog/0.0.1366.768@0.0.1366.768" timestamp="1597078229465" />
-    <state x="313" y="0" key="SettingsEditor" timestamp="1597070767835">
+    <state x="313" y="0" key="SettingsEditor" timestamp="1597332314277">
       <screen x="0" y="0" width="1366" height="768" />
     </state>
-    <state x="313" y="0" key="SettingsEditor/0.0.1366.768@0.0.1366.768" timestamp="1597070767835" />
+    <state x="313" y="0" key="SettingsEditor/0.0.1366.768@0.0.1366.768" timestamp="1597332314277" />
     <state x="440" y="114" key="SettingsEditor/0.0.1920.1080@0.0.1920.1080" timestamp="1589983958116" />
     <state x="499" y="162" key="chooseDestDirectoryDialog" timestamp="1597069012457">
       <screen x="0" y="0" width="1366" height="768" />
@@ -236,9 +240,9 @@
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state x="342" y="242" key="new project wizard/0.0.1920.1080@0.0.1920.1080" timestamp="1589526903367" />
-    <state x="346" y="89" width="672" height="678" key="search.everywhere.popup" timestamp="1597073081904">
+    <state x="346" y="89" width="672" height="678" key="search.everywhere.popup" timestamp="1597333359830">
       <screen x="0" y="0" width="1366" height="768" />
     </state>
-    <state x="346" y="89" width="672" height="678" key="search.everywhere.popup/0.0.1366.768@0.0.1366.768" timestamp="1597073081904" />
+    <state x="346" y="89" width="672" height="678" key="search.everywhere.popup/0.0.1366.768@0.0.1366.768" timestamp="1597333359830" />
   </component>
 </project>

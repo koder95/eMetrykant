@@ -17,15 +17,13 @@
 
 package pl.koder95.eme.dfs;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.Set;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import pl.koder95.eme.Visited;
-import pl.koder95.eme.Visitor;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Klasa reprezentuje indeks, czyli zbiór danych osobowych. Może również
@@ -33,15 +31,17 @@ import pl.koder95.eme.Visitor;
  * przechowywanych na parafii.
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.3.1, 2020-05-21
+ * @version 0.4.0, 2020-08-26
  * @since 0.1.11
  */
 public class Index implements Visited {
 
     private final Map<String, String> data = new HashMap<>(); // dane indeksu
     private ActNumber an;
+    private final Book owner;
     
-    private Index(Node index) {
+    private Index(Book owner, Node index) {
+        this.owner = owner;
         NamedNodeMap attrs = index.getAttributes(); // pobiera listę atrybutów
         while (attrs.getLength() > 0) {
             Node attr = attrs.item(0); // pobiera pierwszy atrybut
@@ -52,19 +52,33 @@ public class Index implements Visited {
         }
     }
     
-    private Index() {}
-    
+    private Index(Book owner) {
+        this.owner = owner;
+    }
+
     /**
      * Tworzy nowy indeks na podstawie węzła obiektowego modelu dokumentu XML.
-     * 
+     *
      * @param index węzeł XML
      * @return nowy indeks lub {@code null} jeśli węzeł {@code index} nazywa się
      * inaczej niż "index"
      */
     public static Index create(Node index) {
-        if (index == null) return new Index();
+        return create(null, index);
+    }
+
+    /**
+     * Tworzy nowy indeks na podstawie węzła obiektowego modelu dokumentu XML.
+     *
+     * @param owner księga, do której indeks należy
+     * @param index węzeł XML
+     * @return nowy indeks lub {@code null} jeśli węzeł {@code index} nazywa się
+     * inaczej niż "index"
+     */
+    public static Index create(Book owner, Node index) {
+        if (index == null) return new Index(owner);
         if (!index.getNodeName().equalsIgnoreCase("index")) return null;
-        Index i = index.hasAttributes()? new Index(index) : new Index();
+        Index i = index.hasAttributes()? new Index(owner, index) : new Index(owner);
         return i.getDataNames().contains("an") && !i.getData("an").isEmpty()?
                 i : null;
     }
@@ -84,7 +98,7 @@ public class Index implements Visited {
     public Set<String> getDataNames() {
         return data.keySet();
     }
-    
+
     /**
      * @return numer aktu
      */
@@ -92,9 +106,16 @@ public class Index implements Visited {
         if (an == null) an = ActNumber.parseActNumber(getData("an"));
         return an;
     }
+
+    /**
+     * @return księga, do której należy akt
+     */
+    public Book getOwner() {
+        return owner;
+    }
     
     @Override
     public String toString() {
-       return getActNumber() + " " + data;
+       return getActNumber() + " " + data.toString();
     }
 }

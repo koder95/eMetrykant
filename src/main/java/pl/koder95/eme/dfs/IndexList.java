@@ -18,10 +18,7 @@ package pl.koder95.eme.dfs;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
 import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
 import pl.koder95.eme.Files;
@@ -36,7 +33,7 @@ import pl.koder95.eme.searching.SearchContext;
  * Zawiera wszystkie typy ksiąg i zawierających się w nich zbiorach indeksów.
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.3.0, 2018-11-03
+ * @version 0.4.0, 2020-08-26
  * @since 0.1.11
  */
 public enum IndexList implements IndexContainer {
@@ -109,18 +106,21 @@ public enum IndexList implements IndexContainer {
      */
     public void load() {
         MemoryUtils.memory();
-        loaded = new LinkedList<>();
+        this.loaded = new LinkedList<>();
         if (BOOKS == null) loadBooks();
         BOOKS.stream().filter((b)->b.getName().equalsIgnoreCase(name))
         .forEach((b)->{
             MemoryUtils.memory();
-            loaded.addAll(b.indices);
+            this.loaded.addAll(b.indices);
             MemoryUtils.memory();
             b.indices.forEach((i) -> i.getDataNames().stream()
                     .filter(nameQueue::contains)
                     .forEachOrdered(nameQueue::add));
             MemoryUtils.memory();
         });
+        List<Index> loaded = this.loaded;
+        this.loaded = new ArrayList<>(loaded);
+        loaded.clear();
     }
 
     /**

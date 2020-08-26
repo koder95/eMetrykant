@@ -27,7 +27,7 @@ import java.util.regex.Pattern;
  * <a href="https://semver.org/lang/pl/">Wersjonowania semantycznego 2.0.0</a>.
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.3.0, 2018-11-03
+ * @version 0.4.0, 2020-08-13
  * @since 0.2.0
  */
 public class Version implements Comparable<Version> {
@@ -290,6 +290,6 @@ public class Version implements Comparable<Version> {
      * @return wersja tego programu
      */
     public static Version get() {
-        return parse("0.3.1");
+        return parse("0.4.0");
     }
 }
