@@ -16,7 +16,6 @@
  */
 package pl.koder95.eme;
 
-import com.sun.javafx.application.LauncherImpl;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -27,10 +26,8 @@ import pl.koder95.eme.core.*;
 import pl.koder95.eme.core.spi.CabinetAnalyzer;
 import pl.koder95.eme.core.spi.FilingCabinet;
 import pl.koder95.eme.dfs.IndexList;
-import pl.koder95.eme.fx.Preloader;
 
 import java.awt.*;
-import java.io.File;
 import java.text.Collator;
 import java.util.Arrays;
 import java.util.Locale;
@@ -54,11 +51,6 @@ public class Main extends Application {
      */
     public static final Locale POLISH = Locale.forLanguageTag("PL-pl"); //NOI18N
     /**
-     * Folder, gdzie znajdują się pliki zawierające dane do wczytania
-     * przez program.
-     */
-    public static final File DATA_DIR = Files.DATA_DIR;
-    /**
      * Domyślny sposób porównywania stringów (polski).
      */
     public static final Collator DEFAULT_COLLATOR
@@ -69,28 +61,13 @@ public class Main extends Application {
      */
     public static final String FAVICON_PATH = FAV_PATH_START + ".png";
     /**
-     * Ikona dla okienek.
-     */
-    public static final java.awt.Image FAVICON = Toolkit.getDefaultToolkit()
-           .createImage(ClassLoader.getSystemResource(FAV_PATH_START + ".png"));
-    /**
-     * Ikona dla zasobnika systemowego w rozmiarze 16x16.
-     */
-    public static final java.awt.Image FAVICON16 = Toolkit.getDefaultToolkit()
-         .createImage(ClassLoader.getSystemResource(FAV_PATH_START + "16.png"));
-    /**
-     * Ikona dla zasobnika systemowego w rozmiarze 24x24.
-     */
-    public static final java.awt.Image FAVICON24 = Toolkit.getDefaultToolkit()
-         .createImage(ClassLoader.getSystemResource(FAV_PATH_START + "24.png"));
-    /**
      * Wzór identyfikujący liczby w stringu.
      */
     public static final Pattern DIGITS_STRING_PATTERN
             = Pattern.compile("([0-9]*)");
 
     public static void main(String[] args) {
-        LauncherImpl.launchApplication(Main.class, args);
+        Main.launch(args);
     }
     
     /**
@@ -107,7 +84,6 @@ public class Main extends Application {
     public void init() throws Exception {
 
         super.init();
-        notifyPreloader(new Preloader.ProgressNotification(0));
         Arrays.stream(IndexList.values()).forEach(IndexList::load);
 
         FilingCabinet cabinet = new TreeFilingCabinet();

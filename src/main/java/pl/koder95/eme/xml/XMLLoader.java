@@ -40,6 +40,8 @@ import static pl.koder95.eme.Main.BUNDLE;
  */
 public class XMLLoader {
 
+    private XMLLoader() {}
+
     /**
      * Wczytuje dokument z pliku XML w formie obiektowego modelu dokumentu.
      * 
@@ -54,78 +56,6 @@ public class XMLLoader {
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         DocumentBuilder db = dbf.newDocumentBuilder();
         return db.parse(xml);
-    }
-    
-    private final Document doc;
-    private final XMLType type;
-
-    /**
-     * Tworzy obiekt przechowujący obiektowy model dokumentu XML i jego typ.
-     * 
-     * @param xml plik, dokument XML, który zostanie przetworzony na OMD
-     * @throws ParserConfigurationException nieodpowiednia konfiguracja parsera
-     * @throws SAXException podstawowy błąd lub uwaga SAX
-     * @throws IOException błąd wczytywania
-     */
-    public XMLLoader(File xml) throws ParserConfigurationException,
-            SAXException, IOException {
-        this.doc = loadDOM(xml);
-        this.type = XMLType.analize(doc);
-    }
-    
-    /**
-     * @return podstawowy element dokumentu
-     */
-    public Element getDocumentElement() {
-        return doc.getDocumentElement();
-    }
-    
-    /**
-     * @param tagname nazwa znacznika
-     * @return lista elementów dokumentu, która zawiera znaczniki o podanej
-     * nazwie
-     */
-    public NodeList getElementsByTagName(String tagname) {
-        return doc.getElementsByTagName(tagname);
-    }
-
-    /**
-     * @return typ wewnętrzny dokumentu
-     */
-    public XMLType getType() {
-        return type;
-    }
-    
-    /**
-     * @param nodes lista węzłów drzewa dokumentu XML
-     * @param tag nazwa znacznika
-     * @param attr nazwa atrybutu
-     * @param value wartość atrybutu
-     * @return węzeł, który jest znacznikiem o określonej nazwie,
-     * z określonym atrybutem i wybrany z listy węzłów drzewa dokumentu XML
-     */
-    public static Node getTagNode(NodeList nodes, String tag, String attr,
-            String value) {
-        for (int i = 0; i < nodes.getLength(); i++) {
-            Node n = nodes.item(i);
-            if (n.getNodeName().equalsIgnoreCase(tag)
-                    && getAttrV(n, attr).equalsIgnoreCase(value))
-                return n;
-        }
-        return null;
-    }
-    
-    /**
-     * @param doc obiektowy model dokumentu XML
-     * @param tag nazwa znacznika XML
-     * @param attr nazwa atrybytu znacznika
-     * @param value wartość atrybutu znacznika
-     * @return węzeł, który jest znacznikiem o określonej nazwie,
-     * z określonym atrybutem i pobrany z OMD
-     */
-    public static Node getTagNode(Document doc, String tag, String attr,
-            String value) {
-        return getTagNode(doc.getElementsByTagName(tag), tag, attr, value);
     }
     
     /**

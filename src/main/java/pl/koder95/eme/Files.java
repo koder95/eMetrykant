@@ -40,19 +40,13 @@ public final class Files {
     public static final File DATA_DIR = WORKDIR;
     /**
      * Folder, gdzie znajdują się pliki zawierające dane do wczytania
-     * przez program o rozszerzeniu CSV.
-     */
-    public static final File CSV_DIR = DATA_DIR; //NOI18N
-    /**
-     * Folder, gdzie znajdują się pliki zawierające dane do wczytania
      * przez program o rozszerzeniu XML.
      */
     public static final File XML_DIR = DATA_DIR; //NOI18N
     /**
-     * Plik XML, gdzie zapisane są dane o szablonach.
+     * Plik, który przechowuje dane na temat indeksów.
      */
-    public static final File TEMPLATE_XML
-            = new File(WORKDIR, "templates.xml"); //NOI18N
+    public static final File INDICES_XML = new File(Files.XML_DIR, "indices.xml");
 
     private Files() {}
 }

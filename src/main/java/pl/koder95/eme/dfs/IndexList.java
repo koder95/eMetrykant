@@ -16,7 +16,6 @@
  */
 package pl.koder95.eme.dfs;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.*;
 import javax.xml.parsers.ParserConfigurationException;
@@ -24,10 +23,6 @@ import org.xml.sax.SAXException;
 import pl.koder95.eme.Files;
 import pl.koder95.eme.Main;
 import pl.koder95.eme.MemoryUtils;
-import pl.koder95.eme.fx.SuggestCreatingMethod;
-import pl.koder95.eme.fx.SuggestCreator;
-import static pl.koder95.eme.fx.SuggestCreator.prepareData;
-import pl.koder95.eme.searching.SearchContext;
 
 /**
  * Zawiera wszystkie typy ksiąg i zawierających się w nich zbiorach indeksów.
@@ -44,7 +39,7 @@ public enum IndexList implements IndexContainer {
      */
     LIBER_BAPTISMORUM("Księga ochrzczonych", new LinkedList<>(Arrays.asList(
             "name", "surname", "an"
-    )), SuggestCreator.DEFAULT_METHOD),
+    ))),
 
     /**
      * Zbiór indeksów osób bierzmowanych. Indeksy zawierają dane: nazwisko,
@@ -52,7 +47,7 @@ public enum IndexList implements IndexContainer {
      */
     LIBER_CONFIRMATORUM("Księga bierzmowanych", new LinkedList<>(Arrays.asList(
             "name", "surname", "an"
-    )), SuggestCreator.DEFAULT_METHOD),
+    ))),
 
     /**
      * Zbiór indeksów osób zaślubionych. Indeksy zawierają dane: nazwisko męża,
@@ -60,15 +55,7 @@ public enum IndexList implements IndexContainer {
      */
     LIBER_MATRIMONIORUM("Księga zaślubionych", new LinkedList<>(Arrays.asList(
             "husband-surname", "husband-name", "wife-surname", "wife-name", "an"
-    )), (i) -> {
-        StringBuilder builder = new StringBuilder();
-        builder.append(prepareData(i.getData("husband-surname")));
-        builder.append(" ").append(prepareData(i.getData("husband-name")));
-        builder.append(" ").append(prepareData(i.getData("wife-surname")));
-        builder.append(" ").append(prepareData(i.getData("wife-name")));
-        builder.append(" ").append(prepareData(i.getData("an")));
-        return builder.toString();
-    }),
+    ))),
 
     /**
      * Zbiór indeksów osób zmarłych. Indeksy zawierają dane: nazwisko,
@@ -76,23 +63,19 @@ public enum IndexList implements IndexContainer {
      */
     LIBER_DEFUNCTORUM("Księga zmarłych", new LinkedList<>(Arrays.asList(
             "name", "surname", "an"
-    )), SuggestCreator.DEFAULT_METHOD);
-    
+    )));
+
     private List<Index> loaded;
     private final String name;
     private final Queue<String> nameQueue;
-    private final SuggestCreatingMethod scm;
 
-    IndexList(String name, Queue<String> nameQueue,
-              SuggestCreatingMethod scm) {
+    IndexList(String name, Queue<String> nameQueue) {
         this.name = name;
         this.nameQueue = nameQueue;
-        this.scm = scm;
     }
 
     @Override
     public Index get(int id) {
-        System.out.println("get[id]=" + id);
         return loaded.get(id-1);
     }
     
@@ -169,34 +152,14 @@ public enum IndexList implements IndexContainer {
         loaded.clear();
         Main.releaseMemory();
     }
-
-    public SuggestCreatingMethod getSCM() {
-        return scm;
-    }
-    
-    /**
-     * Tworzy i zwraca kolejkę nazw, które służą do pobrania odpowiednich danych
-     * z indeksów.
-     * 
-     * @return nazwy danych w postaci kolejki
-     */
-    public Queue<String> queueNames() {
-        return new LinkedList<>(nameQueue);
-    }
     
     private static List<Book> BOOKS;
     
     private static void loadBooks() {
         try {
-            BOOKS = Book.load(new File(Files.XML_DIR, "indices.xml"));
+            BOOKS = Book.load(Files.INDICES_XML);
         } catch (IOException | SAXException | ParserConfigurationException ex) {
             System.err.println(ex);
         }
-    }
-    
-    public Index search(String query) {
-        SearchContext context = new SearchContext();
-        context.setAutoSearch();
-        return context.select(context.search(loaded));
     }
 }

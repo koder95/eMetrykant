@@ -3,9 +3,11 @@ package pl.koder95.eme.core;
 import static org.controlsfx.control.textfield.AutoCompletionBinding.ISuggestionRequest;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
+import pl.koder95.eme.Main;
 import pl.koder95.eme.core.spi.FilingCabinet;
 import pl.koder95.eme.core.spi.PersonalDataModel;
 
+import java.text.Collator;
 import java.util.*;
 
 /**
