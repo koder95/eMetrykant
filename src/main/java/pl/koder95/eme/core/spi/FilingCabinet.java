@@ -10,7 +10,7 @@ import java.util.Set;
  * który korzystając z metod tego interfejsu może zarządzać danymi.
  *
  * @author Kamil Jan Mularski [@Koder95]
- * @version 0.4.0, 2020-08-13
+ * @version 0.4.0, 2020-08-26
  * @since 0.4.0
  */
 public interface FilingCabinet {
@@ -56,6 +56,8 @@ public interface FilingCabinet {
      * @return aktówka, która przechowywana jest pod podanym nazwiskiem i imieniem (imionami)
      */
     default Briefcase get(String surname, String name) {
-        return get(surname).get(name);
+        Map<String, Briefcase> briefcaseMap = get(surname);
+        if (briefcaseMap == null) return null;
+        return briefcaseMap.get(name);
     }
 }

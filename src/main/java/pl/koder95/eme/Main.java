@@ -17,24 +17,30 @@
 package pl.koder95.eme;
 
 import com.sun.javafx.application.LauncherImpl;
-import java.awt.Toolkit;
-import java.io.File;
-import java.nio.charset.Charset;
-import java.text.Collator;
-import java.util.Locale;
-import java.util.ResourceBundle;
-import java.util.regex.Pattern;
 import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import pl.koder95.eme.core.*;
+import pl.koder95.eme.core.spi.CabinetAnalyzer;
+import pl.koder95.eme.core.spi.FilingCabinet;
+import pl.koder95.eme.dfs.IndexList;
 import pl.koder95.eme.fx.Preloader;
-import pl.koder95.eme.views.fx.BookRepositoryView;
+
+import java.awt.*;
+import java.io.File;
+import java.text.Collator;
+import java.util.Arrays;
+import java.util.Locale;
+import java.util.ResourceBundle;
+import java.util.regex.Pattern;
 
 /**
  * Klasa uruchamiająca i inicjalizująca podstawowe elementy aplikacji.
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.3.0, 2018-11-03
+ * @version 0.4.0, 2020-08-26
  * @since 0.0.201
  */
 public class Main extends Application {
@@ -48,18 +54,10 @@ public class Main extends Application {
      */
     public static final Locale POLISH = Locale.forLanguageTag("PL-pl"); //NOI18N
     /**
-     * Folder, gdzie znajdują się pliki programu.
-     */
-    public static final File WORKDIR = Files.WORKDIR;
-    /**
      * Folder, gdzie znajdują się pliki zawierające dane do wczytania
      * przez program.
      */
     public static final File DATA_DIR = Files.DATA_DIR;
-    /**
-     * Domyślne kodowanie dla pliku CSV.
-     */
-    public static final Charset CSV_DEFAULT_CHARSET = Charset.forName("UTF-8");
     /**
      * Domyślny sposób porównywania stringów (polski).
      */
@@ -86,23 +84,13 @@ public class Main extends Application {
     public static final java.awt.Image FAVICON24 = Toolkit.getDefaultToolkit()
          .createImage(ClassLoader.getSystemResource(FAV_PATH_START + "24.png"));
     /**
-     * Komunikat błędu braku danych, które powinny zostać wczytane.
-     */
-    public static final Object READ_DATA_ERR_MESSAGE
-            = BUNDLE.getString("ERR_IMPORTANT_FILE_NOT_FOUND");
-    /**
-     * Tytuł komunikatu błędu braku danych, które powinny zostać wczytane.
-     */
-    public static final String READ_DATA_ERR_TITLE
-            = BUNDLE.getString("ERR_IMPORTANT_FILE_NOT_FOUND_TITLE");
-    /**
      * Wzór identyfikujący liczby w stringu.
      */
     public static final Pattern DIGITS_STRING_PATTERN
             = Pattern.compile("([0-9]*)");
 
     public static void main(String[] args) {
-        LauncherImpl.launchApplication(Main.class, Preloader.class, args);
+        LauncherImpl.launchApplication(Main.class, args);
     }
     
     /**
@@ -113,14 +101,24 @@ public class Main extends Application {
         MemoryUtils.releaseMemory();
     }
 
-    private BookRepositoryView root = null;
+    private Parent root = null;
     
     @Override
     public void init() throws Exception {
+
         super.init();
         notifyPreloader(new Preloader.ProgressNotification(0));
-        root = BookRepositoryView.loadAndCreateLater(Files.TEMPLATE_XML);
-        System.out.println(System.currentTimeMillis());
+        Arrays.stream(IndexList.values()).forEach(IndexList::load);
+
+        FilingCabinet cabinet = new TreeFilingCabinet();
+        IndexListDataSource source = new IndexListDataSource();
+
+        SuggestionProvider suggestionProvider = new SuggestionProvider(cabinet);
+        AbstractCabinetAnalyzer worker = new SimpleCabinetAnalyzer(cabinet, source, null, suggestionProvider);
+        CabinetWorkers.register(CabinetAnalyzer.class, worker);
+        worker.load();
+
+        root = FXMLLoader.load(ClassLoader.getSystemResource("pl/koder95/eme/fx/PersonalDataView.fxml"));
     }
 
     @Override
@@ -128,10 +126,7 @@ public class Main extends Application {
         primaryStage.getIcons().add(new Image(FAVICON_PATH));
         primaryStage.setTitle("eMetrykant " + Version.get());
         primaryStage.setScene(new Scene(root));
-        root.displayBooks();
-        primaryStage.setOnCloseRequest(event -> {
-            System.exit(0);
-        });
+        primaryStage.setOnCloseRequest(event -> System.exit(0));
         primaryStage.show();
     }
 }

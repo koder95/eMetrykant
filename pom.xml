@@ -119,7 +119,7 @@
                         </goals>
                         <configuration>
                             <outputDirectory>
-                                ${project.build.directory}/libs
+                                ${project.build.directory}/lib
                             </outputDirectory>
                         </configuration>
                     </execution>

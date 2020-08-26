@@ -14,6 +14,13 @@ import java.net.URL;
 import java.util.ListResourceBundle;
 import java.util.ResourceBundle;
 
+/**
+ * Kontroler dla widoku modelu danych osobowych.
+ *
+ * @author Kamil Jan Mularski [@koder95]
+ * @version 0.4.0, 2020-08-26
+ * @since 0.1.11
+ */
 public class PersonalDataView implements Initializable {
 
     public static final String ANALYZER_KEY = "analyzer";
@@ -31,9 +38,10 @@ public class PersonalDataView implements Initializable {
     private Label decease;
 
     @FXML
-    private Object searching;
+    private Label numberOfActs;
 
-    private CabinetAnalyzer analyzer;
+    @FXML
+    private Object searching;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -50,15 +58,27 @@ public class PersonalDataView implements Initializable {
         if (resources.containsKey(ANALYZER_KEY)) {
             Object obj = resources.getObject(ANALYZER_KEY);
             if (obj instanceof CabinetAnalyzer) {
-                analyzer = (CabinetAnalyzer) obj;
-            }
-            if (searching instanceof TextField) {
-                AutoCompletionBinding<PersonalDataModel> autoCompletionBinding = TextFields.bindAutoCompletion(
-                        (TextField) searching,
-                        analyzer.getSuggestionProvider(),
-                        analyzer.getPersonalDataConverter()
-                );
-                autoCompletionBinding.setOnAutoCompleted(event -> setPersonalDataModel(event.getCompletion()));
+                CabinetAnalyzer analyzer = (CabinetAnalyzer) obj;
+                if (searching instanceof TextField) {
+                    TextField field = (TextField) searching;
+                    AutoCompletionBinding<PersonalDataModel> autoCompletionBinding = TextFields.bindAutoCompletion(
+                            field,
+                            analyzer.getSuggestionProvider(),
+                            analyzer.getPersonalDataConverter()
+                    );
+                    autoCompletionBinding.setOnAutoCompleted(event -> setPersonalDataModel(event.getCompletion()));
+                    field.setOnAction(event -> setPersonalDataModel(
+                            analyzer.getPersonalDataConverter().fromString(field.getText())
+                    ));
+                    field.textProperty().addListener(
+                            (observable, oldValue, newValue) -> {
+                                if (oldValue.length() < newValue.length()) {
+                                    field.setText(newValue.toUpperCase());
+                                }
+                            }
+                    );
+                }
+                numberOfActs.setText(analyzer.getNumberOfActs() + "");
             }
         }
     }

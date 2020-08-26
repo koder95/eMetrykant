@@ -2,6 +2,7 @@ package pl.koder95.eme.core.spi;
 
 import pl.koder95.eme.dfs.ActNumber;
 
+import java.util.Arrays;
 import java.util.Map;
 import java.util.Set;
 
@@ -13,7 +14,7 @@ import java.util.Set;
  * danych, więc <i>pracownik</i> przekazuje je do celu.
  *
  * @author Kamil Jan Mularski [@Koder95]
- * @version 0.4.0, 2020-08-13
+ * @version 0.4.0, 2020-08-26
  * @since 0.4.0
  */
 public interface CabinetWorker {
@@ -34,13 +35,13 @@ public interface CabinetWorker {
     /**
      * Metoda wytwórcza aktówek z numerami akt: chrztu, bierzmowania, małżeństwa i pogrzebu.
      *
-     * @param baptism numer aktu chrztu
-     * @param confirmation numer aktu bierzmowania
-     * @param marriage numer aktu małżeństwa
-     * @param decease numer aktu pogrzebu
+     * @param baptism numery aktów chrztu
+     * @param confirmation numery aktów bierzmowania
+     * @param marriage numery aktów małżeństwa
+     * @param decease numery aktów pogrzebu
      * @return {@link Briefcase aktówka}, która zawiera wprowadzone dane
      */
-    Briefcase createBriefcase(ActNumber baptism, ActNumber confirmation, ActNumber marriage, ActNumber decease);
+    Briefcase createBriefcase(ActNumber[] baptism, ActNumber[] confirmation, ActNumber[] marriage, ActNumber[] decease);
 
     /**
      * Pracownik ładuje dane ze {@link DataSource źródła} do {@link FilingCabinet szafy aktowej}.
@@ -64,10 +65,18 @@ public interface CabinetWorker {
         Map<String, Set<String>> personalData = getCabinet().getPersonalData();
         personalData.forEach((surname, names) -> names.forEach((name) -> {
             Briefcase briefcase = getCabinet().get(surname, name);
-            getDataTarget().setBaptism(surname, name, briefcase.getBaptism());
-            getDataTarget().setConfirmation(surname, name, briefcase.getConfirmation());
-            getDataTarget().setMarriage(surname, name, briefcase.getMarriage());
-            getDataTarget().setDecease(surname, name, briefcase.getDecease());
+            Arrays.stream(briefcase.getBaptism()).forEach(a -> {
+                getDataTarget().setBaptism(surname, name, a);
+            });
+            Arrays.stream(briefcase.getConfirmation()).forEach(a -> {
+                getDataTarget().setBaptism(surname, name, a);
+            });
+            Arrays.stream(briefcase.getMarriage()).forEach(a -> {
+                getDataTarget().setBaptism(surname, name, a);
+            });
+            Arrays.stream(briefcase.getDecease()).forEach(a -> {
+                getDataTarget().setBaptism(surname, name, a);
+            });
         }));
     }
 }

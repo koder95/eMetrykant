@@ -4,7 +4,7 @@ package pl.koder95.eme.core.spi;
  * Interfejs zwraca dane osobowe przeznaczone do wyświetlenia.
  *
  * @author Kamil Jan Mularski [@Koder95]
- * @version 0.4.0, 2020-08-13
+ * @version 0.4.0, 2020-08-26
  * @since 0.4.0
  */
 public interface PersonalDataModel {
@@ -19,19 +19,19 @@ public interface PersonalDataModel {
     String getName();
 
     /**
-     * @return numer aktu chrztu, gdy {@code null} wtedy {@code '-'}
+     * @return numery aktów chrztu, albo {@code '-'} jeśli nie ma żadnych
      */
     String getBaptismAN();
     /**
-     * @return numer aktu bierzmowania, gdy {@code null} wtedy {@code '-'}
+     * @return numery aktów bierzmowania, albo {@code '-'} jeśli nie ma żadnych
      */
     String getConfirmationAN();
     /**
-     * @return numer aktu małżeństwa, gdy {@code null} wtedy {@code '-'}
+     * @return numery aktów małżeństwa, albo {@code '-'} jeśli nie ma żadnych
      */
     String getMarriageAN();
     /**
-     * @return numer aktu pogrzebu, gdy {@code null} wtedy {@code '-'}
+     * @return numery aktów pogrzebu, albo {@code '-'} jeśli nie ma żadnych
      */
     String getDeceaseAN();
 }

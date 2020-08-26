@@ -28,7 +28,7 @@ import static pl.koder95.eme.Main.DIGITS_STRING_PATTERN;
  * danego roku ciąg znaków (zwykle liczbę naturalną), oraz rok.
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.3.1, 2020-05-21
+ * @version 0.4.0, 2020-08-26
  * @since 0.1.11
  */
 public class ActNumber implements Comparable<ActNumber>, Serializable {
@@ -76,7 +76,7 @@ public class ActNumber implements Comparable<ActNumber>, Serializable {
             if (digit1.find() && digit2.find()) {
                 int act1 = Integer.parseInt(digit1.group(1));
                 int act2 = Integer.parseInt(digit2.group(1));
-                return act1 > act2? 1: act1 == act2? 0: -1;
+                return Integer.compare(act1, act2);
             }
             String remainder1 = getSign().substring(digit1.end(1)+1);
             String remainder2 = getSign().substring(digit2.end(1)+1);

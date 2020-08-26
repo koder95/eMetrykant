@@ -9,25 +9,25 @@ import java.util.Set;
  * Za pomocą interfejsu numery akt są rozpoznawane i kategoryzowane.
  *
  * @author Kamil Jan Mularski [@Koder95]
- * @version 0.4.0, 2020-08-13
+ * @version 0.4.0, 2020-08-26
  * @since 0.4.0
  */
 public interface Briefcase {
 
     /**
-     * @return numer aktu chrztu, może być {@code null}
+     * @return numery aktów chrztu, tablica może być pusta
      */
-    ActNumber getBaptism();
+    ActNumber[] getBaptism();
     /**
-     * @return numer aktu bierzmowania, może być {@code null}
+     * @return numery aktów bierzmowania, tablica może być pusta
      */
-    ActNumber getConfirmation();
+    ActNumber[] getConfirmation();
     /**
-     * @return numer aktu małżeństwa, może być {@code null}
+     * @return numery aktów małżeństwa, tablica może być pusta
      */
-    ActNumber getMarriage();
+    ActNumber[] getMarriage();
     /**
-     * @return numer aktu pogrzebu, może być {@code null}
+     * @return numery aktów pogrzebu, tablica może być pusta
      */
-    ActNumber getDecease();
+    ActNumber[] getDecease();
 }
