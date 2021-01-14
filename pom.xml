@@ -40,6 +40,11 @@
             <artifactId>controlsfx</artifactId>
             <version>8.40.16</version>
         </dependency>
+        <dependency>
+            <groupId>org.kohsuke</groupId>
+            <artifactId>github-api</artifactId>
+            <version>1.119</version>
+        </dependency>
     </dependencies>
 
     <distributionManagement>
