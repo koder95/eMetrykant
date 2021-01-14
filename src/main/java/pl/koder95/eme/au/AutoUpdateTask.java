@@ -4,8 +4,7 @@ import javafx.application.Platform;
 import javafx.concurrent.Task;
 import pl.koder95.eme.Main;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.net.URISyntaxException;
 
 public class AutoUpdateTask extends Task<Object> {
@@ -28,5 +27,15 @@ public class AutoUpdateTask extends Task<Object> {
         System.exit(0);
     }
 
-    private static void generateUpdateScript() {}
+    private static void generateUpdateScript() {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("update.bat"))) {
+            writer.write("@echo off");
+            writer.newLine();
+            writer.write("timeout /T 5 /nobreak > nil");
+            writer.newLine();
+            writer.write("copy ");
+        } catch (IOException ex) {
+
+        }
+    }
 }
