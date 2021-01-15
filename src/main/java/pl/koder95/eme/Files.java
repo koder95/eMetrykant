@@ -48,5 +48,11 @@ public final class Files {
      */
     public static final File INDICES_XML = new File(Files.XML_DIR, "indices.xml");
 
+    public static final File TEMP_DIR = new File(System.getProperty("java.io.tmpdir"), "eMetrykant");
+
+    public static final File UPDATE_WIN = new File(Files.WORKDIR, "update.bat");
+    public static final File UPDATE_UNIX = new File(Files.WORKDIR, "update");
+    public static final File SELF = new File(Files.WORKDIR, "eMetrykant.jar");
+
     private Files() {}
 }

@@ -22,12 +22,14 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import pl.koder95.eme.au.AutoUpdateTask;
 import pl.koder95.eme.core.*;
 import pl.koder95.eme.core.spi.CabinetAnalyzer;
 import pl.koder95.eme.core.spi.FilingCabinet;
 import pl.koder95.eme.dfs.IndexList;
 
 import java.awt.*;
+import java.io.File;
 import java.text.Collator;
 import java.util.Arrays;
 import java.util.Locale;
@@ -79,11 +81,14 @@ public class Main extends Application {
     }
 
     private Parent root = null;
+    private AutoUpdateTask task = null;
     
     @Override
     public void init() throws Exception {
-
         super.init();
+        if (Files.UPDATE_WIN.exists() && !Files.UPDATE_WIN.delete()) Files.UPDATE_WIN.deleteOnExit();
+        if (Files.UPDATE_UNIX.exists() && !Files.UPDATE_UNIX.delete()) Files.UPDATE_UNIX.deleteOnExit();
+        /*
         Arrays.stream(IndexList.values()).forEach(IndexList::load);
 
         FilingCabinet cabinet = new TreeFilingCabinet();
@@ -95,14 +100,19 @@ public class Main extends Application {
         worker.load();
 
         root = FXMLLoader.load(ClassLoader.getSystemResource("pl/koder95/eme/fx/PersonalDataView.fxml"));
+         */
+        task = new AutoUpdateTask();
     }
 
     @Override
     public void start(Stage primaryStage) {
+        /*
         primaryStage.getIcons().add(new Image(FAVICON_PATH));
         primaryStage.setTitle("eMetrykant " + Version.get());
         primaryStage.setScene(new Scene(root));
         primaryStage.setOnCloseRequest(event -> System.exit(0));
         primaryStage.show();
+         */
+        task.run();
     }
 }
