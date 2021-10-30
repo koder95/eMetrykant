@@ -13,6 +13,7 @@ import java.net.URLConnection;
 import java.nio.channels.Channels;
 import java.nio.channels.FileChannel;
 import java.nio.channels.ReadableByteChannel;
+import java.nio.file.Path;
 import java.text.NumberFormat;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -43,39 +44,40 @@ public class AutoUpdateTask extends Task<Object> {
         }
 
         // pobieranie zip'a
-        File downloaded = downloadZip(zip.getBrowserDownloadUrl(), TEMP_DIR, zip.getName(), zip.getSize());
+        Path downloaded = downloadZip(zip.getBrowserDownloadUrl(), TEMP_DIR, zip.getName(), zip.getSize());
         // rozpakowywanie do folderu tymczasowego
         if (extractZip(downloaded, TEMP_DIR, true)) {
             // TODO: tworzenie mapy aktualizacji
-            Map<File, File> updateMap = new HashMap<>();
-            updateMap.put(new File(TEMP_DIR, "eMetrykant.jar"), SELF);
+            Map<Path, Path> updateMap = new HashMap<>();
+            updateMap.put(TEMP_DIR.resolve("eMetrykant.jar"), SELF);
+			
             restart(updateMap);
         }
         return null;
     }
 
-    private File downloadZip(String url, File dir, String name, long size) throws IOException {
+    private Path downloadZip(String url, Path dir, String name, long size) throws IOException {
         NumberFormat pF = NumberFormat.getPercentInstance();
         String title = "Pobieranie " + name;
         updateTitle(title);
         updateProgress(0, 1);
 
         URLConnection connection = new URL(url).openConnection();
-        File forDownload = new File(dir, name);
+        Path forDownload = dir.resolve(name);
+        java.nio.file.Files.createFile(forDownload);
 
         try (InputStream in = connection.getInputStream();
              ReadableByteChannel rbc = Channels.newChannel(in);
-             FileOutputStream out = new FileOutputStream(forDownload);
-             FileChannel channel = out.getChannel()) {
-            channel.truncate(size);
-            in.mark((int) size);
-            long workDone = 0;
-            long count = size > 100? size / 100: 1;
-            while (workDone < size) {
-                long transferred = channel.transferFrom(rbc, workDone, count);
-                workDone += transferred;
-                updateMessage(pF.format((double) workDone/ size));
-                updateProgress(workDone, size);
+             FileChannel channel = FileChannel.open(forDownload)) {
+                channel.truncate(size);
+                in.mark((int) size);
+                long workDone = 0;
+                long count = size > 100? size / 100: 1;
+                while (workDone < size) {
+                    long transferred = channel.transferFrom(rbc, workDone, count);
+                    workDone += transferred;
+                    updateMessage(pF.format((double) workDone/ size));
+                    updateProgress(workDone, size);
             }
             channel.force(true);
         } catch (Exception ex) { ex.printStackTrace(); }
@@ -83,21 +85,22 @@ public class AutoUpdateTask extends Task<Object> {
         return forDownload;
     }
 
-    private boolean extractZip(File forExtract, File dir, boolean deleteZip) throws IOException {
+    private boolean extractZip(Path forExtract, Path dir, boolean deleteZip) throws IOException {
         NumberFormat pF = NumberFormat.getPercentInstance();
-        updateTitle("Rozpakowywanie " + forExtract.getName());
+        updateTitle("Rozpakowywanie " + forExtract.getFileName());
         updateProgress(0, 1);
         updateMessage("");
-        try (ZipFile zip = new ZipFile(forExtract)) {
-            updateProgress(0, forExtract.length());
+        try (ZipFile zip = new ZipFile(forExtract.toFile())) {
+            updateProgress(0, java.nio.file.Files.size(forExtract));
             double total = 0;
-            if (dir == null) dir = forExtract.getParentFile();
+            if (dir == null) dir = forExtract.getParent();
             Enumeration<? extends ZipEntry> entries = zip.entries();
             while (entries.hasMoreElements()) {
                 ZipEntry entry = entries.nextElement();
                 System.out.println(entry);
                 if (entry.isDirectory()) {
-                    if (new File(dir, entry.getName()).mkdirs()) System.out.println("Directory created!");
+                    if (java.nio.file.Files.isDirectory(java.nio.file.Files.createDirectories(dir.resolve(entry.getName()))))
+                        System.out.println("Directory created!");
                 }
 
                 InputStream input = zip.getInputStream(entry);
@@ -108,10 +111,10 @@ public class AutoUpdateTask extends Task<Object> {
             double work = 0;
             while (entries.hasMoreElements()) {
                 ZipEntry entry = entries.nextElement();
-                File outFile = new File(dir, entry.getName());
+                Path outFile = dir.resolve(entry.getName());
 
                 if (!entry.isDirectory()) {
-                    if (outFile.createNewFile()) {
+                    if (java.nio.file.Files.isRegularFile(java.nio.file.Files.createFile(outFile))) {
                         System.out.println("New file created: " + outFile);
                     }
                 }
@@ -119,7 +122,7 @@ public class AutoUpdateTask extends Task<Object> {
 
                 System.out.println("Entry: " + entry);
                 InputStream input = zip.getInputStream(entry);
-                try (FileOutputStream output = new FileOutputStream(outFile)) {
+                try (OutputStream output = java.nio.file.Files.newOutputStream(outFile)) {
                     while (input.available() > 0) {
                         int b = input.read();
                         output.write(b);
@@ -131,11 +134,11 @@ public class AutoUpdateTask extends Task<Object> {
             }
         }
         updateProgress(Double.NaN, 0);
-        if (deleteZip) return forExtract.delete();
+        if (deleteZip) return java.nio.file.Files.deleteIfExists(forExtract);
         return false;
     }
 
-    private static void restart(Map<File, File> updateMap) {
+    private static void restart(Map<Path, Path> updateMap) {
         Platform.exit();
         try {
             File update = Files.UPDATE_WIN;
@@ -147,7 +150,7 @@ public class AutoUpdateTask extends Task<Object> {
         System.exit(0);
     }
 
-    private static void generateUpdateScript(File update, Map<File, File> updateMap) {
+    private static void generateUpdateScript(File update, Map<Path, Path> updateMap) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(update))) {
             generateWinUpdateScript(writer, updateMap);
         } catch (IOException e) {
@@ -155,20 +158,20 @@ public class AutoUpdateTask extends Task<Object> {
         }
     }
 
-    private static void generateWinUpdateScript(BufferedWriter writer, Map<File, File> updateMap)
+    private static void generateWinUpdateScript(BufferedWriter writer, Map<Path, Path> updateMap)
             throws IOException {
         writer.write("@echo off");
         writer.newLine();
         writer.write("timeout /T 5 /nobreak > nul");
         writer.newLine();
-        for (Map.Entry<File, File> entry : updateMap.entrySet()) {
-            File oldFile = entry.getValue();
-            File newFile = entry.getKey();
-            if (newFile.exists()) {
+        for (Map.Entry<Path, Path> entry : updateMap.entrySet()) {
+            Path oldFile = entry.getValue();
+            Path newFile = entry.getKey();
+            if (java.nio.file.Files.exists(newFile)) {
                 writer.write("copy " + '"');
-                writer.write(newFile.getPath());
+                writer.write(newFile.toString());
                 writer.write('"' + " " + '"');
-                writer.write(oldFile.getPath());
+                writer.write(oldFile.toString());
                 writer.write('"' + " /y");
                 writer.newLine();
             } else throw new FileNotFoundException("Nie znaleziono odpowiednich plików do aktualizacji.");

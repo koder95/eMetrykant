@@ -14,7 +14,7 @@ public class GitHubRepositoryController {
                 e.printStackTrace();
                 System.out.println(uc);
             }
-        }).withOAuthToken("35fcc8651d5fed19ca80b9fc8fbd17e4599c7499").build();
+        }).build();
     }
 
     private GitHub connection = null;

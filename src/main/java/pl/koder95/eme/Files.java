@@ -18,6 +18,8 @@
 package pl.koder95.eme;
 
 import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 /**
  * Przechowuje dane na temat plików.
@@ -48,11 +50,11 @@ public final class Files {
      */
     public static final File INDICES_XML = new File(Files.XML_DIR, "indices.xml");
 
-    public static final File TEMP_DIR = new File(System.getProperty("java.io.tmpdir"), "eMetrykant");
+    public static final Path TEMP_DIR = Paths.get(System.getProperty("java.io.tmpdir"), "eMetrykant");
 
     public static final File UPDATE_WIN = new File(Files.WORKDIR, "update.bat");
     public static final File UPDATE_UNIX = new File(Files.WORKDIR, "update");
-    public static final File SELF = new File(Files.WORKDIR, "eMetrykant.jar");
+    public static final Path SELF = WORKDIR.toPath().resolve("eMetrykant.jar");
 
     private Files() {}
 }
