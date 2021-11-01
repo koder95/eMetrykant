@@ -11,8 +11,8 @@ public class GitHubRepositoryController {
         return new GitHubBuilder().withRateLimitHandler(new RateLimitHandler() {
             @Override
             public void onError(IOException e, HttpURLConnection uc) {
-                e.printStackTrace();
                 System.out.println(uc);
+                e.printStackTrace();
             }
         }).build();
     }

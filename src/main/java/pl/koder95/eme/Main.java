@@ -17,19 +17,27 @@
 package pl.koder95.eme;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
+import javafx.scene.control.ProgressIndicator;
 import javafx.scene.image.Image;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import pl.koder95.eme.au.AutoUpdateTask;
 import pl.koder95.eme.core.*;
 import pl.koder95.eme.core.spi.CabinetAnalyzer;
 import pl.koder95.eme.core.spi.FilingCabinet;
 import pl.koder95.eme.dfs.IndexList;
 
-import java.awt.*;
-import java.io.File;
 import java.text.Collator;
 import java.util.Arrays;
 import java.util.Locale;
@@ -86,9 +94,6 @@ public class Main extends Application {
     @Override
     public void init() throws Exception {
         super.init();
-        if (Files.UPDATE_WIN.exists() && !Files.UPDATE_WIN.delete()) Files.UPDATE_WIN.deleteOnExit();
-        if (Files.UPDATE_UNIX.exists() && !Files.UPDATE_UNIX.delete()) Files.UPDATE_UNIX.deleteOnExit();
-        /*
         Arrays.stream(IndexList.values()).forEach(IndexList::load);
 
         FilingCabinet cabinet = new TreeFilingCabinet();
@@ -100,19 +105,38 @@ public class Main extends Application {
         worker.load();
 
         root = FXMLLoader.load(ClassLoader.getSystemResource("pl/koder95/eme/fx/PersonalDataView.fxml"));
-         */
         task = new AutoUpdateTask();
     }
 
     @Override
     public void start(Stage primaryStage) {
-        /*
         primaryStage.getIcons().add(new Image(FAVICON_PATH));
         primaryStage.setTitle("eMetrykant " + Version.get());
         primaryStage.setScene(new Scene(root));
         primaryStage.setOnCloseRequest(event -> System.exit(0));
-        primaryStage.show();
-         */
-        task.run();
+
+        Stage secondary = new Stage();
+        secondary.initStyle(StageStyle.UNDECORATED);
+
+        ProgressIndicator updating = new ProgressIndicator();
+        Label title = new Label();
+        Label message = new Label();
+        updating.progressProperty().bind(task.progressProperty());
+        title.textProperty().bind(task.titleProperty());
+        message.textProperty().bind(task.messageProperty());
+
+        VBox texts = new VBox(5d, title, message);
+        texts.setAlignment(Pos.CENTER_LEFT);
+        VBox progressing = new VBox(updating);
+        progressing.setAlignment(Pos.CENTER_RIGHT);
+        HBox root = new HBox(5d, progressing, texts);
+        root.setAlignment(Pos.CENTER);
+
+        secondary.setScene(new Scene(root));
+        secondary.setAlwaysOnTop(true);
+        secondary.setMinWidth(300);
+        secondary.setMinHeight(150);
+        secondary.show();
+        Platform.runLater(task);
     }
 }

@@ -33,28 +33,27 @@ public final class Files {
     /**
      * Folder, gdzie znajdują się pliki programu.
      */
-    public static final File WORKDIR
-            = new File(System.getProperty("user.dir")); //NOI18N
+    public static final Path WORKDIR
+            = Paths.get(System.getProperty("user.dir")); //NOI18N
     /**
      * Folder, gdzie znajdują się pliki zawierające dane do wczytania
      * przez program.
      */
-    public static final File DATA_DIR = WORKDIR;
+    public static final Path DATA_DIR = WORKDIR;
     /**
      * Folder, gdzie znajdują się pliki zawierające dane do wczytania
      * przez program o rozszerzeniu XML.
      */
-    public static final File XML_DIR = DATA_DIR; //NOI18N
+    public static final Path XML_DIR = DATA_DIR; //NOI18N
     /**
      * Plik, który przechowuje dane na temat indeksów.
      */
-    public static final File INDICES_XML = new File(Files.XML_DIR, "indices.xml");
+    public static final Path INDICES_XML = XML_DIR.resolve("indices.xml");
 
     public static final Path TEMP_DIR = Paths.get(System.getProperty("java.io.tmpdir"), "eMetrykant");
-
-    public static final File UPDATE_WIN = new File(Files.WORKDIR, "update.bat");
-    public static final File UPDATE_UNIX = new File(Files.WORKDIR, "update");
-    public static final Path SELF = WORKDIR.toPath().resolve("eMetrykant.jar");
+    public static final Path UPDATE_WIN = Files.WORKDIR.resolve("update.bat");
+    public static final Path UPDATE_UNIX = Files.WORKDIR.resolve("update");
+    public static final Path SELF = WORKDIR.resolve("eMetrykant.jar");
 
     private Files() {}
 }
