@@ -28,7 +28,7 @@ import pl.koder95.eme.MemoryUtils;
  * Zawiera wszystkie typy ksiąg i zawierających się w nich zbiorach indeksów.
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.4.0, 2020-08-26
+ * @version 0.4.1, 2021-11-05
  * @since 0.1.11
  */
 public enum IndexList implements IndexContainer {
@@ -157,7 +157,7 @@ public enum IndexList implements IndexContainer {
     
     private static void loadBooks() {
         try {
-            BOOKS = Book.load(Files.INDICES_XML);
+            BOOKS = Book.load(Files.INDICES_XML.toFile());
         } catch (IOException | SAXException | ParserConfigurationException ex) {
             System.err.println(ex);
         }

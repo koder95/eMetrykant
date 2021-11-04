@@ -37,6 +37,7 @@ import pl.koder95.eme.core.*;
 import pl.koder95.eme.core.spi.CabinetAnalyzer;
 import pl.koder95.eme.core.spi.FilingCabinet;
 import pl.koder95.eme.dfs.IndexList;
+import pl.koder95.eme.git.RepositoryInfo;
 
 import java.text.Collator;
 import java.util.Arrays;
@@ -47,7 +48,7 @@ import java.util.regex.Pattern;
 /**
  * Klasa uruchamiająca i inicjalizująca podstawowe elementy aplikacji.
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.4.0, 2020-08-26
+ * @version 0.4.1, 2021-11-05
  * @since 0.0.201
  */
 public class Main extends Application {
@@ -63,8 +64,8 @@ public class Main extends Application {
     /**
      * Domyślny sposób porównywania stringów (polski).
      */
-    public static final Collator DEFAULT_COLLATOR
-            = Collator.getInstance(POLISH); //NOI18N
+    public static final Collator DEFAULT_COLLATOR = Collator.getInstance(POLISH); //NOI18N
+
     private static final String FAV_PATH_START = "pl/koder95/eme/favicon";
     /**
      * Ścieżka ikony dla okienek.
@@ -77,6 +78,12 @@ public class Main extends Application {
             = Pattern.compile("([0-9]*)");
 
     public static void main(String[] args) {
+        if (args.length == 1) {
+            if (args[0].equals("-v")) {
+                System.out.println(Version.get());
+                System.exit(0);
+            }
+        }
         Main.launch(args);
     }
     
@@ -93,6 +100,7 @@ public class Main extends Application {
     
     @Override
     public void init() throws Exception {
+        RepositoryInfo.get().reload();
         super.init();
         Arrays.stream(IndexList.values()).forEach(IndexList::load);
 
@@ -112,31 +120,35 @@ public class Main extends Application {
     public void start(Stage primaryStage) {
         primaryStage.getIcons().add(new Image(FAVICON_PATH));
         primaryStage.setTitle("eMetrykant " + Version.get());
-        primaryStage.setScene(new Scene(root));
-        primaryStage.setOnCloseRequest(event -> System.exit(0));
+        Version latestRelease = RepositoryInfo.get().getLatestReleaseVersion();
+        if (latestRelease.compareTo(Version.get()) > 0) {
+            primaryStage.initStyle(StageStyle.UNDECORATED);
 
-        Stage secondary = new Stage();
-        secondary.initStyle(StageStyle.UNDECORATED);
+            ProgressIndicator updating = new ProgressIndicator();
+            Label title = new Label();
+            Label message = new Label();
+            updating.progressProperty().bind(task.progressProperty());
+            title.textProperty().bind(task.titleProperty());
+            message.textProperty().bind(task.messageProperty());
 
-        ProgressIndicator updating = new ProgressIndicator();
-        Label title = new Label();
-        Label message = new Label();
-        updating.progressProperty().bind(task.progressProperty());
-        title.textProperty().bind(task.titleProperty());
-        message.textProperty().bind(task.messageProperty());
+            VBox texts = new VBox(5d, title, message);
+            texts.setAlignment(Pos.CENTER_LEFT);
+            VBox progressing = new VBox(updating);
+            progressing.setAlignment(Pos.CENTER_RIGHT);
+            HBox root = new HBox(5d, progressing, texts);
+            root.setAlignment(Pos.CENTER);
 
-        VBox texts = new VBox(5d, title, message);
-        texts.setAlignment(Pos.CENTER_LEFT);
-        VBox progressing = new VBox(updating);
-        progressing.setAlignment(Pos.CENTER_RIGHT);
-        HBox root = new HBox(5d, progressing, texts);
-        root.setAlignment(Pos.CENTER);
-
-        secondary.setScene(new Scene(root));
-        secondary.setAlwaysOnTop(true);
-        secondary.setMinWidth(300);
-        secondary.setMinHeight(150);
-        secondary.show();
-        Platform.runLater(task);
+            primaryStage.setScene(new Scene(root));
+            primaryStage.setAlwaysOnTop(true);
+            primaryStage.setMinWidth(300);
+            primaryStage.setMinHeight(150);
+            primaryStage.show();
+            Platform.runLater(task);
+        }
+        else {
+            primaryStage.setScene(new Scene(root));
+            primaryStage.setOnCloseRequest(event -> System.exit(0));
+            primaryStage.show();
+        }
     }
 }

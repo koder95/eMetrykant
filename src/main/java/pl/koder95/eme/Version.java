@@ -27,7 +27,7 @@ import java.util.regex.Pattern;
  * <a href="https://semver.org/lang/pl/">Wersjonowania semantycznego 2.0.0</a>.
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.4.0, 2020-08-13
+ * @version 0.4.1, 2021-11-05
  * @since 0.2.0
  */
 public class Version implements Comparable<Version> {
@@ -157,7 +157,7 @@ public class Version implements Comparable<Version> {
             < 1.0.0-beta.2 < 1.0.0-beta.11 < 1.0.0-rc.1 < 1.0.0.
             */
             else if (!i0.hasNext() && i1.hasNext()) return -1;
-            else if (i0.hasNext() && !i1.hasNext()) return 1;
+            return 1;
         }
         return 0;
     }
@@ -223,32 +223,33 @@ public class Version implements Comparable<Version> {
         } else return stable;
     }
 
-    private static Version parse(String str, boolean preRelease) {
+    private static Version parse0(String str) {
         boolean isPreRelease = str.contains("-"),
                 hasBuildMetadata = str.contains("+");
         if (hasBuildMetadata) {
             String[] mainParts = str.split(Pattern.quote("+"));
-            Version r = parse(mainParts[0], preRelease);
-            r.getBuildMetadata().addAll(
-                    Arrays.asList(mainParts[1].split(Pattern.quote(".")))
-            );
-            return r;
+            Version r = parse0(mainParts[0]);
+            if (r == null) return null;
+            return new Version(r.major, r.minor, r.patch, r.preRelease, r.identifiers,
+                    Arrays.asList(mainParts[1].split(Pattern.quote("."))));
         } else {
             if (isPreRelease) {
                 // 0 - stable, 1 - pre-release:
                 String[] nonBuildParts = str.split(Pattern.quote("-"));
                 String[] preReleaseParts = nonBuildParts[1]
                         .split(Pattern.quote("."));
-                Version r = parse(nonBuildParts[0], true);
-                r.getIdentifiers().addAll(Arrays.asList(preReleaseParts));
-                return r;
+                Version r = parse0(nonBuildParts[0]);
+                if (r == null) return null;
+                return new Version(r.major, r.minor, r.patch, true, Arrays.asList(preReleaseParts),
+                        Collections.emptyList());
             } else {
                 String[] stableParts = str.split(Pattern.quote("."));
-                return new Version(
-                        Integer.parseInt(stableParts[0]),
-                        Integer.parseInt(stableParts[1]),
-                        Integer.parseInt(stableParts[2]),
-                        preRelease, new LinkedList<>(), new LinkedList<>());
+                for (String part : stableParts) {
+                    if (!part.matches("(\\d)+")) {
+                        return null;
+                    }
+                }
+                return new Version(Integer.parseInt(stableParts[0]), Integer.parseInt(stableParts[1]), Integer.parseInt(stableParts[2]));
             }
         }
     }
@@ -260,9 +261,7 @@ public class Version implements Comparable<Version> {
      * @return wersja
      */
     public static Version parse(String str) {
-        if (str.startsWith("v"))
-            return parse(str.substring(1), str.contains("-"));
-        return parse(str, str.contains("-"));
+        return parse0(str.startsWith("v")? str.substring(1) : str);
     }
 
     /**
@@ -271,13 +270,14 @@ public class Version implements Comparable<Version> {
      * metody {@link Object#toString()}.
      *
      * @param klasa klasa, która ma zostać odczytana
-     * @return wersja
+     * @return instancja klasy {@link Version} utworzona na podstawie podanej klasy,
+     * {@code null} — gdy nie można odczytać wersji z podanej klasy
      */
-    public static Version parse(Class klasa) {
+    public static Version parse(Class<?> klasa) {
         try {
             Method get = Arrays.stream(klasa.getMethods())
                     .reduce(null, (r, c) -> c.getName().equals("get")? c : r);
-            
+
             if (get != null) return parse(get.invoke(null).toString());
             return null;
         } catch (IllegalAccessException | IllegalArgumentException
@@ -290,6 +290,6 @@ public class Version implements Comparable<Version> {
      * @return wersja tego programu
      */
     public static Version get() {
-        return parse("0.5.0");
+        return parse(Main.class.getPackage().getSpecificationVersion());
     }
 }

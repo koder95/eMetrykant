@@ -139,9 +139,10 @@
                         <manifest>
                             <addClasspath>true</addClasspath>
                             <classpathPrefix>lib/</classpathPrefix>
-                            <mainClass>
-                                pl.koder95.eme.Main
-                            </mainClass>
+                            <mainClass>pl.koder95.eme.Main</mainClass>
+                            <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                            <addExtensions>true</addExtensions>
                         </manifest>
                     </archive>
                 </configuration>
