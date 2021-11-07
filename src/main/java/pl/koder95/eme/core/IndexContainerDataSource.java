@@ -10,7 +10,7 @@ import java.util.*;
  * Źródło danych, które pobiera informacje z {@link IndexContainer kontenera indeksów}.
  *
  * @author Kamil Jan Mularski [@Koder95]
- * @version 0.4.0, 2020-08-26
+ * @version 0.4.1, 2021-11-07
  * @since 0.4.0
  */
 public class IndexContainerDataSource implements DataSource, Visitor<Index> {
@@ -26,7 +26,7 @@ public class IndexContainerDataSource implements DataSource, Visitor<Index> {
      * @param container kontener, którego indeksy zostaną przejrzane, aby pozyskać informacje
      */
     public IndexContainerDataSource(IndexContainer container) {
-        container.getLoaded().forEach(this::visit);
+        if (container != null) container.getLoaded().forEach(this::visit);
     }
 
     @Override

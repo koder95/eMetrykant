@@ -17,7 +17,6 @@
 
 package pl.koder95.eme;
 
-import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -49,10 +48,18 @@ public final class Files {
      * Plik, który przechowuje dane na temat indeksów.
      */
     public static final Path INDICES_XML = XML_DIR.resolve("indices.xml");
-
+    /**
+     * Folder tymczasowy eMetrykant, gdzie zapisywane są pliki pobrane z repozytorium.
+     */
     public static final Path TEMP_DIR = Paths.get(System.getProperty("java.io.tmpdir"), "eMetrykant");
-    public static final Path UPDATE_WIN = Files.WORKDIR.resolve("update.bat");
-    public static final Path UPDATE_UNIX = Files.WORKDIR.resolve("update");
+    /**
+     * Plik skryptu aktualizującego program, w formie bez rozszerzenia.
+     */
+    public static final Path UPDATE_SCRIPT = Files.WORKDIR.resolve("update");
+    /**
+     * Ścieżka do archiwum JAR. Jeśli program jest uruchomiony standardowo, ścieżka wskazuje archiwum
+     * uruchamiające.
+     */
     public static final Path SELF = WORKDIR.resolve("eMetrykant.jar");
 
     private Files() {}

@@ -18,20 +18,20 @@ package pl.koder95.eme.git;
 
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
-import org.kohsuke.github.*;
+import org.kohsuke.github.GHAsset;
+import org.kohsuke.github.GHRelease;
+import org.kohsuke.github.GHRepository;
 import pl.koder95.eme.Version;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.rmi.NoSuchObjectException;
 import java.util.Optional;
+
 /**
  * Klasa pobiera informacje o repozytorium GitHub. Dostarcza również wartości
  * jako {@link ReadOnlyObjectProperty}.
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.4.1, 2021-11-05
+ * @version 0.4.1, 2021-11-07
  * @since 0.4.1
  */
 public final class RepositoryInfo {
@@ -39,12 +39,17 @@ public final class RepositoryInfo {
     private static final RepositoryInfo INFO = new RepositoryInfo("eMetrykant", ".zip");
     private static final String DEFAULT_USER = "koder95";
 
+    /**
+     * @return instancja singleton {@link RepositoryInfo}
+     */
     public static RepositoryInfo get() {
         return INFO;
     }
 
     private final ReadOnlyObjectWrapper<Version> latestReleaseVersion = new ReadOnlyObjectWrapper<>();
-    private final ReadOnlyObjectWrapper<URL> latestReleaseURL = new ReadOnlyObjectWrapper<>();
+    private final ReadOnlyObjectWrapper<String> latestReleaseBrowserURL = new ReadOnlyObjectWrapper<>();
+    private final ReadOnlyObjectWrapper<Long> latestReleaseSize = new ReadOnlyObjectWrapper<>();
+    private final ReadOnlyObjectWrapper<String> latestReleaseName = new ReadOnlyObjectWrapper<>();
     private final String assetPrefix;
     private final String assetSuffix;
 
@@ -61,50 +66,57 @@ public final class RepositoryInfo {
         return latestReleaseVersion.getReadOnlyProperty();
     }
 
-    public URL getLatestReleaseURL() {
-        return latestReleaseURLProperty().get();
+    public String getLatestReleaseBrowserURL() {
+        return latestReleaseBrowserURLProperty().get();
     }
 
-    public ReadOnlyObjectProperty<URL> latestReleaseURLProperty() {
-        return latestReleaseURL.getReadOnlyProperty();
+    public ReadOnlyObjectProperty<String> latestReleaseBrowserURLProperty() {
+        return latestReleaseBrowserURL.getReadOnlyProperty();
     }
 
-    private synchronized void reload(String tagName, GHAsset latestZip) throws MalformedURLException {
-        latestReleaseURL.set(new URL(latestZip.getBrowserDownloadUrl()));
+    public Long getLatestReleaseSize() {
+        return latestReleaseSizeProperty().get();
+    }
+
+    public ReadOnlyObjectProperty<Long> latestReleaseSizeProperty() {
+        return latestReleaseSize.getReadOnlyProperty();
+    }
+
+    public String getLatestReleaseName() {
+        return latestReleaseNameProperty().get();
+    }
+
+    public ReadOnlyObjectProperty<String> latestReleaseNameProperty() {
+        return latestReleaseName.getReadOnlyProperty();
+    }
+
+    private void reload(String tagName, GHAsset latestZip) {
+        latestReleaseBrowserURL.set(latestZip.getBrowserDownloadUrl());
         latestReleaseVersion.set(Version.parse(tagName));
+        latestReleaseSize.set(latestZip.getSize());
+        latestReleaseName.set(latestZip.getName());
     }
 
     private void reload(GHRelease latest) throws IOException {
         Optional<GHAsset> asset = latest.listAssets().toSet().stream()
                 .filter(a -> a.getName().startsWith(assetPrefix) && a.getName().endsWith(assetSuffix))
                 .findAny();
-        if (asset.isPresent()) reload(latest.getTagName(), asset.get());
+        asset.ifPresent(ghAsset -> reload(latest.getTagName(), ghAsset));
     }
 
-    public void reload(GHRepository repository) throws IOException {
+    private void reload(GHRepository repository) throws IOException {
         GHRelease latest = repository.getLatestRelease();
         if (latest != null) reload(latest);
     }
 
-    public void reload(GitHub gitHub, String user, String repository) throws IOException {
-        GHUser ghu = gitHub.getUser(user);
-        if (ghu == null)
-            throw new IOException(new NoSuchObjectException("Nie znaleziono użytkownika: " + user));
-        GHRepository ghr = ghu.getRepository(repository);
-        if (ghr == null)
-            throw new IOException(new NoSuchObjectException("Nie znaleziono repozytorium: " + repository));
-        else reload(ghr);
-    }
-
-    public void reload(GitHub gitHub, String repository) throws IOException {
-        reload(gitHub, DEFAULT_USER, repository);
-    }
-
-    public void reload(GitHub gitHub) throws IOException {
-        reload(gitHub, assetPrefix);
-    }
-
+    /**
+     * Ponownie odczytuje informacje z serwerów GitHub i aktualizuje dane przechowywane w tym obiekcie.
+     *
+     * @throws IOException problemy z połączeniem lub pobieraniem danych z GitHub
+     */
     public void reload() throws IOException {
-        reload(GitHub.connectAnonymously());
+        GitHubRepositoryController controller = new GitHubRepositoryController(DEFAULT_USER, assetPrefix);
+        controller.init();
+        reload(controller.getRepository());
     }
 }

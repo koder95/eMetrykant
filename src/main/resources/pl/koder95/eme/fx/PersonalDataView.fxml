@@ -1,18 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 <?import org.controlsfx.control.textfield.TextFields?>
-
 <BorderPane minHeight="300.0" minWidth="400.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pl.koder95.eme.fx.PersonalDataView">
    <center>
       <VBox alignment="CENTER" spacing="10.0" BorderPane.alignment="CENTER">
          <children>
              <TextFields fx:factory="createClearableTextField" fx:id="searching"/>
-            <Label fx:id="personalData" text="NAZWISKO Imię">
+            <Label fx:id="personalData" text="%FX_LABEL_PERSONAL_DATA">
                <font>
                   <Font name="System Bold" size="24.0" />
                </font>
@@ -21,7 +19,7 @@
                </VBox.margin></Label>
             <TilePane alignment="TOP_CENTER" hgap="5.0" vgap="5.0" VBox.vgrow="ALWAYS">
                <children>
-                  <TitledPane collapsible="false" text="Chrzest" TilePane.alignment="CENTER">
+                  <TitledPane collapsible="false" text="%FX_TITLED_PANE_BAPTISM" TilePane.alignment="CENTER">
                      <TilePane.margin>
                         <Insets />
                      </TilePane.margin>
@@ -32,7 +30,7 @@
                            </font></Label>
                      </content>
                   </TitledPane>
-                  <TitledPane collapsible="false" text="Bierzmowanie" TilePane.alignment="CENTER">
+                  <TitledPane collapsible="false" text="%FX_TITLED_PANE_CONFIRMATION" TilePane.alignment="CENTER">
                      <TilePane.margin>
                         <Insets />
                      </TilePane.margin>
@@ -43,7 +41,7 @@
                            </font></Label>
                       </content>
                   </TitledPane>
-                  <TitledPane collapsible="false" text="Ślub" TilePane.alignment="CENTER">
+                  <TitledPane collapsible="false" text="%FX_TITLED_PANE_MARRIAGE" TilePane.alignment="CENTER">
                      <TilePane.margin>
                         <Insets />
                      </TilePane.margin>
@@ -54,7 +52,7 @@
                            </font></Label>
                       </content>
                   </TitledPane>
-                  <TitledPane collapsible="false" text="Pogrzeb" TilePane.alignment="CENTER">
+                  <TitledPane collapsible="false" text="%FX_TITLED_PANE_DECEASE" TilePane.alignment="CENTER">
                      <TilePane.margin>
                         <Insets />
                      </TilePane.margin>
@@ -79,7 +77,7 @@
    <bottom>
       <HBox alignment="BOTTOM_LEFT" spacing="5.0" BorderPane.alignment="CENTER">
          <children>
-            <Label text="Liczba wczytanych aktów:" />
+            <Label text="%FX_LABEL_NUMBER_OF_ACTS" />
             <Label fx:id="numberOfActs" text="0">
                <font>
                   <Font name="System Bold" size="12.0" />

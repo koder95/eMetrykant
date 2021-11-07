@@ -17,22 +17,17 @@
 package pl.koder95.eme;
 
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
-import javafx.scene.control.ProgressIndicator;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.image.Image;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import pl.koder95.eme.au.AutoUpdateTask;
+import pl.koder95.eme.au.SelfUpdateTask;
 import pl.koder95.eme.core.*;
 import pl.koder95.eme.core.spi.CabinetAnalyzer;
 import pl.koder95.eme.core.spi.FilingCabinet;
@@ -46,9 +41,10 @@ import java.util.ResourceBundle;
 import java.util.regex.Pattern;
 
 /**
- * Klasa uruchamiająca i inicjalizująca podstawowe elementy aplikacji.
+ * Klasa uruchamiająca i inicjująca podstawowe elementy aplikacji.
+ *
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.4.1, 2021-11-05
+ * @version 0.4.1, 2021-11-07
  * @since 0.0.201
  */
 public class Main extends Application {
@@ -76,12 +72,19 @@ public class Main extends Application {
      */
     public static final Pattern DIGITS_STRING_PATTERN
             = Pattern.compile("([0-9]*)");
+    /**
+     * Sprawdzenie, czy system operacyjny należy do rodziny "Windows".
+     */
+    public static final boolean IS_WINDOWS_OS = System.getProperty("os.name").toLowerCase().contains("windows");
 
     public static void main(String[] args) {
         if (args.length == 1) {
             if (args[0].equals("-v")) {
                 System.out.println(Version.get());
                 System.exit(0);
+            }
+            else if (args[0].equals("-u")) {
+
             }
         }
         Main.launch(args);
@@ -96,13 +99,15 @@ public class Main extends Application {
     }
 
     private Parent root = null;
-    private AutoUpdateTask task = null;
+    private SelfUpdateTask task = null;
     
     @Override
     public void init() throws Exception {
-        RepositoryInfo.get().reload();
         super.init();
-        Arrays.stream(IndexList.values()).forEach(IndexList::load);
+        RepositoryInfo.get().reload();
+        if (getParameters().getUnnamed().isEmpty()) {
+            Arrays.stream(IndexList.values()).forEach(IndexList::load);
+        }
 
         FilingCabinet cabinet = new TreeFilingCabinet();
         IndexListDataSource source = new IndexListDataSource();
@@ -113,7 +118,7 @@ public class Main extends Application {
         worker.load();
 
         root = FXMLLoader.load(ClassLoader.getSystemResource("pl/koder95/eme/fx/PersonalDataView.fxml"));
-        task = new AutoUpdateTask();
+        task = new SelfUpdateTask();
     }
 
     @Override
@@ -121,29 +126,27 @@ public class Main extends Application {
         primaryStage.getIcons().add(new Image(FAVICON_PATH));
         primaryStage.setTitle("eMetrykant " + Version.get());
         Version latestRelease = RepositoryInfo.get().getLatestReleaseVersion();
-        if (latestRelease.compareTo(Version.get()) > 0) {
-            primaryStage.initStyle(StageStyle.UNDECORATED);
-
-            ProgressIndicator updating = new ProgressIndicator();
+        if (latestRelease.compareTo(Version.get()) > 0 || !getParameters().getUnnamed().isEmpty()) {
+            ProgressBar updating = new ProgressBar();
             Label title = new Label();
             Label message = new Label();
+            VBox root = new VBox(5d, title, updating, message);
+
+            updating.setMinSize(400d, 35d);
             updating.progressProperty().bind(task.progressProperty());
             title.textProperty().bind(task.titleProperty());
             message.textProperty().bind(task.messageProperty());
 
-            VBox texts = new VBox(5d, title, message);
-            texts.setAlignment(Pos.CENTER_LEFT);
-            VBox progressing = new VBox(updating);
-            progressing.setAlignment(Pos.CENTER_RIGHT);
-            HBox root = new HBox(5d, progressing, texts);
             root.setAlignment(Pos.CENTER);
 
+            primaryStage.initStyle(StageStyle.UTILITY);
             primaryStage.setScene(new Scene(root));
             primaryStage.setAlwaysOnTop(true);
-            primaryStage.setMinWidth(300);
-            primaryStage.setMinHeight(150);
+            primaryStage.setResizable(false);
+            primaryStage.setMinWidth(400);
+            primaryStage.setMinHeight(100);
             primaryStage.show();
-            Platform.runLater(task);
+            new Thread(task).start();
         }
         else {
             primaryStage.setScene(new Scene(root));

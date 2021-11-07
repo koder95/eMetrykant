@@ -261,7 +261,7 @@ public class Version implements Comparable<Version> {
      * @return wersja
      */
     public static Version parse(String str) {
-        return parse0(str.startsWith("v")? str.substring(1) : str);
+        return parse0(str == null? "0.0.0" : str.startsWith("v")? str.substring(1) : str);
     }
 
     /**

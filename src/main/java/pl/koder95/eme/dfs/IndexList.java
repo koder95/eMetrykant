@@ -28,7 +28,7 @@ import pl.koder95.eme.MemoryUtils;
  * Zawiera wszystkie typy ksiąg i zawierających się w nich zbiorach indeksów.
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.4.1, 2021-11-05
+ * @version 0.4.1, 2021-11-07
  * @since 0.1.11
  */
 public enum IndexList implements IndexContainer {
@@ -65,7 +65,7 @@ public enum IndexList implements IndexContainer {
             "name", "surname", "an"
     )));
 
-    private List<Index> loaded;
+    private List<Index> loaded = new LinkedList<>();
     private final String name;
     private final Queue<String> nameQueue;
 
