@@ -9,7 +9,7 @@
     <url>https://github.com/koder95/eMetrykant</url>
     <groupId>pl.koder95</groupId>
     <artifactId>eMetrykant</artifactId>
-    <version>0.4.1</version>
+    <version>0.4.2</version>
     <scm>
         <url>https://github.com/koder95/eMetrykant</url>
         <tag>search, metric, church</tag>
@@ -38,12 +38,12 @@
         <dependency>
             <groupId>org.controlsfx</groupId>
             <artifactId>controlsfx</artifactId>
-            <version>8.40.16</version>
+            <version>8.40.18</version>
         </dependency>
         <dependency>
             <groupId>org.kohsuke</groupId>
             <artifactId>github-api</artifactId>
-            <version>1.133</version>
+            <version>1.135</version>
         </dependency>
     </dependencies>
 

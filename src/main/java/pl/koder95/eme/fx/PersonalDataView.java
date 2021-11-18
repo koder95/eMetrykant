@@ -1,6 +1,7 @@
 package pl.koder95.eme.fx;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -12,18 +13,17 @@ import pl.koder95.eme.core.spi.PersonalDataModel;
 
 import java.net.URL;
 import java.util.ListResourceBundle;
+import java.util.Properties;
 import java.util.ResourceBundle;
 
 /**
  * Kontroler dla widoku modelu danych osobowych.
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.4.0, 2020-08-26
+ * @version 0.4.2, 2020-11-18
  * @since 0.1.11
  */
 public class PersonalDataView implements Initializable {
-
-    public static final String ANALYZER_KEY = "analyzer";
 
     @FXML
     private Label personalData;
@@ -45,42 +45,27 @@ public class PersonalDataView implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        if (resources == null) {
-            resources = new ListResourceBundle() {
-                @Override
-                protected Object[][] getContents() {
-                    return new Object[][] {
-                            { ANALYZER_KEY, CabinetWorkers.get(CabinetAnalyzer.class) }
-                    };
-                }
-            };
+        CabinetAnalyzer analyzer = CabinetWorkers.get(CabinetAnalyzer.class);
+        if (searching instanceof TextField) {
+            TextField field = (TextField) searching;
+            AutoCompletionBinding<PersonalDataModel> autoCompletionBinding = TextFields.bindAutoCompletion(
+                    field,
+                    analyzer.getSuggestionProvider(),
+                    analyzer.getPersonalDataConverter()
+            );
+            autoCompletionBinding.setOnAutoCompleted(event -> setPersonalDataModel(event.getCompletion()));
+            field.setOnAction(event -> setPersonalDataModel(
+                    analyzer.getPersonalDataConverter().fromString(field.getText())
+            ));
+            field.textProperty().addListener(
+                    (observable, oldValue, newValue) -> {
+                        if (oldValue.length() < newValue.length()) {
+                            field.setText(newValue.toUpperCase());
+                        }
+                    }
+            );
         }
-        if (resources.containsKey(ANALYZER_KEY)) {
-            Object obj = resources.getObject(ANALYZER_KEY);
-            if (obj instanceof CabinetAnalyzer) {
-                CabinetAnalyzer analyzer = (CabinetAnalyzer) obj;
-                if (searching instanceof TextField) {
-                    TextField field = (TextField) searching;
-                    AutoCompletionBinding<PersonalDataModel> autoCompletionBinding = TextFields.bindAutoCompletion(
-                            field,
-                            analyzer.getSuggestionProvider(),
-                            analyzer.getPersonalDataConverter()
-                    );
-                    autoCompletionBinding.setOnAutoCompleted(event -> setPersonalDataModel(event.getCompletion()));
-                    field.setOnAction(event -> setPersonalDataModel(
-                            analyzer.getPersonalDataConverter().fromString(field.getText())
-                    ));
-                    field.textProperty().addListener(
-                            (observable, oldValue, newValue) -> {
-                                if (oldValue.length() < newValue.length()) {
-                                    field.setText(newValue.toUpperCase());
-                                }
-                            }
-                    );
-                }
-                numberOfActs.setText(analyzer.getNumberOfActs() + "");
-            }
-        }
+        numberOfActs.setText(analyzer.getNumberOfActs() + "");
     }
 
     private void setPersonalDataModel(PersonalDataModel model) {

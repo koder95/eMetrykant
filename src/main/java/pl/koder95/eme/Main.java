@@ -44,7 +44,7 @@ import java.util.regex.Pattern;
  * Klasa uruchamiająca i inicjująca podstawowe elementy aplikacji.
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.4.1, 2021-11-07
+ * @version 0.4.2, 2021-11-18
  * @since 0.0.201
  */
 public class Main extends Application {
@@ -70,8 +70,7 @@ public class Main extends Application {
     /**
      * Wzór identyfikujący liczby w stringu.
      */
-    public static final Pattern DIGITS_STRING_PATTERN
-            = Pattern.compile("([0-9]*)");
+    public static final Pattern DIGITS_STRING_PATTERN = Pattern.compile("([0-9]*)");
     /**
      * Sprawdzenie, czy system operacyjny należy do rodziny "Windows".
      */
@@ -117,7 +116,7 @@ public class Main extends Application {
         CabinetWorkers.register(CabinetAnalyzer.class, worker);
         worker.load();
 
-        root = FXMLLoader.load(ClassLoader.getSystemResource("pl/koder95/eme/fx/PersonalDataView.fxml"));
+        root = FXMLLoader.load(ClassLoader.getSystemResource("pl/koder95/eme/fx/PersonalDataView.fxml"), BUNDLE);
         task = new SelfUpdateTask();
     }
 
@@ -126,7 +125,8 @@ public class Main extends Application {
         primaryStage.getIcons().add(new Image(FAVICON_PATH));
         primaryStage.setTitle("eMetrykant " + Version.get());
         Version latestRelease = RepositoryInfo.get().getLatestReleaseVersion();
-        if (latestRelease.compareTo(Version.get()) > 0 || !getParameters().getUnnamed().isEmpty()) {
+        if (latestRelease != null &&
+                (latestRelease.compareTo(Version.get()) > 0 || !getParameters().getUnnamed().isEmpty())) {
             ProgressBar updating = new ProgressBar();
             Label title = new Label();
             Label message = new Label();
