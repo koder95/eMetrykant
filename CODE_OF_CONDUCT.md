@@ -4,7 +4,7 @@ Zasady poniższe dotyczą osób, które chcą rozwijać aplikację ***eMetrykant
 
 ## Jak mogę przyczynić się do rozwoju oprogramowania?
 
-Projekt można rozwijać biorąc udział w tworzeniu kodu źródłowego
+Projekt można rozwijać, biorąc udział w tworzeniu kodu źródłowego,
 jak również materiałów dodatkowych, takich jak ulotki, grafiki,
 szablony danych, strony internetowe i wiele innych rzeczy podobnych
 do tych.
