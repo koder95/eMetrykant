@@ -17,8 +17,10 @@
 
 package pl.koder95.eme.dfs;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -106,6 +108,19 @@ public class Book {
     public static List<Book> load(File xml) throws IOException,
             ParserConfigurationException, SAXException {
         LinkedList<Book> books = new LinkedList<>();
+        if (!xml.exists()) {
+            try (BufferedWriter writer = Files.newBufferedWriter(xml.toPath())) {
+                writer.write(
+                        "<?xml version=\"1.0\" encoding=\"utf-8\" standalone=\"no\"?>\n" +
+                        "<indices>\n" +
+                        "    <book name=\"Księga zaślubionych\"></book>\n" +
+                        "    <book name=\"Księga zmarłych\"></book>\n" +
+                        "    <book name=\"Księga ochrzczonych\"></book>\n" +
+                        "    <book name=\"Księga bierzmowanych\"></book>\n" +
+                        "</indices>"
+                );
+            }
+        }
         Document doc = XMLLoader.loadDOM(xml);
         Element indices = doc.getDocumentElement();
         if (indices.getNodeName().equalsIgnoreCase("indices")) {
