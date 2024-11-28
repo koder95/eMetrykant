@@ -17,9 +17,9 @@
 package pl.koder95.eme.git;
 
 import org.kohsuke.github.*;
+import org.kohsuke.github.connector.GitHubConnectorResponse;
 
 import java.io.IOException;
-import java.net.HttpURLConnection;
 
 import static pl.koder95.eme.Main.BUNDLE;
 
@@ -33,11 +33,10 @@ import static pl.koder95.eme.Main.BUNDLE;
 public class GitHubRepositoryController {
 
     private GitHub createNewConnection() throws IOException {
-        return new GitHubBuilder().withRateLimitHandler(new RateLimitHandler() {
+        return new GitHubBuilder().withRateLimitHandler(new GitHubRateLimitHandler() {
             @Override
-            public void onError(IOException e, HttpURLConnection uc) {
-                System.out.println(uc);
-                e.printStackTrace();
+            public void onError(GitHubConnectorResponse connectorResponse) {
+                System.out.println(connectorResponse);
             }
         }).build();
     }
@@ -49,7 +48,7 @@ public class GitHubRepositoryController {
             try {
                 connection = createNewConnection();
             } catch (IOException e) {
-                e.printStackTrace();
+                throw new RuntimeException(e);
             }
         }
         return connection;
