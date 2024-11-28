@@ -27,6 +27,7 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import pl.koder95.eme.au.SelfUpdate;
 import pl.koder95.eme.au.SelfUpdateTask;
 import pl.koder95.eme.core.*;
 import pl.koder95.eme.core.spi.CabinetAnalyzer;
@@ -83,7 +84,8 @@ public class Main extends Application {
                 System.exit(0);
             }
             else if (args[0].equals("-u")) {
-
+                SelfUpdate su = new SelfUpdate();
+                new Thread(su).start();
             }
         }
         Main.launch(args);
