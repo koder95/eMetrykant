@@ -33,7 +33,7 @@ import static pl.koder95.eme.Main.IS_WINDOWS_OS;
  * Klasa dostarcza metody do generowania skryptów aktualizacyjnych.
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.4.3, 2024-12-01
+ * @version 0.4.4, 2024-12-02
  * @since 0.4.1
  */
 public class UpdateScriptGenerator {
@@ -58,9 +58,7 @@ public class UpdateScriptGenerator {
      * @return nowa instancja generatora skryptu
      */
     public static UpdateScriptGenerator create(Path out) {
-        return new UpdateScriptGenerator(IS_WINDOWS_OS?
-                out.endsWith(WIN_EXT)? out : Paths.get(out + WIN_EXT)
-                : out);
+        return new UpdateScriptGenerator(IS_WINDOWS_OS && !out.endsWith(WIN_EXT)? Paths.get(out + WIN_EXT) : out);
     }
 
     /**
@@ -71,7 +69,7 @@ public class UpdateScriptGenerator {
     public void generateUpdateScript(Map<Path, Path> updateMap) throws IOException {
         if (Files.notExists(path)) Files.createFile(path);
         try (BufferedWriter writer = Files.newBufferedWriter(path, StandardOpenOption.WRITE)) {
-            if (path.endsWith(WIN_EXT)) {
+            if (IS_WINDOWS_OS) {
                 generateWinUpdateScript(writer, updateMap);
             } else {
                 generateUnixScript(writer, updateMap);
@@ -92,15 +90,21 @@ public class UpdateScriptGenerator {
                 writer.write(newFile.toString());
                 writer.write('"' + " " + '"');
                 writer.write(oldFile.toString());
-                writer.write('"' + " /y");
-                writer.newLine();
-                writer.write("rmdir -r " + '"');
-                writer.write(oldFile.getParent().toString());
-                writer.write('"' + " /y");
+                writer.write('"' + " 2>/dev/null");
                 writer.newLine();
             } else throw new FileNotFoundException(BUNDLE.getString("THR_UPDATE_FILES_NOT_FOUND"));
         }
-        writer.write("java -jar \"" + SELF + '"');
+        for (Path newFile : updateMap.keySet()) {
+            if (Files.exists(newFile)) {
+                writer.write("rmdir -r " + '"');
+                writer.write(newFile.getParent().toString());
+                writer.write('"' + " 2>/dev/null");
+                writer.newLine();
+            } else throw new FileNotFoundException(BUNDLE.getString("THR_UPDATE_FILES_NOT_FOUND"));
+        }
+        writer.write("rm -rf \"" + this.path + "\" 2>/dev/null");
+        writer.newLine();
+        writer.write('"' + System.getProperty("java.home") + "\\bin\\java\" -jar \"" + SELF + '"');
         writer.newLine();
     }
 
@@ -118,15 +122,21 @@ public class UpdateScriptGenerator {
                 writer.write(newFile.toString());
                 writer.write('"' + " " + '"');
                 writer.write(oldFile.toString());
-                writer.write('"' + " /y");
-                writer.newLine();
-                writer.write("rmdir -r " + '"');
-                writer.write(oldFile.getParent().toString());
-                writer.write('"' + " /y");
+                writer.write('"' + " > nul");
                 writer.newLine();
             } else throw new FileNotFoundException(BUNDLE.getString("THR_UPDATE_FILES_NOT_FOUND"));
         }
-        writer.write("java -jar \"" + SELF + '"');
+        for (Path newFile : updateMap.keySet()) {
+            if (Files.exists(newFile)) {
+                writer.write("rmdir /s /q " + '"');
+                writer.write(newFile.getParent().toString());
+                writer.write('"' + " > nul");
+                writer.newLine();
+            } else throw new FileNotFoundException(BUNDLE.getString("THR_UPDATE_FILES_NOT_FOUND"));
+        }
+        writer.write("del \"" + this.path + "\" /q");
+        writer.newLine();
+        writer.write('"' + System.getProperty("java.home") + "\\bin\\java.exe\" -jar \"" + SELF + '"');
         writer.newLine();
     }
 }

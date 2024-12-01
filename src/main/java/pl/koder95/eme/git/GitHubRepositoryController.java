@@ -27,7 +27,7 @@ import static pl.koder95.eme.Main.BUNDLE;
  * Klasa dostarcza metod kontrolujących połączenie z repozytorium GitHub.
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.4.1, 2021-11-07
+ * @version 0.4.4, 2024-12-02
  * @since 0.4.1
  */
 public class GitHubRepositoryController {
@@ -92,13 +92,9 @@ public class GitHubRepositoryController {
     /**
      * Wprowadza podstawowe ustawienia do połączenia z repozytorium: wybiera użytkownika i repozytorium.
      */
-    public void init() {
-        try {
-            selectUser();
-            selectRepository();
-        } catch (IOException e) {
-            throw new ExceptionInInitializerError(e);
-        }
+    public void init() throws IOException {
+        selectUser();
+        selectRepository();
     }
 
     /**

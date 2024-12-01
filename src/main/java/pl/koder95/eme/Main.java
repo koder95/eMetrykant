@@ -21,6 +21,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.image.Image;
@@ -35,6 +36,7 @@ import pl.koder95.eme.core.spi.FilingCabinet;
 import pl.koder95.eme.dfs.IndexList;
 import pl.koder95.eme.git.RepositoryInfo;
 
+import java.io.IOException;
 import java.text.Collator;
 import java.util.Arrays;
 import java.util.Locale;
@@ -45,7 +47,7 @@ import java.util.regex.Pattern;
  * Klasa uruchamiająca i inicjująca podstawowe elementy aplikacji.
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.4.3, 2024-12-01
+ * @version 0.4.4, 2024-12-02
  * @since 0.0.201
  */
 public class Main extends Application {
@@ -82,10 +84,12 @@ public class Main extends Application {
             if (args[0].equals("-v")) {
                 System.out.println(Version.get());
                 System.exit(0);
+                return;
             }
             else if (args[0].equals("-u")) {
                 SelfUpdate su = new SelfUpdate();
                 new Thread(su).start();
+                return;
             }
         }
         Main.launch(args);
@@ -105,7 +109,7 @@ public class Main extends Application {
     @Override
     public void init() throws Exception {
         super.init();
-        RepositoryInfo.get().reload();
+        task = new SelfUpdateTask();
         if (getParameters().getUnnamed().isEmpty()) {
             Arrays.stream(IndexList.values()).forEach(IndexList::load);
         }
@@ -119,7 +123,6 @@ public class Main extends Application {
         worker.load();
 
         root = FXMLLoader.load(ClassLoader.getSystemResource("pl/koder95/eme/fx/PersonalDataView.fxml"), BUNDLE);
-        task = new SelfUpdateTask();
     }
 
     @Override

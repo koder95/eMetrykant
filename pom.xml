@@ -9,7 +9,7 @@
     <url>https://github.com/koder95/eMetrykant</url>
     <groupId>pl.koder95</groupId>
     <artifactId>eMetrykant</artifactId>
-    <version>0.4.3</version>
+    <version>0.4.4</version>
     <scm>
         <url>https://github.com/koder95/eMetrykant</url>
         <tag>search, metric, church</tag>

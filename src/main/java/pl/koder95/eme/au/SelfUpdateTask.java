@@ -20,26 +20,24 @@ import javafx.concurrent.Task;
 
 /**
  * Klasa definiuje metody samoaktualizacji, które współpracują z JavaFX. Jest to szczególna implementacja
- * klasy abstrakcyjnej {@link Task}, której metoda {@link #call()} zwraca zawsze {@code null} i działa
- * w następujący sposób:
- * <ol>
- *     <li>Usuwanie zawartości folderu tymczasowego, gdzie pobrane zostaną pliki ostatniego wydania.</li>
- *     <li>Pobieranie najnowszego wydania programu w postaci archiwum ZIP.</li>
- *     <li>Wypakowanie zawartości archiwum do folderu tymczasowego.</li>
- *     <li>Usunięcie pobranego archiwum ZIP.</li>
- *     <li>Wygenerowanie skryptu samoaktualizacji.</li>
- *     <li>Uruchomienie skryptu i zamknięcie programu.</li>
- * </ol>
+ * klasy abstrakcyjnej {@link Task}, której metoda {@link #call()} zwraca zawsze {@code null}.
  * Generator skryptu aktualizującego powinien zadbać o uruchomienie programu po skończeniu aktualizacji.
+ *
+ * @author Kamil Jan Mularski [@koder95]
+ * @version 0.4.4, 2024-12-02
+ * @since 0.4.1
+ * @see SelfUpdate
  */
 public class SelfUpdateTask extends Task<Void> {
+
+    private final SelfUpdate su = new SelfUpdate(this::updateProgress, this::updateMessage, this::updateTitle);
 
     /**
      * @return zawsze {@code null}
      */
     @Override
     protected Void call() throws Exception {
-        new SelfUpdate(this::updateProgress, this::updateMessage, this::updateTitle).run();
+        su.run();
         return null;
     }
 

@@ -26,9 +26,19 @@ import static pl.koder95.eme.Files.TEMP_DIR;
 
 /**
  * Klasa odpowiedzialna za aktualizowanie własnej wersji do najnowszej.
+ * Działa w następujący sposób:
+ * <ol>
+ *     <li>Usuwanie zawartości folderu tymczasowego, gdzie pobrane zostaną pliki ostatniego wydania.</li>
+ *     <li>Pobieranie najnowszego wydania programu w postaci archiwum ZIP.</li>
+ *     <li>Wypakowanie zawartości archiwum do folderu tymczasowego.</li>
+ *     <li>Usunięcie pobranego archiwum ZIP.</li>
+ *     <li>Wygenerowanie skryptu samoaktualizacji.</li>
+ *     <li>Uruchomienie skryptu i zamknięcie programu.</li>
+ * </ol>
+ * Generator skryptu aktualizującego powinien zadbać o uruchomienie programu po skończeniu aktualizacji.
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.4.3, 2024-12-01
+ * @version 0.4.4, 2024-12-02
  * @since 0.4.3
  */
 public class SelfUpdate implements Runnable {
@@ -56,26 +66,33 @@ public class SelfUpdate implements Runnable {
      * Tworzy domyślną instancję klasy.
      */
     public SelfUpdate() {
-        this((workDone, max) -> {
-            double percent = 100 * workDone.doubleValue()/max.doubleValue();
-            System.out.println("Processing... " + (int) percent);
-        }, msg -> System.out.println("INFO: " + msg), title -> System.out.println('\n' + title + '\n'));
+        this((workDone, max) -> {}, msg -> {}, title -> System.out.println('\n' + title + '\n'));
     }
 
     @Override
     public void run() {
+        updateTitle.accept("Rozpoczęcie aktualizacji");
         try {
-            // usuwanie plików z katalogu tymczasowego:
+            updateMessage.accept("Usuwanie plików z katalogu tymczasowego...");
             clear();
-            // pobieranie zip'a i rozpakowywanie do folderu tymczasowego:
+            updateMessage.accept("Przygotowywanie do pobierania...");
             prepare();
         } catch (IOException e) {
             throw new RuntimeException(e);
+        }
+        updateTitle.accept("Ponowne uruchamianie w celu zapisania zmian...");
+        updateProgress.accept(0, 0);
+        updateMessage.accept("");
+        try {
+            Thread.sleep(200);
+        } catch (InterruptedException e) {
+            // ignoruj
         }
         restart(); // restartowanie z wywołaniem skryptu
     }
 
     private void clear() throws IOException {
+        if (Files.notExists(TEMP_DIR)) return;
         List<Exception> exceptions = new LinkedList<>();
         try (Stream<Path> paths = Files.walk(TEMP_DIR).sorted(Comparator.reverseOrder())) {
             paths.forEach(path -> {
@@ -105,15 +122,24 @@ public class SelfUpdate implements Runnable {
     }
 
     private void prepare() throws IOException {
+        updateMessage.accept("Tworzenie katalogu tymczasowego...");
+        Files.createDirectories(TEMP_DIR);
+        updateMessage.accept(Files.exists(TEMP_DIR)? "Stworzono katalog tymczasowy." : "Błąd tworzenia katalogu tymczasowego!");
+        updateMessage.accept("Sprawdzanie ostatniej wersji...");
+        RepositoryInfo.get().reload();
         if (extractZip(downloadZip())) {
             Map<Path, Path> updateMap = new HashMap<>();
             try (Stream<Path> paths = Files.list(TEMP_DIR)) {
-                paths.forEach(path -> updateMap.put(path, WORKDIR.resolve(path.getFileName().toString())));
+                paths.forEach(path -> {
+                    String fileName = path.getFileName().toString();
+                    if (fileName.startsWith("eMetrykant") && fileName.endsWith(".jar"))
+                        fileName = SELF.getFileName().toString();
+                    updateMap.put(path, WORKDIR.resolve(fileName));
+                });
             }
             updateScriptGenerator.generateUpdateScript(updateMap);
         }
     }
-
 
     private Path downloadZip() throws IOException {
         updateTitle.accept("Pobieranie " + RepositoryInfo.get().getLatestReleaseName());
@@ -172,7 +198,7 @@ public class SelfUpdate implements Runnable {
                     Files.createFile(outFile);
 
                     if (Files.isRegularFile(outFile)) {
-                        tryTransfer(zip, entry, outFile, workDone, total);
+                        workDone = tryTransfer(zip, entry, outFile, workDone, total);
                     }
                 } else if (Files.notExists(outFile)) {
                     Files.createDirectories(outFile);
@@ -199,14 +225,14 @@ public class SelfUpdate implements Runnable {
         return total;
     }
 
-    private void tryTransfer(ZipFile zip, ZipEntry entry, Path outFile, long workDone, long total) throws IOException {
+    private long tryTransfer(ZipFile zip, ZipEntry entry, Path outFile, long workDone, long total) throws IOException {
         try (InputStream input = zip.getInputStream(entry);
              OutputStream output = Files.newOutputStream(outFile)) {
-            transfer(input, output, workDone, total);
+            return transfer(input, output, workDone, total);
         }
     }
 
-    private void transfer(InputStream input, OutputStream output, long workDone, long total) throws IOException {
+    private long transfer(InputStream input, OutputStream output, long workDone, long total) throws IOException {
         while (input.available() > 0) {
             int b = input.read();
             output.write(b);
@@ -214,5 +240,6 @@ public class SelfUpdate implements Runnable {
             updateProgress.accept(++workDone, total);
             updateMessage.accept(NumberFormat.getPercentInstance().format((double) workDone / total));
         }
+        return workDone;
     }
 }
