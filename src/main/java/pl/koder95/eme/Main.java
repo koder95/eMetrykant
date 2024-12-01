@@ -45,7 +45,7 @@ import java.util.regex.Pattern;
  * Klasa uruchamiająca i inicjująca podstawowe elementy aplikacji.
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.4.2, 2021-11-18
+ * @version 0.4.3, 2024-12-01
  * @since 0.0.201
  */
 public class Main extends Application {

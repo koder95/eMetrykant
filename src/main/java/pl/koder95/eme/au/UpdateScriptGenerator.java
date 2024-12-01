@@ -33,7 +33,7 @@ import static pl.koder95.eme.Main.IS_WINDOWS_OS;
  * Klasa dostarcza metody do generowania skryptów aktualizacyjnych.
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.4.1, 2021-11-07
+ * @version 0.4.3, 2024-12-01
  * @since 0.4.1
  */
 public class UpdateScriptGenerator {

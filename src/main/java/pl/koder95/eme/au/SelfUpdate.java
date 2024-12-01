@@ -24,6 +24,13 @@ import java.util.zip.ZipFile;
 import static pl.koder95.eme.Files.*;
 import static pl.koder95.eme.Files.TEMP_DIR;
 
+/**
+ * Klasa odpowiedzialna za aktualizowanie własnej wersji do najnowszej.
+ *
+ * @author Kamil Jan Mularski [@koder95]
+ * @version 0.4.3, 2024-12-01
+ * @since 0.4.3
+ */
 public class SelfUpdate implements Runnable {
 
     private static final UpdateScriptGenerator US_GENERATOR = UpdateScriptGenerator.create(UPDATE_SCRIPT);
@@ -41,11 +48,13 @@ public class SelfUpdate implements Runnable {
         this.updateScriptGenerator = updateScriptGenerator;
     }
 
-    SelfUpdate(BiConsumer<Number, Number> updateProgress, Consumer<String> updateMessage,
-                      Consumer<String> updateTitle) {
+    SelfUpdate(BiConsumer<Number, Number> updateProgress, Consumer<String> updateMessage, Consumer<String> updateTitle) {
         this(updateProgress, updateMessage, updateTitle, US_GENERATOR);
     }
 
+    /**
+     * Tworzy domyślną instancję klasy.
+     */
     public SelfUpdate() {
         this((workDone, max) -> {
             double percent = 100 * workDone.doubleValue()/max.doubleValue();
