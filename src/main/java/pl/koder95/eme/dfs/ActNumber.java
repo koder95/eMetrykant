@@ -68,9 +68,10 @@ public class ActNumber implements Comparable<ActNumber>, Serializable {
 
     @Override
     public int compareTo(ActNumber o) {
-        if (getYear() > o.getYear()) return 1;
-        else if (getYear() < o.getYear()) return -1;
-        else {
+        int compared = Integer.compare(getYear(), o.getYear());
+        if (compared != 0) {
+            return compared;
+        } else {
             Matcher digit1 = DIGITS_STRING_PATTERN.matcher(getSign());
             Matcher digit2 = DIGITS_STRING_PATTERN.matcher(o.getSign());
             if (digit1.find() && digit2.find()) {

@@ -47,36 +47,30 @@ public interface CabinetWorker {
      * Pracownik ładuje dane ze {@link DataSource źródła} do {@link FilingCabinet szafy aktowej}.
      */
     default void load() {
-        Map<String, Set<String>> personalData = getDataSource().getPersonalData();
-        personalData.forEach((surname, names) -> names.forEach((name) -> {
-            getCabinet().add(surname, name, createBriefcase(
-                    getDataSource().getBaptism(surname, name),
-                    getDataSource().getConfirmation(surname, name),
-                    getDataSource().getMarriage(surname, name),
-                    getDataSource().getDecease(surname, name))
-            );
-        }));
+        DataSource dataSource = getDataSource();
+        Map<String, Set<String>> personalData = dataSource.getPersonalData();
+        FilingCabinet cabinet = getCabinet();
+        personalData.forEach((surname, names) -> names.forEach((name) -> cabinet.add(surname, name, createBriefcase(
+                dataSource.getBaptism(surname, name),
+                dataSource.getConfirmation(surname, name),
+                dataSource.getMarriage(surname, name),
+                dataSource.getDecease(surname, name))
+        )));
     }
 
     /**
      * Pracownik wysyła dane do {@link DataTarget celu}, aby zostały zapisane.
      */
     default void save() {
-        Map<String, Set<String>> personalData = getCabinet().getPersonalData();
+        FilingCabinet cabinet = getCabinet();
+        Map<String, Set<String>> personalData = cabinet.getPersonalData();
+        DataTarget dataTarget = getDataTarget();
         personalData.forEach((surname, names) -> names.forEach((name) -> {
-            Briefcase briefcase = getCabinet().get(surname, name);
-            Arrays.stream(briefcase.getBaptism()).forEach(a -> {
-                getDataTarget().setBaptism(surname, name, a);
-            });
-            Arrays.stream(briefcase.getConfirmation()).forEach(a -> {
-                getDataTarget().setBaptism(surname, name, a);
-            });
-            Arrays.stream(briefcase.getMarriage()).forEach(a -> {
-                getDataTarget().setBaptism(surname, name, a);
-            });
-            Arrays.stream(briefcase.getDecease()).forEach(a -> {
-                getDataTarget().setBaptism(surname, name, a);
-            });
+            Briefcase briefcase = cabinet.get(surname, name);
+            Arrays.stream(briefcase.getBaptism()).forEach(a -> dataTarget.setBaptism(surname, name, a));
+            Arrays.stream(briefcase.getConfirmation()).forEach(a -> dataTarget.setBaptism(surname, name, a));
+            Arrays.stream(briefcase.getMarriage()).forEach(a -> dataTarget.setBaptism(surname, name, a));
+            Arrays.stream(briefcase.getDecease()).forEach(a -> dataTarget.setBaptism(surname, name, a));
         }));
     }
 }

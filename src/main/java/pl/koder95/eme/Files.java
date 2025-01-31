@@ -28,7 +28,45 @@ import java.nio.file.Paths;
  * @since 0.1.5
  */
 public final class Files {
-    
+
+    /**
+     * Folder, gdzie znajdują się pliki konfiguracyjne użytkownika.
+     */
+    public static final Path CONFIGS = getUserConfigsDir();
+
+    private static Path getUserConfigsDir() {
+        String os = System.getProperty("os.name").toLowerCase();
+        String userHome = System.getProperty("user.home");
+
+        if (os.contains("win")) {
+            // Windows – klasyczne %LOCALAPPDATA%
+            String localAppData = System.getenv("LOCALAPPDATA");
+            if (localAppData != null) {
+                return Path.of(localAppData);
+            }
+            // fallback (bardzo rzadko potrzebny)
+            return Path.of(userHome, "AppData", "Local");
+        }
+
+        if (os.contains("mac")) {
+            // macOS – odpowiednik ~/Library/Application Support
+            return Path.of(userHome, "Library", "Application Support");
+        }
+
+        // UNIX/Linux/BSD zgodnie z XDG
+        String xdgDataHome = System.getenv("XDG_DATA_HOME");
+        if (xdgDataHome != null && !xdgDataHome.isBlank()) {
+            return Path.of(xdgDataHome);
+        }
+
+        // domyślny katalog wg XDG
+        return Path.of(userHome, ".local", "share");
+    }
+
+    /**
+     * Folder, gdzie znajdują się pliki programu.
+     */
+    public static final Path CONFIG_DIR = CONFIGS.resolve("eMetrykant");
     /**
      * Folder, gdzie znajdują się pliki programu.
      */

@@ -17,28 +17,10 @@
 package pl.koder95.eme;
 
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.geometry.Pos;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Label;
-import javafx.scene.control.ProgressBar;
-import javafx.scene.image.Image;
-import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import pl.koder95.eme.au.SelfUpdate;
-import pl.koder95.eme.au.SelfUpdateTask;
 import pl.koder95.eme.core.*;
-import pl.koder95.eme.core.spi.CabinetAnalyzer;
-import pl.koder95.eme.core.spi.FilingCabinet;
-import pl.koder95.eme.dfs.IndexList;
-import pl.koder95.eme.git.RepositoryInfo;
 
-import java.io.IOException;
 import java.text.Collator;
-import java.util.Arrays;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.regex.Pattern;
@@ -50,7 +32,7 @@ import java.util.regex.Pattern;
  * @version 0.4.4, 2024-12-02
  * @since 0.0.201
  */
-public class Main extends Application {
+public class Main {
     /**
      * Domyślny pakiet językowy.
      */
@@ -92,71 +74,16 @@ public class Main extends Application {
                 return;
             }
         }
-        Main.launch(args);
+        Application.launch(App.class, args);
     }
-    
+
     /**
      * @since 0.0.203
      * @see MemoryUtils#releaseMemory()
+     * @deprecated use {@link MemoryUtils#releaseMemory()}
      */
+    @Deprecated
     public static void releaseMemory() {
         MemoryUtils.releaseMemory();
-    }
-
-    private Parent root = null;
-    private SelfUpdateTask task = null;
-    
-    @Override
-    public void init() throws Exception {
-        super.init();
-        task = new SelfUpdateTask();
-        if (getParameters().getUnnamed().isEmpty()) {
-            Arrays.stream(IndexList.values()).forEach(IndexList::load);
-        }
-
-        FilingCabinet cabinet = new TreeFilingCabinet();
-        IndexListDataSource source = new IndexListDataSource();
-
-        SuggestionProvider suggestionProvider = new SuggestionProvider(cabinet);
-        AbstractCabinetAnalyzer worker = new SimpleCabinetAnalyzer(cabinet, source, null, suggestionProvider);
-        CabinetWorkers.register(CabinetAnalyzer.class, worker);
-        worker.load();
-
-        root = FXMLLoader.load(ClassLoader.getSystemResource("pl/koder95/eme/fx/PersonalDataView.fxml"), BUNDLE);
-    }
-
-    @Override
-    public void start(Stage primaryStage) {
-        primaryStage.getIcons().add(new Image(FAVICON_PATH));
-        primaryStage.setTitle("eMetrykant " + Version.get());
-        Version latestRelease = RepositoryInfo.get().getLatestReleaseVersion();
-        if (latestRelease != null &&
-                (latestRelease.compareTo(Version.get()) > 0 || !getParameters().getUnnamed().isEmpty())) {
-            ProgressBar updating = new ProgressBar();
-            Label title = new Label();
-            Label message = new Label();
-            VBox root = new VBox(5d, title, updating, message);
-
-            updating.setMinSize(400d, 35d);
-            updating.progressProperty().bind(task.progressProperty());
-            title.textProperty().bind(task.titleProperty());
-            message.textProperty().bind(task.messageProperty());
-
-            root.setAlignment(Pos.CENTER);
-
-            primaryStage.initStyle(StageStyle.UTILITY);
-            primaryStage.setScene(new Scene(root));
-            primaryStage.setAlwaysOnTop(true);
-            primaryStage.setResizable(false);
-            primaryStage.setMinWidth(400);
-            primaryStage.setMinHeight(100);
-            primaryStage.show();
-            new Thread(task).start();
-        }
-        else {
-            primaryStage.setScene(new Scene(root));
-            primaryStage.setOnCloseRequest(event -> System.exit(0));
-            primaryStage.show();
-        }
     }
 }

@@ -73,11 +73,6 @@ public enum IndexList implements IndexContainer {
         this.name = name;
         this.nameQueue = nameQueue;
     }
-
-    @Override
-    public Index get(int id) {
-        return loaded.get(id-1);
-    }
     
     @Override
     public List<Index> getLoaded() {
@@ -111,46 +106,6 @@ public enum IndexList implements IndexContainer {
      */
     public String getName() {
         return name;
-    }
-    
-    @Override
-    public int size() {
-        return loaded.size();
-    }
-    
-    @Override
-    public Index getFirst() {
-        return get(size());
-    }
-    
-    /**
-     * @param i indeks
-     * @return kolejny indeks
-     */
-    public Index getNext(Index i) {
-        int index = loaded.indexOf(i);
-        return index < 0? null : loaded.get(index-1);
-    }
-    
-    /**
-     * @param i indeks
-     * @return poprzedni indeks
-     */
-    public Index getPrev(Index i) {
-        int index = loaded.indexOf(i);
-        return index < loaded.size()? loaded.get(index+1) : null;
-    }
-    
-    @Override
-    public Index getLast() {
-        return get(1);
-    }
-
-    @Override
-    public void clear() {
-        if (loaded == null) return;
-        loaded.clear();
-        Main.releaseMemory();
     }
     
     private static List<Book> BOOKS;
