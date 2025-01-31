@@ -31,8 +31,14 @@ public interface IndexContainer {
     /**
      * @param id identyfikator {@literal >} 0
      * @return indeks
+     * @throws IndexOutOfBoundsException identyfikator nie jest większy od 0
      */
-    Index get(int id);
+    default Index get(int id) {
+        if (id > 0)
+            return getLoaded().get(id - 1);
+        else
+            throw new IndexOutOfBoundsException("ID have to be greater than 0");
+    }
 
     /**
      * @return lista wczytanych indeksów
@@ -42,20 +48,48 @@ public interface IndexContainer {
     /**
      * Usuwa wczytane dane i zwalnia pamięć dla potencjalnie nowych danych.
      */
-    void clear();
+    default void clear() {
+        getLoaded().clear();
+    }
     
     /**
      * @return liczba indeksów wczytanych oraz ostatni utworzony identyfikator
      */
-    int size();
+    default int size() {
+        return getLoaded().size();
+    }
     
     /**
      * @return pierwszy indeks
      */
-    Index getFirst();
+    default Index getFirst() {
+        return get(1);
+    }
     
     /**
      * @return ostatni indeks
      */
-    Index getLast();
+    default Index getLast() {
+        return get(size());
+    }
+
+    /**
+     * @param i indeks
+     * @return kolejny indeks
+     */
+    default Index getNext(Index i) {
+        List<Index> loaded = getLoaded();
+        int index = loaded.indexOf(i);
+        return index < 0? null : loaded.get(index-1);
+    }
+
+    /**
+     * @param i indeks
+     * @return poprzedni indeks
+     */
+    default Index getPrev(Index i) {
+        List<Index> loaded = getLoaded();
+        int index = loaded.indexOf(i);
+        return index < loaded.size()? loaded.get(index+1) : null;
+    }
 }
