@@ -17,11 +17,10 @@
 
 package pl.koder95.eme.dfs;
 
-import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import pl.koder95.eme.Visited;
+import pl.koder95.eme.dfs.impl.IndexNodeInterpreterImpl;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -31,40 +30,20 @@ import java.util.Set;
  * przechowywanych na parafii.
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.4.0, 2020-08-26
+ * @version 0.5.0, 2025-12-11
  * @since 0.1.11
  */
 public class Index implements Visited {
 
-    private final Map<String, String> data = new HashMap<>(); // dane indeksu
+    private static final IndexNodeInterpreter NODE_INTERPRETER = new IndexNodeInterpreterImpl();
+    private final Map<String, String> data; // dane indeksu
     private ActNumber an;
     private final Book owner;
-    
-    private Index(Book owner, Node index) {
-        this.owner = owner;
-        NamedNodeMap attrs = index.getAttributes(); // pobiera listę atrybutów
-        while (attrs.getLength() > 0) {
-            Node attr = attrs.item(0); // pobiera pierwszy atrybut
-            String key = attr.getNodeName(); // - nazwa atrybutu
-            String value = attr.getTextContent(); // - wartość atrybutu
-            data.put(key, value); // dodanie nazwy i wartości atrybutu do danych
-            attrs.removeNamedItem(key); // usuwa odczytany atrybut
-        }
-    }
-    
-    private Index(Book owner) {
-        this.owner = owner;
-    }
 
-    /**
-     * Tworzy nowy indeks na podstawie węzła obiektowego modelu dokumentu XML.
-     *
-     * @param index węzeł XML
-     * @return nowy indeks lub {@code null} jeśli węzeł {@code index} nazywa się
-     * inaczej niż "index"
-     */
-    public static Index create(Node index) {
-        return create(null, index);
+    private Index(Book owner, Map<String, String> data, ActNumber an) {
+        this.owner = owner;
+        this.an = an;
+        this.data = Map.copyOf(data);
     }
 
     /**
@@ -76,13 +55,24 @@ public class Index implements Visited {
      * inaczej niż "index"
      */
     public static Index create(Book owner, Node index) {
-        if (index == null) return new Index(owner);
+        if (index == null || !index.hasAttributes()) return new Index(owner, Map.of(), null);
         if (!index.getNodeName().equalsIgnoreCase("index")) return null;
-        Index i = index.hasAttributes()? new Index(owner, index) : new Index(owner);
-        return i.getDataNames().contains("an") && !i.getData("an").isEmpty()?
-                i : null;
+        return create(owner, NODE_INTERPRETER.interpret(index));
     }
-    
+
+    /**
+     * Tworzy nowy indeks na podstawie mapy danych.
+     *
+     * @param owner księga, do której indeks należy
+     * @param data mapa danych
+     * @since 0.5.0
+     * @return nowy indeks lub {@code null}, jeśli mapa to {@code null} lub jeśli nie znaleziono numeru aktu
+     */
+    public static Index create(Book owner, Map<String, String> data) {
+        if (data == null || !data.containsKey("an")) return null;
+        return new Index(owner, data, ActNumber.parseActNumber(data.get("an")));
+    }
+
     /**
      * @param name nazwa unikatowa określająca informacje, którą indeks
      * przechowuje
