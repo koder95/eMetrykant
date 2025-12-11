@@ -67,7 +67,19 @@ public class Index implements Visited {
         }
         return index;
     }
-    
+
+    /**
+     * Tworzy nowy indeks na podstawie mapy danych.
+     *
+     * @param owner księga, do której indeks należy
+     * @param data mapa danych
+     * @return nowy indeks lub {@code null}, jeśli mapa to {@code null} lub jeśli nie znaleziono numeru aktu
+     */
+    public static Index create(Book owner, Map<String, String> data) {
+        if (data == null || !data.containsKey("an")) return null;
+        return new Index(owner, data, ActNumber.parseActNumber(data.get("an")));
+    }
+
     /**
      * @param name nazwa unikatowa określająca informacje, którą indeks
      * przechowuje
