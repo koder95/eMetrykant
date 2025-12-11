@@ -57,22 +57,17 @@ public class Index implements Visited {
     public static Index create(Book owner, Node index) {
         if (index == null || !index.hasAttributes()) return new Index(owner, Map.of(), null);
         if (!index.getNodeName().equalsIgnoreCase("index")) return null;
-        return create(owner, NODE_INTERPRETER.interpret(index));
+        Map<String, String> data = NODE_INTERPRETER.interpret(index);
+        return validate(new Index(owner, data, ActNumber.parseActNumber(data.get("an"))));
     }
 
-    /**
-     * Tworzy nowy indeks na podstawie mapy danych.
-     *
-     * @param owner księga, do której indeks należy
-     * @param data mapa danych
-     * @since 0.5.0
-     * @return nowy indeks lub {@code null}, jeśli mapa to {@code null} lub jeśli nie znaleziono numeru aktu
-     */
-    public static Index create(Book owner, Map<String, String> data) {
-        if (data == null || !data.containsKey("an")) return null;
-        return new Index(owner, data, ActNumber.parseActNumber(data.get("an")));
+    private static Index validate(Index index) {
+        if (index == null || !index.getDataNames().contains("an") || index.getData("an").isEmpty()) {
+            return null;
+        }
+        return index;
     }
-
+    
     /**
      * @param name nazwa unikatowa określająca informacje, którą indeks
      * przechowuje
