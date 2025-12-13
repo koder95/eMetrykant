@@ -43,12 +43,16 @@ public class App extends Application {
 
     private Parent root = null;
     private SelfUpdateTask task = null;
+
+    private boolean isRunWithoutUnnamedParameters() {
+        return getParameters().getUnnamed().isEmpty();
+    }
     
     @Override
     public void init() throws Exception {
         super.init();
         task = new SelfUpdateTask();
-        if (getParameters().getUnnamed().isEmpty()) {
+        if (isRunWithoutUnnamedParameters()) {
             Arrays.stream(IndexList.values()).forEach(IndexList::load);
         }
 
@@ -56,7 +60,7 @@ public class App extends Application {
         IndexListDataSource source = new IndexListDataSource();
 
         SuggestionProvider suggestionProvider = new SuggestionProvider(cabinet);
-        AbstractCabinetAnalyzer worker = new SimpleCabinetAnalyzer(cabinet, source, null, suggestionProvider);
+        CabinetAnalyzer worker = new SimpleCabinetAnalyzer(cabinet, source, null, suggestionProvider);
         CabinetWorkers.register(CabinetAnalyzer.class, worker);
         worker.load();
 
@@ -67,11 +71,16 @@ public class App extends Application {
 
     @Override
     public void start(Stage primaryStage) {
+        Version latestRelease = RepositoryInfo.get().getLatestReleaseVersion();
+        boolean runWithOptions = !isRunWithoutUnnamedParameters() && getParameters().getUnnamed().contains("-u");
+        boolean isNotLatestVersion = latestRelease != null && latestRelease.compareTo(Version.get()) > 0;
+        start(primaryStage, isNotLatestVersion || runWithOptions);
+    }
+
+    public void start(Stage primaryStage, boolean update) {
         primaryStage.getIcons().add(new Image(FAVICON_PATH));
         primaryStage.setTitle("eMetrykant " + Version.get());
-        Version latestRelease = RepositoryInfo.get().getLatestReleaseVersion();
-        if (latestRelease != null &&
-                (latestRelease.compareTo(Version.get()) > 0 || !getParameters().getUnnamed().isEmpty())) {
+        if (update) {
             ProgressBar updating = new ProgressBar();
             Label title = new Label();
             Label message = new Label();
@@ -92,8 +101,7 @@ public class App extends Application {
             primaryStage.setMinHeight(100);
             primaryStage.show();
             new Thread(task).start();
-        }
-        else {
+        } else {
             primaryStage.setScene(new Scene(root));
             primaryStage.setOnCloseRequest(event -> System.exit(0));
             primaryStage.show();
