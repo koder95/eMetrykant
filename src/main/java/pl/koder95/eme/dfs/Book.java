@@ -72,7 +72,9 @@ public class Book {
         if (indices == null) return;
         LinkedList<Index> linked = new LinkedList<>();
         for (int i = 0; i < indices.getLength(); i++) {
-            Index ix = Index.create(this, indices.item(i));
+            Node node = indices.item(i);
+            if (node.getNodeType() != Node.ELEMENT_NODE) continue;
+            Index ix = Index.create(this, node);
             if (ix != null) linked.add(ix);
         }
         this.indices.addAll(linked);

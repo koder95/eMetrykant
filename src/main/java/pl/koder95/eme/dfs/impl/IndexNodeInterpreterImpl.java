@@ -10,7 +10,7 @@ import pl.koder95.eme.dfs.IndexNodeInterpreter;
 public class IndexNodeInterpreterImpl implements IndexNodeInterpreter {
     @Override
     public Map<String, String> interpret(Node node) {
-        if (node == null || node.getNodeName().equalsIgnoreCase("index")) {
+        if (node == null || !node.getNodeName().equalsIgnoreCase("index")) {
             throw new IllegalArgumentException("Node is null or node is not an index");
         }
         Map<String, String> data = new HashMap<>();
