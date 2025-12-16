@@ -50,31 +50,39 @@ public class PersonalDataView implements Initializable {
     private Label numberOfActs;
 
     @FXML
-    private Object searching;
+    private TextField searching;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        CabinetAnalyzer analyzer = CabinetWorkers.get(CabinetAnalyzer.class);
-        if (searching instanceof TextField) {
-            TextField field = (TextField) searching;
-            AutoCompletionBinding<PersonalDataModel> autoCompletionBinding = TextFields.bindAutoCompletion(
-                    field,
-                    analyzer.getSuggestionProvider(),
-                    analyzer.getPersonalDataConverter()
-            );
-            autoCompletionBinding.setOnAutoCompleted(event -> setPersonalDataModel(event.getCompletion()));
-            field.setOnAction(event -> setPersonalDataModel(
-                    analyzer.getPersonalDataConverter().fromString(field.getText())
-            ));
-            field.textProperty().addListener(
-                    (observable, oldValue, newValue) -> {
-                        if (oldValue.length() < newValue.length()) {
-                            field.setText(newValue.toUpperCase());
-                        }
-                    }
-            );
-        }
+        installCabinetAnalyzer(CabinetWorkers.get(CabinetAnalyzer.class));
+    }
+
+    private void installCabinetAnalyzer(CabinetAnalyzer analyzer) {
+        setupAutoCompletion(analyzer);
+        setupInputActions(analyzer);
         numberOfActs.setText(analyzer.getNumberOfActs() + "");
+    }
+
+    private void setupInputActions(CabinetAnalyzer analyzer) {
+        searching.setOnAction(event -> setPersonalDataModel(
+                analyzer.getPersonalDataConverter().fromString(searching.getText())
+        ));
+        searching.textProperty().addListener(
+                (observable, oldValue, newValue) -> {
+                    if (oldValue.length() < newValue.length()) {
+                        searching.setText(newValue.toUpperCase());
+                    }
+                }
+        );
+    }
+
+    private void setupAutoCompletion(CabinetAnalyzer analyzer) {
+        AutoCompletionBinding<PersonalDataModel> binding = TextFields.bindAutoCompletion(
+                searching,
+                analyzer.getSuggestionProvider(),
+                analyzer.getPersonalDataConverter()
+        );
+        binding.setOnAutoCompleted(event -> setPersonalDataModel(event.getCompletion()));
     }
 
     private void setPersonalDataModel(PersonalDataModel model) {
@@ -106,33 +114,10 @@ public class PersonalDataView implements Initializable {
         }
     }
 
-    public void reload(ActionEvent actionEvent) {
+    public void reload() {
         Scene scene = main.getScene();
         if (scene != null) {
-            Dialog<Boolean> dialog = new Dialog<>();
-            ProgressIndicator indicator = new ProgressIndicator(ProgressIndicator.INDETERMINATE_PROGRESS);
-            Label label = new Label("Czekaj...");
-            label.setFont(Font.font(label.getFont().getFamily(), FontWeight.BOLD, 24));
-            VBox v = new VBox(indicator, label);
-            v.setMaxWidth(Double.MAX_VALUE);
-            v.setSpacing(10);
-            v.setFillWidth(true);
-            v.setAlignment(Pos.CENTER);
-            DialogPane pane = new DialogPane();
-            pane.setContent(v);
-            dialog.setDialogPane(pane);
-            Thread thread = new Thread(() -> {
-                for (IndexList value : IndexList.values()) {
-                    value.clear();
-                    value.load();
-                }
-                Platform.runLater(() -> {
-                    dialog.setResult(true);
-                    dialog.close();
-                });
-            });
-            dialog.setOnShown(event -> Platform.runLater(thread::start));
-            dialog.show();
+            ProgressDialog.start();
         }
     }
 
