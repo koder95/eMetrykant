@@ -20,6 +20,7 @@ package pl.koder95.eme.dfs;
 import org.w3c.dom.Node;
 import pl.koder95.eme.Visited;
 import pl.koder95.eme.dfs.impl.IndexNodeInterpreterImpl;
+import pl.koder95.eme.model.UniqueActNumber;
 
 import java.util.Map;
 import java.util.Set;
@@ -37,11 +38,13 @@ public class Index implements Visited {
 
     private static final IndexNodeInterpreter NODE_INTERPRETER = new IndexNodeInterpreterImpl();
     private final Map<String, String> data; // dane indeksu
-    private ActNumber an;
+    private final UniqueActNumber uan;
+    private final ActNumber an;
     private final Book owner;
 
     private Index(Book owner, Map<String, String> data, ActNumber an) {
         this.owner = owner;
+        this.uan = RefactoringHelper.convert(an, owner.getName());
         this.an = an;
         this.data = Map.copyOf(data);
     }
@@ -93,8 +96,14 @@ public class Index implements Visited {
      * @return numer aktu
      */
     public ActNumber getActNumber() {
-        if (an == null) an = ActNumber.parseActNumber(getData("an"));
         return an;
+    }
+
+    /**
+     * @return unikalny numer aktu
+     */
+    public UniqueActNumber getUniqueActNumber() {
+        return uan;
     }
 
     /**
