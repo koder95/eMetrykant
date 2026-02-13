@@ -9,8 +9,12 @@ public class IndexReloadService {
 
     public void reloadAll() {
         for (IndexList value : IndexList.values()) {
-            value.clear();
-            value.load();
+            try {
+                value.clear();
+                value.load();
+            } catch (Exception ex) {
+                System.err.println(ex);
+            }
         }
     }
 }

@@ -116,6 +116,7 @@ public enum IndexList implements IndexContainer {
             BOOKS = INDEX_LOADER.loadBooks();
         } catch (IOException ex) {
             System.err.println(ex);
+            BOOKS = new ArrayList<>();
         }
     }
 }

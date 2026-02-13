@@ -8,6 +8,7 @@ import org.w3c.dom.NodeList;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Loader odpowiedzialny za wczytywanie i filtrowanie rekordów indeksów.
@@ -45,7 +46,11 @@ public class IndexLoader {
         if (!bookNode.hasAttributes()) {
             return new Book("");
         }
-        Book book = new Book(bookNode.getAttributes().getNamedItem("name").getTextContent());
+        String bookName = Optional
+                .ofNullable(bookNode.getAttributes().getNamedItem("name"))
+                .map(Node::getTextContent)
+                .orElseThrow(() -> new IllegalArgumentException("Brak atrybutu 'name' w węźle <book>."));
+        Book book = new Book(bookName);
         NodeList indices = bookNode.getChildNodes();
         for (int i = 0; i < indices.getLength(); i++) {
             Index index = Index.create(book, indices.item(i));

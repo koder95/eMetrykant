@@ -14,8 +14,17 @@ public record PersonalDataPresentation(
         String deceaseAN
 ) implements PersonalDataModel {
 
+    public PersonalDataPresentation {
+        surname = normalize(surname, "-");
+        name = normalize(name, "");
+        baptismAN = normalize(baptismAN, "-");
+        confirmationAN = normalize(confirmationAN, "-");
+        marriageAN = normalize(marriageAN, "-");
+        deceaseAN = normalize(deceaseAN, "-");
+    }
+
     public String fullName() {
-        return name == null || name.isBlank() ? surname.toUpperCase() : surname.toUpperCase() + " " + name;
+        return name.isBlank() ? surname.toUpperCase() : surname.toUpperCase() + " " + name;
     }
 
     @Override
@@ -46,5 +55,9 @@ public record PersonalDataPresentation(
     @Override
     public String getDeceaseAN() {
         return deceaseAN;
+    }
+
+    private static String normalize(String value, String defaultValue) {
+        return value == null || value.isBlank() ? defaultValue : value;
     }
 }

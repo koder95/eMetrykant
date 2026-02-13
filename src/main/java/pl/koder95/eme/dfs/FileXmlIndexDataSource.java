@@ -9,6 +9,7 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 
 /**
  * Domyślne źródło danych indeksów z pliku XML.
@@ -35,7 +36,11 @@ public class FileXmlIndexDataSource implements IndexDataSource {
         if (Files.exists(xmlPath)) {
             return;
         }
-        try (BufferedWriter writer = Files.newBufferedWriter(xmlPath)) {
+        try (BufferedWriter writer = Files.newBufferedWriter(
+                xmlPath,
+                StandardOpenOption.CREATE_NEW,
+                StandardOpenOption.WRITE
+        )) {
             writer.write(
                     "<?xml version=\"1.0\" encoding=\"utf-8\" standalone=\"no\"?>\n" +
                     "<indices>\n" +
