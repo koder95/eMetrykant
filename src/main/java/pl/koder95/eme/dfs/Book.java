@@ -17,29 +17,16 @@
 
 package pl.koder95.eme.dfs;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import javax.xml.parsers.ParserConfigurationException;
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
-import pl.koder95.eme.xml.XMLLoader;
+
+import java.util.Collection;
 
 /**
  * Klasa reprezentuje księgę zawierającą indeksy z danymi osobowymi.
  *
  * @author Kamil Jan Mularski [@koder95]
- * @version 0.4.0, 2020-08-26
+ * @version 0.4.1, 2026-02-13
  * @since 0.1.10
  */
 public class Book {
@@ -62,76 +49,20 @@ public class Book {
     public String getName() {
         return name;
     }
-    
-    /**
-     * Wczytuje indeksy z listy węzłów i dodaje je do księgi.
-     * 
-     * @param indices lista węzłów
-     */
-    public void load(NodeList indices) {
-        if (indices == null) return;
-        LinkedList<Index> linked = new LinkedList<>();
-        for (int i = 0; i < indices.getLength(); i++) {
-            Index ix = Index.create(this, indices.item(i));
-            if (ix != null) linked.add(ix);
-        }
-        this.indices.addAll(linked);
-        linked.clear();
+
+    public ObservableList<Index> getIndices() {
+        return indices;
     }
-    
-    /**
-     * Wczytuje księgę z węzła XML.
-     * 
-     * @param book węzeł dokumentu XML
-     * @return księga z indeksami
-     */
-    public static Book load(Node book) {
-        if (book == null) return null;
-        if (book.getNodeName().equalsIgnoreCase("book")) {
-            if (book.hasAttributes()) {
-                Book b = new Book(XMLLoader.getAttrV(book, "name"));
-                b.load(book.getChildNodes());
-                return b;
-            } else return new Book("");
-        } else return null;
+
+    public void addIndex(Index index) {
+        if (index != null) {
+            indices.add(index);
+        }
     }
-    
-    /**
-     * Wczytuje księgi z pliku XML.
-     * 
-     * @param xml plik XML
-     * @return lista ksiąg z indeksami
-     * @throws IOException problemy z odczytaniem pliku
-     * @throws SAXException błąd SAX
-     * @throws ParserConfigurationException problemy z konfiguracją parsera XML
-     */
-    public static List<Book> load(File xml) throws IOException,
-            ParserConfigurationException, SAXException {
-        LinkedList<Book> books = new LinkedList<>();
-        if (!xml.exists()) {
-            try (BufferedWriter writer = Files.newBufferedWriter(xml.toPath())) {
-                writer.write(
-                        "<?xml version=\"1.0\" encoding=\"utf-8\" standalone=\"no\"?>\n" +
-                        "<indices>\n" +
-                        "    <book name=\"Księga zaślubionych\"></book>\n" +
-                        "    <book name=\"Księga zmarłych\"></book>\n" +
-                        "    <book name=\"Księga ochrzczonych\"></book>\n" +
-                        "    <book name=\"Księga bierzmowanych\"></book>\n" +
-                        "</indices>"
-                );
-            }
+
+    public void addIndices(Collection<Index> records) {
+        if (records != null) {
+            indices.addAll(records);
         }
-        Document doc = XMLLoader.loadDOM(xml);
-        Element indices = doc.getDocumentElement();
-        if (indices.getNodeName().equalsIgnoreCase("indices")) {
-            NodeList bookNodes = indices.getElementsByTagName("book");
-            for (int i = 0; i < bookNodes.getLength(); i++) {
-                Book b = load(bookNodes.item(i));
-                if (b != null) books.add(b);
-            }
-        }
-        ArrayList<Book> array = new ArrayList<>(books);
-        books.clear();
-        return array;
     }
 }
