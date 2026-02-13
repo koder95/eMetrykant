@@ -18,10 +18,7 @@ package pl.koder95.eme.dfs;
 
 import java.io.IOException;
 import java.util.*;
-import javax.xml.parsers.ParserConfigurationException;
-import org.xml.sax.SAXException;
 import pl.koder95.eme.Files;
-import pl.koder95.eme.Main;
 import pl.koder95.eme.MemoryUtils;
 
 /**
@@ -89,9 +86,9 @@ public enum IndexList implements IndexContainer {
         BOOKS.stream().filter((b)->b.getName().equalsIgnoreCase(name))
         .forEach((b)->{
             MemoryUtils.memory();
-            this.loaded.addAll(b.indices);
+            this.loaded.addAll(b.getIndices());
             MemoryUtils.memory();
-            b.indices.forEach((i) -> i.getDataNames().stream()
+            b.getIndices().forEach((i) -> i.getDataNames().stream()
                     .filter(nameQueue::contains)
                     .forEachOrdered(nameQueue::add));
             MemoryUtils.memory();
@@ -109,11 +106,15 @@ public enum IndexList implements IndexContainer {
     }
     
     private static List<Book> BOOKS;
-    
+    private static final IndexLoader INDEX_LOADER = new IndexLoader(
+            new FileXmlIndexDataSource(Files.INDICES_XML),
+            IndexFilter.acceptAll()
+    );
+
     private static void loadBooks() {
         try {
-            BOOKS = Book.load(Files.INDICES_XML.toFile());
-        } catch (IOException | SAXException | ParserConfigurationException ex) {
+            BOOKS = INDEX_LOADER.loadBooks();
+        } catch (IOException ex) {
             System.err.println(ex);
         }
     }

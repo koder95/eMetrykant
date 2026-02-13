@@ -29,10 +29,13 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import pl.koder95.eme.au.SelfUpdateTask;
-import pl.koder95.eme.core.*;
-import pl.koder95.eme.core.spi.CabinetAnalyzer;
-import pl.koder95.eme.core.spi.FilingCabinet;
+import pl.koder95.eme.bootstrap.AppConfig;
+import pl.koder95.eme.bootstrap.ApplicationContext;
+import pl.koder95.eme.application.AppCloseService;
+import pl.koder95.eme.application.IndexReloadService;
+import pl.koder95.eme.application.PersonalDataQueryService;
 import pl.koder95.eme.dfs.IndexList;
+import pl.koder95.eme.fx.FxDialogs;
 import pl.koder95.eme.fx.PersonalDataView;
 import pl.koder95.eme.git.RepositoryInfo;
 
@@ -43,6 +46,7 @@ public class App extends Application {
 
     private Parent root = null;
     private SelfUpdateTask task = null;
+    private ApplicationContext applicationContext = null;
     
     @Override
     public void init() throws Exception {
@@ -52,17 +56,24 @@ public class App extends Application {
             Arrays.stream(IndexList.values()).forEach(IndexList::load);
         }
 
-        FilingCabinet cabinet = new TreeFilingCabinet();
-        IndexListDataSource source = new IndexListDataSource();
-
-        SuggestionProvider suggestionProvider = new SuggestionProvider(cabinet);
-        AbstractCabinetAnalyzer worker = new SimpleCabinetAnalyzer(cabinet, source, null, suggestionProvider);
-        CabinetWorkers.register(CabinetAnalyzer.class, worker);
-        worker.load();
+        applicationContext = new ApplicationContext();
+        PersonalDataQueryService personalDataQueryService = applicationContext.getPersonalDataQueryService();
+        IndexReloadService indexReloadService = applicationContext.getIndexReloadService();
+        AppCloseService appCloseService = applicationContext.getAppCloseService();
+        FxDialogs dialogs = applicationContext.getDialogs();
+        AppConfig appConfig = applicationContext.getAppConfig();
+        applicationContext.initialize();
 
         String resource = "PersonalDataView.fxml";
         URL url = PersonalDataView.class.getResource(resource);
-        root = FXMLLoader.load(url, BUNDLE);
+        FXMLLoader loader = new FXMLLoader(url, appConfig.bundle());
+        loader.setControllerFactory(type -> {
+            if (type == PersonalDataView.class) {
+                return new PersonalDataView(personalDataQueryService, indexReloadService, appCloseService, dialogs);
+            }
+            throw new IllegalArgumentException("Nieobsługiwany kontroler FXML: " + type.getName());
+        });
+        root = loader.load();
     }
 
     @Override
