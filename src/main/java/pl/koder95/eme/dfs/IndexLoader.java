@@ -44,12 +44,17 @@ public class IndexLoader {
             return null;
         }
         if (!bookNode.hasAttributes()) {
-            return new Book("");
+            return null;
         }
         String bookName = Optional
                 .ofNullable(bookNode.getAttributes().getNamedItem("name"))
                 .map(Node::getTextContent)
-                .orElseThrow(() -> new IllegalArgumentException("Brak atrybutu 'name' w węźle <book>."));
+                .map(String::trim)
+                .orElse(null);
+        if (bookName == null || bookName.isBlank()) {
+            System.err.println("Pominięto <book> bez poprawnego atrybutu 'name'.");
+            return null;
+        }
         Book book = new Book(bookName);
         NodeList indices = bookNode.getChildNodes();
         for (int i = 0; i < indices.getLength(); i++) {

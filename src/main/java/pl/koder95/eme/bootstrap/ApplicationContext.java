@@ -6,6 +6,7 @@ import pl.koder95.eme.application.PersonalDataQueryService;
 import pl.koder95.eme.Main;
 import pl.koder95.eme.fx.FxDialogs;
 import pl.koder95.eme.core.IndexListDataSource;
+import pl.koder95.eme.core.NoOpDataTarget;
 import pl.koder95.eme.core.SimpleCabinetAnalyzer;
 import pl.koder95.eme.core.SuggestionProvider;
 import pl.koder95.eme.core.TreeFilingCabinet;
@@ -37,7 +38,7 @@ public class ApplicationContext {
         this.cabinetAnalyzer = new SimpleCabinetAnalyzer(
                 cabinet,
                 indexListDataSource,
-                null,
+                new NoOpDataTarget(),
                 suggestionProvider
         );
         this.personalDataQueryService = new PersonalDataQueryService(cabinetAnalyzer);
