@@ -8,6 +8,7 @@ import pl.koder95.eme.domain.index.BookType;
 import pl.koder95.eme.domain.index.Index;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Źródło danych, które pobiera informacje z kolekcji indeksów.
@@ -54,7 +55,10 @@ public class IndexContainerDataSource implements DataSource, Visitor<Index> {
 
     @Override
     public Map<String, Set<String>> getPersonalData() {
-        return Collections.unmodifiableMap(personalData);
+        return personalData.entrySet().stream()
+                .map(entry ->
+                        Map.entry(entry.getKey(), Collections.unmodifiableSet(entry.getValue()))
+                ).collect(Collectors.toUnmodifiableMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 
     private static ActNumber[] get(Map<String, Map<String, Set<ActNumber>>> map, String surname, String name) {
