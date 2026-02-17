@@ -80,43 +80,58 @@ public class App extends Application {
     }
 
     /**
-     * Uruchamia główne okno aplikacji i obsługuje scenariusz samoczynnej aktualizacji.
+     * Uruchamia okno i deleguje wybór scenariusza startowego.
      */
     @Override
     public void start(Stage primaryStage) {
+        configureCommonWindow(primaryStage);
+        if (shouldStartUpdateFlow()) {
+            showUpdateWindow(primaryStage);
+        } else {
+            showMainWindow(primaryStage);
+        }
+    }
+
+    private void configureCommonWindow(Stage primaryStage) {
         primaryStage.getIcons().add(new Image(FAVICON_PATH));
         primaryStage.setTitle("eMetrykant " + Version.get());
+    }
+
+    private boolean shouldStartUpdateFlow() {
         Version latestRelease = RepositoryInfo.get().getLatestReleaseVersion();
-        if (latestRelease != null &&
-                (latestRelease.compareTo(Version.get()) > 0 || !getParameters().getUnnamed().isEmpty())) {
-            ProgressBar updating = new ProgressBar();
-            Label title = new Label();
-            Label message = new Label();
-            VBox root = new VBox(5d, title, updating, message);
+        return latestRelease != null
+                && (latestRelease.compareTo(Version.get()) > 0 || !getParameters().getUnnamed().isEmpty());
+    }
 
-            updating.setMinSize(400d, 35d);
-            updating.progressProperty().bind(task.progressProperty());
-            title.textProperty().bind(task.titleProperty());
-            message.textProperty().bind(task.messageProperty());
+    private void showUpdateWindow(Stage primaryStage) {
+        ProgressBar updating = new ProgressBar();
+        Label title = new Label();
+        Label message = new Label();
+        VBox updateRoot = new VBox(5d, title, updating, message);
 
-            root.setAlignment(Pos.CENTER);
+        updating.setMinSize(400d, 35d);
+        updating.progressProperty().bind(task.progressProperty());
+        title.textProperty().bind(task.titleProperty());
+        message.textProperty().bind(task.messageProperty());
 
-            primaryStage.initStyle(StageStyle.UTILITY);
-            primaryStage.setScene(new Scene(root));
-            primaryStage.setAlwaysOnTop(true);
-            primaryStage.setResizable(false);
-            primaryStage.setMinWidth(400);
-            primaryStage.setMinHeight(100);
-            primaryStage.show();
-            new Thread(task).start();
-        }
-        else {
-            primaryStage.setScene(new Scene(root));
-            primaryStage.setOnCloseRequest(event -> {
-                event.consume();
-                appCloseService.closeWithConfirmation(primaryStage.getScene(), Platform::exit);
-            });
-            primaryStage.show();
-        }
+        updateRoot.setAlignment(Pos.CENTER);
+
+        primaryStage.initStyle(StageStyle.UTILITY);
+        primaryStage.setScene(new Scene(updateRoot));
+        primaryStage.setAlwaysOnTop(true);
+        primaryStage.setResizable(false);
+        primaryStage.setMinWidth(400);
+        primaryStage.setMinHeight(100);
+        primaryStage.show();
+        new Thread(task).start();
+    }
+
+    private void showMainWindow(Stage primaryStage) {
+        primaryStage.setScene(new Scene(root));
+        primaryStage.setOnCloseRequest(event -> {
+            event.consume();
+            appCloseService.closeWithConfirmation(primaryStage.getScene(), Platform::exit);
+        });
+        primaryStage.show();
     }
 }
