@@ -3,6 +3,7 @@ package pl.koder95.eme.core;
 import pl.koder95.eme.Visitor;
 import pl.koder95.eme.core.spi.DataSource;
 import pl.koder95.eme.domain.index.ActNumber;
+import pl.koder95.eme.domain.index.Book;
 import pl.koder95.eme.domain.index.Index;
 
 import java.util.*;
@@ -70,7 +71,7 @@ public class IndexContainerDataSource implements DataSource, Visitor<Index> {
     }
 
     private void set(Map<String, Map<String, Set<ActNumber>>> map, String surname, String name,
-                            ActNumber number) {
+                     ActNumber number) {
         surname = removeUTF8BOM(surname.trim());
         name = removeUTF8BOM(name.trim());
         if (!map.containsKey(surname)) {
@@ -109,7 +110,14 @@ public class IndexContainerDataSource implements DataSource, Visitor<Index> {
 
     @Override
     public void visit(Index i) {
-        String bookName = i.getOwner().getName();
+        if (i == null) {
+            return;
+        }
+        Book owner = i.getOwner();
+        if (owner == null || owner.getName() == null) {
+            return;
+        }
+        String bookName = owner.getName();
         if (bookName.equalsIgnoreCase("Księga ochrzczonych")) {
             setBaptism(i);
         } else if (bookName.equalsIgnoreCase("Księga bierzmowanych")) {

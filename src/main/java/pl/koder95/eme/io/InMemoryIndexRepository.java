@@ -5,8 +5,8 @@ import pl.koder95.eme.MemoryUtils;
 import pl.koder95.eme.core.spi.IndexFilter;
 import pl.koder95.eme.core.spi.IndexRepository;
 import pl.koder95.eme.domain.index.Book;
-import pl.koder95.eme.domain.index.Index;
 import pl.koder95.eme.domain.index.BookType;
+import pl.koder95.eme.domain.index.Index;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -15,6 +15,7 @@ import java.util.EnumMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * Repozytorium indeksów utrzymujące cache w pamięci i odświeżanie z XML.
@@ -23,20 +24,23 @@ public class InMemoryIndexRepository implements IndexRepository {
 
     private final IndexLoader loader;
     private final Map<BookType, List<Index>> loaded = new EnumMap<>(BookType.class);
+    private volatile boolean loadedOnce;
 
     public InMemoryIndexRepository() {
         this(new IndexLoader(new FileXmlIndexDataSource(Files.INDICES_XML), IndexFilter.acceptAll()));
     }
 
     public InMemoryIndexRepository(IndexLoader loader) {
-        this.loader = loader;
+        this.loader = Objects.requireNonNull(loader, "loader must not be null");
         for (BookType type : BookType.values()) {
             loaded.put(type, new ArrayList<>());
         }
+        this.loadedOnce = false;
     }
 
     @Override
     public synchronized List<Index> getIndices(BookType type) {
+        Objects.requireNonNull(type, "type must not be null");
         ensureLoaded();
         return Collections.unmodifiableList(loaded.get(type));
     }
@@ -54,24 +58,23 @@ public class InMemoryIndexRepository implements IndexRepository {
                             MemoryUtils.memory();
                             selected.addAll(book.getIndices());
                             MemoryUtils.memory();
-                            book.getIndices().forEach(index -> index.getDataNames().stream()
-                                    .filter(type.getFieldSchema()::contains)
-                                    .forEachOrdered(type.getFieldSchema()::add));
-                            MemoryUtils.memory();
                         });
-                loaded.put(type, new ArrayList<>(selected));
+                List<Index> existing = loaded.get(type);
+                existing.clear();
+                existing.addAll(selected);
             }
+            loadedOnce = true;
         } catch (IOException ex) {
-            ex.printStackTrace();
             for (BookType type : BookType.values()) {
-                loaded.put(type, new ArrayList<>());
+                loaded.get(type).clear();
             }
+            loadedOnce = true;
+            throw new IllegalStateException("Failed to reload indices", ex);
         }
     }
 
     private void ensureLoaded() {
-        boolean empty = loaded.values().stream().allMatch(List::isEmpty);
-        if (empty) {
+        if (!loadedOnce) {
             reloadAll();
         }
     }

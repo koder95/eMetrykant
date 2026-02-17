@@ -12,6 +12,8 @@ import static pl.koder95.eme.Main.DIGITS_STRING_PATTERN;
  */
 public class ActNumber implements Comparable<ActNumber>, Serializable {
 
+    private static final long serialVersionUID = 1L;
+
     private final String sign;
     private final int year;
 
@@ -39,16 +41,27 @@ public class ActNumber implements Comparable<ActNumber>, Serializable {
         if (compared != 0) {
             return compared;
         }
+
         Matcher digit1 = DIGITS_STRING_PATTERN.matcher(getSign());
         Matcher digit2 = DIGITS_STRING_PATTERN.matcher(o.getSign());
-        if (digit1.find() && digit2.find()) {
+
+        boolean hasDigits1 = digit1.find() && digit1.group(1) != null && !digit1.group(1).isEmpty();
+        boolean hasDigits2 = digit2.find() && digit2.group(1) != null && !digit2.group(1).isEmpty();
+
+        if (hasDigits1 && hasDigits2) {
             int act1 = Integer.parseInt(digit1.group(1));
             int act2 = Integer.parseInt(digit2.group(1));
-            return Integer.compare(act1, act2);
+            int byNumber = Integer.compare(act1, act2);
+            if (byNumber != 0) {
+                return byNumber;
+            }
+
+            String remainder1 = getSign().substring(Math.min(getSign().length(), digit1.end(1)));
+            String remainder2 = o.getSign().substring(Math.min(o.getSign().length(), digit2.end(1)));
+            return Main.DEFAULT_COLLATOR.compare(remainder1, remainder2);
         }
-        String remainder1 = getSign().substring(digit1.end(1) + 1);
-        String remainder2 = getSign().substring(digit2.end(1) + 1);
-        return Main.DEFAULT_COLLATOR.compare(remainder1, remainder2);
+
+        return Main.DEFAULT_COLLATOR.compare(getSign(), o.getSign());
     }
 
     public static ActNumber parseActNumber(String s) {

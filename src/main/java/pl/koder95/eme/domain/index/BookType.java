@@ -1,22 +1,20 @@
 package pl.koder95.eme.domain.index;
 
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.List;
 
 /**
  * Typ księgi indeksowej.
  */
 public enum BookType {
-    LIBER_BAPTISMORUM("Księga ochrzczonych", new LinkedList<>(Arrays.asList("name", "surname", "an"))),
-    LIBER_CONFIRMATORUM("Księga bierzmowanych", new LinkedList<>(Arrays.asList("name", "surname", "an"))),
-    LIBER_MATRIMONIORUM("Księga zaślubionych", new LinkedList<>(Arrays.asList("husband-surname", "husband-name", "wife-surname", "wife-name", "an"))),
-    LIBER_DEFUNCTORUM("Księga zmarłych", new LinkedList<>(Arrays.asList("name", "surname", "an")));
+    LIBER_BAPTISMORUM("Księga ochrzczonych", List.of("name", "surname", "an")),
+    LIBER_CONFIRMATORUM("Księga bierzmowanych", List.of("name", "surname", "an")),
+    LIBER_MATRIMONIORUM("Księga zaślubionych", List.of("husband-surname", "husband-name", "wife-surname", "wife-name", "an")),
+    LIBER_DEFUNCTORUM("Księga zmarłych", List.of("name", "surname", "an"));
 
     private final String bookName;
-    private final Queue<String> fieldSchema;
+    private final List<String> fieldSchema;
 
-    BookType(String bookName, Queue<String> fieldSchema) {
+    BookType(String bookName, List<String> fieldSchema) {
         this.bookName = bookName;
         this.fieldSchema = fieldSchema;
     }
@@ -25,7 +23,7 @@ public enum BookType {
         return bookName;
     }
 
-    public Queue<String> getFieldSchema() {
+    public List<String> getFieldSchema() {
         return fieldSchema;
     }
 }

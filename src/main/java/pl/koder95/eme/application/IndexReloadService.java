@@ -14,10 +14,6 @@ public class IndexReloadService {
     }
 
     public void reloadAll() {
-        try {
-            indexRepository.reloadAll();
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
+        indexRepository.reloadAll();
     }
 }

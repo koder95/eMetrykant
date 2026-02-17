@@ -8,6 +8,7 @@ import pl.koder95.eme.xml.XMLLoader;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
@@ -47,6 +48,8 @@ public class FileXmlIndexDataSource implements IndexDataSource {
                             "    <book name=\"Księga bierzmowanych\"></book>\n" +
                             "</indices>"
             );
+        } catch (FileAlreadyExistsException ignored) {
+            // wyścig między sprawdzeniem Files.exists(...) a CREATE_NEW - można bezpiecznie zignorować
         }
     }
 }

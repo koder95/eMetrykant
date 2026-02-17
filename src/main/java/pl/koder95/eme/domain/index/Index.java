@@ -7,11 +7,14 @@ import pl.koder95.eme.Visited;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Logger;
 
 /**
  * Pojedynczy rekord indeksu danych osobowych.
  */
 public class Index implements Visited {
+
+    private static final Logger LOGGER = Logger.getLogger(Index.class.getName());
 
     private final Map<String, String> data = new HashMap<>();
     private ActNumber an;
@@ -20,12 +23,13 @@ public class Index implements Visited {
     private Index(Book owner, Node index) {
         this.owner = owner;
         NamedNodeMap attrs = index.getAttributes();
-        while (attrs.getLength() > 0) {
-            Node attr = attrs.item(0);
-            String key = attr.getNodeName();
-            String value = attr.getTextContent();
-            data.put(key, value);
-            attrs.removeNamedItem(key);
+        for (int i = 0; i < attrs.getLength(); i++) {
+            Node attr = attrs.item(i);
+            if (attr != null) {
+                String key = attr.getNodeName();
+                String value = attr.getTextContent();
+                data.put(key, value);
+            }
         }
     }
 
@@ -45,7 +49,14 @@ public class Index implements Visited {
             return null;
         }
         Index i = index.hasAttributes() ? new Index(owner, index) : new Index(owner);
-        return i.getDataNames().contains("an") && !i.getData("an").isEmpty() ? i : null;
+        if (i.getDataNames().contains("an") && !i.getData("an").isEmpty()) {
+            return i;
+        }
+
+        String ownerName = owner == null ? "<null>" : owner.getName();
+        LOGGER.warning(() -> "Pominięto indeks bez atrybutu 'an'. owner=" + ownerName
+                + ", nodeName=" + index.getNodeName());
+        return null;
     }
 
     public String getData(String name) {

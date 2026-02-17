@@ -12,6 +12,7 @@ import pl.koder95.eme.domain.index.Index;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -23,12 +24,15 @@ public class IndexLoader {
     private final IndexFilter filter;
 
     public IndexLoader(IndexDataSource dataSource, IndexFilter filter) {
-        this.dataSource = dataSource;
-        this.filter = filter;
+        this.dataSource = Objects.requireNonNull(dataSource, "dataSource must not be null");
+        this.filter = filter == null ? IndexFilter.acceptAll() : filter;
     }
 
     public List<Book> loadBooks() throws IOException {
         Document doc = dataSource.loadDocument();
+        if (doc == null) {
+            throw new IOException("Failed to load document: data source returned null");
+        }
         Element indices = doc.getDocumentElement();
         List<Book> books = new ArrayList<>();
         if (indices != null && indices.getNodeName().equalsIgnoreCase("indices")) {

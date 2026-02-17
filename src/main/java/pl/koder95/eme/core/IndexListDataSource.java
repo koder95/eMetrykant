@@ -7,6 +7,7 @@ import pl.koder95.eme.domain.index.BookType;
 import pl.koder95.eme.io.InMemoryIndexRepository;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -63,7 +64,7 @@ public class IndexListDataSource implements DataSource {
     private static void putAll(Map<String, Set<String>> merged, Map<String, Set<String>> source) {
         source.forEach((surname, names) -> {
             if (!merged.containsKey(surname)) {
-                merged.put(surname, new java.util.HashSet<>());
+                merged.put(surname, new HashSet<>());
             }
             merged.get(surname).addAll(names);
         });
