@@ -2,6 +2,8 @@ package pl.koder95.eme.application;
 
 import javafx.util.Callback;
 import javafx.util.StringConverter;
+import pl.koder95.eme.core.AbstractCabinetWorker;
+import pl.koder95.eme.core.IndexListDataSource;
 import pl.koder95.eme.core.spi.CabinetAnalyzer;
 import pl.koder95.eme.core.spi.PersonalDataModel;
 
@@ -30,6 +32,13 @@ public class PersonalDataQueryService {
 
     public StringConverter<PersonalDataModel> getPersonalDataConverter() {
         return analyzer.getPersonalDataConverter();
+    }
+
+    public void reloadAnalyzer() {
+        if (analyzer instanceof AbstractCabinetWorker worker) {
+            worker.setDataSource(new IndexListDataSource());
+        }
+        analyzer.load();
     }
 
     public int getNumberOfActs() {

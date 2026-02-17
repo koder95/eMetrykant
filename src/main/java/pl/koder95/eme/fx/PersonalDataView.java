@@ -109,8 +109,10 @@ public class PersonalDataView implements Initializable {
             Thread thread = new Thread(() -> {
                 try {
                     indexReloadService.reloadAll();
+                    personalDataQueryService.reloadAnalyzer();
                 } finally {
                     Platform.runLater(() -> {
+                        numberOfActs.setText(personalDataQueryService.getNumberOfActs() + "");
                         dialog.setResult(true);
                         dialog.close();
                     });
