@@ -38,12 +38,11 @@ public class ApplicationContext {
         this.cabinet = new TreeFilingCabinet();
         this.indexRepository = new InMemoryIndexRepository();
         this.suggestionProvider = new SuggestionProvider(cabinet);
-        this.cabinetAnalyzer = new SimpleCabinetAnalyzer(
-                cabinet,
-                new IndexListDataSource(indexRepository),
-                new NoOpDataTarget(),
-                suggestionProvider
-        );
+
+        SimpleCabinetAnalyzer analyzer = new SimpleCabinetAnalyzer(cabinet, suggestionProvider);
+        analyzer.setDataTarget(new NoOpDataTarget());
+        this.cabinetAnalyzer = analyzer;
+
         this.personalDataQueryService = new PersonalDataQueryService(cabinetAnalyzer, indexRepository);
         this.indexReloadService = new IndexReloadService(indexRepository);
         this.appConfig = new AppConfig(Main.BUNDLE, Main.POLISH, Main.DEFAULT_COLLATOR);
@@ -85,11 +84,12 @@ public class ApplicationContext {
      *
      * @throws IllegalStateException gdy kontekst został już zainicjalizowany
      */
-    public void initialize() {
+    public synchronized void initialize() {
         if (initialized) {
             throw new IllegalStateException("ApplicationContext został już zainicjalizowany.");
         }
         indexRepository.reloadAll();
+        cabinetAnalyzer.setDataSource(new IndexListDataSource(indexRepository));
         cabinetAnalyzer.load();
         initialized = true;
     }

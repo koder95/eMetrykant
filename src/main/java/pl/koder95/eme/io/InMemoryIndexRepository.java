@@ -15,11 +15,15 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Repozytorium indeksów utrzymujące cache w pamięci i odświeżanie z XML.
  */
 public class InMemoryIndexRepository implements IndexRepository {
+
+    private static final Logger LOGGER = Logger.getLogger(InMemoryIndexRepository.class.getName());
 
     private final IndexLoader loader;
     private final Map<BookType, List<Index>> loaded = new EnumMap<>(BookType.class);
@@ -67,7 +71,8 @@ public class InMemoryIndexRepository implements IndexRepository {
             for (BookType type : BookType.values()) {
                 loaded.computeIfAbsent(type, ignored -> new ArrayList<>()).clear();
             }
-            loadedOnce = false;
+            loadedOnce = true;
+            LOGGER.log(Level.SEVERE, "Failed to reload indices", ex);
             throw new IllegalStateException("Failed to reload indices", ex);
         }
     }

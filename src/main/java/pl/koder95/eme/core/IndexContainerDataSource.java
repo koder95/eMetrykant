@@ -54,7 +54,7 @@ public class IndexContainerDataSource implements DataSource, Visitor<Index> {
 
     @Override
     public Map<String, Set<String>> getPersonalData() {
-        return personalData;
+        return Collections.unmodifiableMap(personalData);
     }
 
     private static ActNumber[] get(Map<String, Map<String, Set<ActNumber>>> map, String surname, String name) {

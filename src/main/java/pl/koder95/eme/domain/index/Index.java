@@ -18,7 +18,7 @@ public class Index implements Visited {
     private static final Logger LOGGER = Logger.getLogger(Index.class.getName());
 
     private final Map<String, String> data = new HashMap<>();
-    private ActNumber an;
+    private volatile ActNumber an;
     private final Book owner;
 
     private Index(Book owner, Node index) {

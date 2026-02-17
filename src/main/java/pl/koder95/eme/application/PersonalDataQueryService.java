@@ -37,6 +37,14 @@ public class PersonalDataQueryService {
         return analyzer.getPersonalDataConverter();
     }
 
+    /**
+     * Ponownie ładuje analizator na podstawie aktualnego źródła danych.
+     *
+     * <p>Przed wywołaniem tej metody należy wykonać
+     * {@link IndexReloadService#reloadAll()}, aby repozytorium indeksów zostało
+     * odświeżone. Metoda podmienia źródło analizatora na
+     * {@link IndexListDataSource} i wywołuje {@link CabinetAnalyzer#load()}.</p>
+     */
     public void reloadAnalyzer() {
         analyzer.setDataSource(new IndexListDataSource(indexRepository));
         analyzer.load();

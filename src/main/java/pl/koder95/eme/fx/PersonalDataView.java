@@ -13,12 +13,15 @@ import org.controlsfx.control.textfield.AutoCompletionBinding;
 import org.controlsfx.control.textfield.TextFields;
 import pl.koder95.eme.application.AppCloseService;
 import pl.koder95.eme.application.IndexReloadService;
-import pl.koder95.eme.application.PersonalDataQueryService;
 import pl.koder95.eme.application.PersonalDataPresentation;
+import pl.koder95.eme.application.PersonalDataQueryService;
 import pl.koder95.eme.core.spi.PersonalDataModel;
 
 import java.net.URL;
+import java.util.Objects;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 /**
@@ -29,6 +32,8 @@ import java.util.ResourceBundle;
  * @since 0.1.11
  */
 public class PersonalDataView implements Initializable {
+
+    private static final Logger LOGGER = Logger.getLogger(PersonalDataView.class.getName());
 
     private final PersonalDataQueryService personalDataQueryService;
     private final IndexReloadService indexReloadService;
@@ -41,11 +46,11 @@ public class PersonalDataView implements Initializable {
                             AppCloseService appCloseService,
                             FxDialogs dialogs,
                             ResourceBundle bundle) {
-        this.personalDataQueryService = personalDataQueryService;
-        this.indexReloadService = indexReloadService;
-        this.appCloseService = appCloseService;
-        this.dialogs = dialogs;
-        this.bundle = bundle;
+        this.personalDataQueryService = Objects.requireNonNull(personalDataQueryService, "personalDataQueryService must not be null");
+        this.indexReloadService = Objects.requireNonNull(indexReloadService, "indexReloadService must not be null");
+        this.appCloseService = Objects.requireNonNull(appCloseService, "appCloseService must not be null");
+        this.dialogs = Objects.requireNonNull(dialogs, "dialogs must not be null");
+        this.bundle = Objects.requireNonNull(bundle, "bundle must not be null");
     }
 
     @FXML
@@ -122,7 +127,7 @@ public class PersonalDataView implements Initializable {
                     personalDataQueryService.reloadAnalyzer();
                 } catch (Exception ex) {
                     reloadException = ex;
-                    ex.printStackTrace();
+                    LOGGER.log(Level.SEVERE, "Błąd podczas przeładowania indeksów", ex);
                 } finally {
                     Exception finalReloadException = reloadException;
                     Platform.runLater(() -> {
@@ -142,7 +147,7 @@ public class PersonalDataView implements Initializable {
                 }
             });
             thread.setDaemon(true);
-            dialog.setOnShown(event -> Platform.runLater(thread::start));
+            dialog.setOnShown(event -> thread.start());
             dialog.show();
         }
     }
