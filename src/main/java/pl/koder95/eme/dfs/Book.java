@@ -62,7 +62,9 @@ public class Book {
 
     public void addIndices(Collection<Index> records) {
         if (records != null) {
-            indices.addAll(records);
+            for (Index record : records) {
+                addIndex(record);
+            }
         }
     }
 }

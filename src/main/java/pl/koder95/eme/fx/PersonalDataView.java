@@ -107,11 +107,14 @@ public class PersonalDataView implements Initializable {
         if (scene != null) {
             Dialog<Boolean> dialog = dialogs.createProgressDialog(scene, "Czekaj...");
             Thread thread = new Thread(() -> {
-                indexReloadService.reloadAll();
-                Platform.runLater(() -> {
-                    dialog.setResult(true);
-                    dialog.close();
-                });
+                try {
+                    indexReloadService.reloadAll();
+                } finally {
+                    Platform.runLater(() -> {
+                        dialog.setResult(true);
+                        dialog.close();
+                    });
+                }
             });
             dialog.setOnShown(event -> Platform.runLater(thread::start));
             dialog.show();

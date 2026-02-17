@@ -57,12 +57,13 @@ public class App extends Application {
         }
 
         applicationContext = new ApplicationContext();
+        applicationContext.initialize();
+
         PersonalDataQueryService personalDataQueryService = applicationContext.getPersonalDataQueryService();
         IndexReloadService indexReloadService = applicationContext.getIndexReloadService();
         AppCloseService appCloseService = applicationContext.getAppCloseService();
         FxDialogs dialogs = applicationContext.getDialogs();
         AppConfig appConfig = applicationContext.getAppConfig();
-        applicationContext.initialize();
 
         String resource = "PersonalDataView.fxml";
         URL url = PersonalDataView.class.getResource(resource);

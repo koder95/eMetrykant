@@ -30,6 +30,7 @@ public class ApplicationContext {
     private final AppConfig appConfig;
     private final FxDialogs dialogs;
     private final AppCloseService appCloseService;
+    private boolean initialized;
 
     public ApplicationContext() {
         this.cabinet = new TreeFilingCabinet();
@@ -46,13 +47,16 @@ public class ApplicationContext {
         this.appConfig = new AppConfig(Main.BUNDLE, Main.POLISH, Main.DEFAULT_COLLATOR);
         this.dialogs = new FxDialogs();
         this.appCloseService = new AppCloseService(appConfig, dialogs);
+        this.initialized = false;
     }
 
     public CabinetAnalyzer getCabinetAnalyzer() {
+        ensureInitialized();
         return cabinetAnalyzer;
     }
 
     public PersonalDataQueryService getPersonalDataQueryService() {
+        ensureInitialized();
         return personalDataQueryService;
     }
 
@@ -72,7 +76,22 @@ public class ApplicationContext {
         return appCloseService;
     }
 
+    /**
+     * Inicjalizuje kontekst po konstrukcji (wywoływane np. z {@code App.init()}).
+     *
+     * @throws IllegalStateException gdy kontekst został już zainicjalizowany
+     */
     public void initialize() {
+        if (initialized) {
+            throw new IllegalStateException("ApplicationContext został już zainicjalizowany.");
+        }
         cabinetAnalyzer.load();
+        initialized = true;
+    }
+
+    private void ensureInitialized() {
+        if (!initialized) {
+            throw new IllegalStateException("ApplicationContext musi zostać zainicjalizowany przez initialize().");
+        }
     }
 }

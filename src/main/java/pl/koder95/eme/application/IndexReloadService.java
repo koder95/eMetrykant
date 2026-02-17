@@ -13,7 +13,7 @@ public class IndexReloadService {
                 value.clear();
                 value.load();
             } catch (Exception ex) {
-                System.err.println(ex);
+                ex.printStackTrace();
             }
         }
     }

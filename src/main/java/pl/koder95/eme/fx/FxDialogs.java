@@ -3,6 +3,7 @@ package pl.koder95.eme.fx;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.DialogPane;
 import javafx.scene.control.Label;
@@ -42,6 +43,8 @@ public class FxDialogs {
         DialogPane pane = new DialogPane();
         pane.setContent(root);
         dialog.setDialogPane(pane);
+        dialog.getDialogPane().getButtonTypes().add(ButtonType.CANCEL);
+        dialog.setOnCloseRequest(event -> dialog.close());
 
         if (ownerScene != null) {
             dialog.initOwner(ownerScene.getWindow());
