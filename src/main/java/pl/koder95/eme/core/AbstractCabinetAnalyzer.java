@@ -88,6 +88,8 @@ public abstract class AbstractCabinetAnalyzer extends AbstractCabinetWorker impl
 
     @Override
     public void load() {
+        numberOfActs = 0f;
+        getCabinet().clear();
         Map<String, Set<String>> personalData = getDataSource().getPersonalData();
         personalData.forEach((surname, names) -> names.forEach((name) -> {
             DataSource dataSource = getDataSource();

@@ -2,18 +2,25 @@ package pl.koder95.eme.core;
 
 import pl.koder95.eme.Visitor;
 import pl.koder95.eme.core.spi.DataSource;
-import pl.koder95.eme.dfs.*;
+import pl.koder95.eme.domain.index.ActNumber;
+import pl.koder95.eme.domain.index.Book;
+import pl.koder95.eme.domain.index.BookType;
+import pl.koder95.eme.domain.index.Index;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
- * Źródło danych, które pobiera informacje z {@link IndexContainer kontenera indeksów}.
+ * Źródło danych, które pobiera informacje z kolekcji indeksów.
  *
  * @author Kamil Jan Mularski [@Koder95]
  * @version 0.4.1, 2021-11-07
  * @since 0.4.0
  */
 public class IndexContainerDataSource implements DataSource, Visitor<Index> {
+
+    private static final java.util.logging.Logger LOGGER =
+            java.util.logging.Logger.getLogger(IndexContainerDataSource.class.getName());
 
     private final Map<String, Map<String, Set<ActNumber>>> baptisms = new TreeMap<>();
     private final Map<String, Map<String, Set<ActNumber>>> confirmations = new TreeMap<>();
@@ -22,11 +29,11 @@ public class IndexContainerDataSource implements DataSource, Visitor<Index> {
     private final Map<String, Set<String>> personalData = new TreeMap<>();
 
     /**
-     * Tworzy źródło danych na podstawie wczytanych indeksów do {@link IndexContainer kontenera}.
-     * @param container kontener, którego indeksy zostaną przejrzane, aby pozyskać informacje
+     * Tworzy źródło danych na podstawie kolekcji indeksów.
+     * @param indexes indeksy do analizy
      */
-    public IndexContainerDataSource(IndexContainer container) {
-        if (container != null) container.getLoaded().forEach(this::visit);
+    public IndexContainerDataSource(Collection<Index> indexes) {
+        if (indexes != null) indexes.forEach(this::visit);
     }
 
     @Override
@@ -51,25 +58,29 @@ public class IndexContainerDataSource implements DataSource, Visitor<Index> {
 
     @Override
     public Map<String, Set<String>> getPersonalData() {
-        return personalData;
+        return personalData.entrySet().stream()
+                .map(entry ->
+                        Map.entry(entry.getKey(), Collections.unmodifiableSet(entry.getValue()))
+                ).collect(Collectors.toUnmodifiableMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 
     private static ActNumber[] get(Map<String, Map<String, Set<ActNumber>>> map, String surname, String name) {
-        for (Map.Entry<String, Map<String, Set<ActNumber>>> entry : map.entrySet()) {
-            if (entry.getKey().equals(surname)) {
-                for (Map.Entry<String, Set<ActNumber>> e : entry.getValue().entrySet()) {
-                    if (e.getKey().equals(name)) {
-                        if (e.getValue() == null) return new ActNumber[0];
-                        return e.getValue().toArray(new ActNumber[0]);
-                    }
-                }
-            }
+        if (surname == null || name == null) {
+            return new ActNumber[0];
         }
-        return null;
+        Map<String, Set<ActNumber>> namesBySurname = map.get(surname);
+        if (namesBySurname == null) {
+            return new ActNumber[0];
+        }
+        Set<ActNumber> numbers = namesBySurname.get(name);
+        if (numbers == null) {
+            return new ActNumber[0];
+        }
+        return numbers.toArray(new ActNumber[0]);
     }
 
     private void set(Map<String, Map<String, Set<ActNumber>>> map, String surname, String name,
-                            ActNumber number) {
+                     ActNumber number) {
         surname = removeUTF8BOM(surname.trim());
         name = removeUTF8BOM(name.trim());
         if (!map.containsKey(surname)) {
@@ -108,15 +119,24 @@ public class IndexContainerDataSource implements DataSource, Visitor<Index> {
 
     @Override
     public void visit(Index i) {
-        String bookName = i.getOwner().getName();
-        if (bookName.equalsIgnoreCase("Księga ochrzczonych")) {
+        if (i == null) {
+            return;
+        }
+        Book owner = i.getOwner();
+        if (owner == null) {
+            return;
+        }
+        String bookName = owner.getName();
+        if (bookName.equalsIgnoreCase(BookType.LIBER_BAPTISMORUM.getBookName())) {
             setBaptism(i);
-        } else if (bookName.equalsIgnoreCase("Księga bierzmowanych")) {
+        } else if (bookName.equalsIgnoreCase(BookType.LIBER_CONFIRMATORUM.getBookName())) {
             setConfirmation(i);
-        } else if (bookName.equalsIgnoreCase("Księga zaślubionych")) {
+        } else if (bookName.equalsIgnoreCase(BookType.LIBER_MATRIMONIORUM.getBookName())) {
             setMarriage(i);
-        } else if (bookName.equalsIgnoreCase("Księga zmarłych")) {
+        } else if (bookName.equalsIgnoreCase(BookType.LIBER_DEFUNCTORUM.getBookName())) {
             setDecease(i);
+        } else {
+            LOGGER.warning(() -> "Unrecognized book name, index skipped: " + bookName);
         }
     }
 

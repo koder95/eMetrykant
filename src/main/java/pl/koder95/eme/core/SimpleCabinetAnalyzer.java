@@ -4,7 +4,7 @@ import pl.koder95.eme.core.spi.Briefcase;
 import pl.koder95.eme.core.spi.DataSource;
 import pl.koder95.eme.core.spi.DataTarget;
 import pl.koder95.eme.core.spi.FilingCabinet;
-import pl.koder95.eme.dfs.ActNumber;
+import pl.koder95.eme.domain.index.ActNumber;
 
 /**
  * Rozszerza {@link AbstractCabinetAnalyzer ogólnego analizatora szafy}

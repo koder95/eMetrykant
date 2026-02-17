@@ -4,24 +4,25 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Dialog;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.VBox;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 import org.controlsfx.control.textfield.AutoCompletionBinding;
 import org.controlsfx.control.textfield.TextFields;
-import pl.koder95.eme.core.CabinetWorkers;
-import pl.koder95.eme.core.spi.CabinetAnalyzer;
+import pl.koder95.eme.application.AppCloseService;
+import pl.koder95.eme.application.IndexReloadService;
+import pl.koder95.eme.application.PersonalDataPresentation;
+import pl.koder95.eme.application.PersonalDataQueryService;
 import pl.koder95.eme.core.spi.PersonalDataModel;
-import pl.koder95.eme.dfs.IndexList;
 
 import java.net.URL;
+import java.util.Objects;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-import static pl.koder95.eme.Main.BUNDLE;
 
 /**
  * Kontroler dla widoku modelu danych osobowych.
@@ -31,6 +32,26 @@ import static pl.koder95.eme.Main.BUNDLE;
  * @since 0.1.11
  */
 public class PersonalDataView implements Initializable {
+
+    private static final Logger LOGGER = Logger.getLogger(PersonalDataView.class.getName());
+
+    private final PersonalDataQueryService personalDataQueryService;
+    private final IndexReloadService indexReloadService;
+    private final AppCloseService appCloseService;
+    private final FxDialogs dialogs;
+    private final ResourceBundle bundle;
+
+    public PersonalDataView(PersonalDataQueryService personalDataQueryService,
+                            IndexReloadService indexReloadService,
+                            AppCloseService appCloseService,
+                            FxDialogs dialogs,
+                            ResourceBundle bundle) {
+        this.personalDataQueryService = Objects.requireNonNull(personalDataQueryService, "personalDataQueryService must not be null");
+        this.indexReloadService = Objects.requireNonNull(indexReloadService, "indexReloadService must not be null");
+        this.appCloseService = Objects.requireNonNull(appCloseService, "appCloseService must not be null");
+        this.dialogs = Objects.requireNonNull(dialogs, "dialogs must not be null");
+        this.bundle = Objects.requireNonNull(bundle, "bundle must not be null");
+    }
 
     @FXML
     private BorderPane main;
@@ -54,17 +75,16 @@ public class PersonalDataView implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        CabinetAnalyzer analyzer = CabinetWorkers.get(CabinetAnalyzer.class);
         if (searching instanceof TextField) {
             TextField field = (TextField) searching;
             AutoCompletionBinding<PersonalDataModel> autoCompletionBinding = TextFields.bindAutoCompletion(
                     field,
-                    analyzer.getSuggestionProvider(),
-                    analyzer.getPersonalDataConverter()
+                    personalDataQueryService.getSuggestionProvider(),
+                    personalDataQueryService.getPersonalDataConverter()
             );
             autoCompletionBinding.setOnAutoCompleted(event -> setPersonalDataModel(event.getCompletion()));
             field.setOnAction(event -> setPersonalDataModel(
-                    analyzer.getPersonalDataConverter().fromString(field.getText())
+                    personalDataQueryService.fromText(field.getText())
             ));
             field.textProperty().addListener(
                     (observable, oldValue, newValue) -> {
@@ -74,97 +94,63 @@ public class PersonalDataView implements Initializable {
                     }
             );
         }
-        numberOfActs.setText(analyzer.getNumberOfActs() + "");
+        numberOfActs.setText(String.valueOf(personalDataQueryService.getNumberOfActs()));
     }
 
     private void setPersonalDataModel(PersonalDataModel model) {
-        if (model != null) {
-            String personalData = model.getSurname().toUpperCase();
-            if (!model.getName().isEmpty()) {
-                personalData += " " + model.getName();
-            }
-            this.personalData.setText(personalData);
-            this.baptism.setText(model.getBaptismAN());
-            this.confirmation.setText(model.getConfirmationAN());
-            this.marriage.setText(model.getMarriageAN());
-            this.decease.setText(model.getDeceaseAN());
-        } else setPersonalDataModel(EMPTY_DATA);
+        PersonalDataPresentation viewData = personalDataQueryService.toPresentation(model);
+        this.personalData.setText(viewData.fullName());
+        this.baptism.setText(viewData.getBaptismAN());
+        this.confirmation.setText(viewData.getConfirmationAN());
+        this.marriage.setText(viewData.getMarriageAN());
+        this.decease.setText(viewData.getDeceaseAN());
     }
 
+    /**
+     * Obsługuje próbę zamknięcia aplikacji z potwierdzeniem.
+     */
     public void close(ActionEvent actionEvent) {
-        Alert a = new Alert(Alert.AlertType.CONFIRMATION);
-        Scene scene = main.getScene();
-        if (scene != null) {
-            a.initOwner(scene.getWindow());
-        }
-        a.setTitle(BUNDLE.getString("ALERT_CONFIRM_CLOSE_TITLE"));
-        a.setHeaderText(BUNDLE.getString("ALERT_CONFIRM_CLOSE_HEADER"));
-        a.setContentText(BUNDLE.getString("ALERT_CONFIRM_CLOSE_CONTENT"));
-        a.showAndWait();
-        if (a.getResult() == ButtonType.OK) {
-            Platform.exit();
-        }
+        appCloseService.closeWithConfirmation(main.getScene());
     }
 
+    /**
+     * Ponownie wczytuje dane indeksów i odświeża licznik aktów.
+     */
     public void reload(ActionEvent actionEvent) {
         Scene scene = main.getScene();
         if (scene != null) {
-            Dialog<Boolean> dialog = new Dialog<>();
-            ProgressIndicator indicator = new ProgressIndicator(ProgressIndicator.INDETERMINATE_PROGRESS);
-            Label label = new Label("Czekaj...");
-            label.setFont(Font.font(label.getFont().getFamily(), FontWeight.BOLD, 24));
-            VBox v = new VBox(indicator, label);
-            v.setMaxWidth(Double.MAX_VALUE);
-            v.setSpacing(10);
-            v.setFillWidth(true);
-            v.setAlignment(Pos.CENTER);
-            DialogPane pane = new DialogPane();
-            pane.setContent(v);
-            dialog.setDialogPane(pane);
+            Dialog<Boolean> dialog = dialogs.createProgressDialog(scene, bundle.getString("FX_RELOAD_PROGRESS_MESSAGE"));
             Thread thread = new Thread(() -> {
-                for (IndexList value : IndexList.values()) {
-                    value.clear();
-                    value.load();
+                Exception reloadException = null;
+                try {
+                    indexReloadService.reloadAll();
+                    personalDataQueryService.reloadAnalyzer();
+                } catch (Exception ex) {
+                    reloadException = ex;
+                    LOGGER.log(Level.SEVERE, "Błąd podczas przeładowania indeksów", ex);
+                } finally {
+                    Exception finalReloadException = reloadException;
+                    Platform.runLater(() -> {
+                        if (finalReloadException != null) {
+                            dialogs.createErrorAlert(
+                                    scene,
+                                    bundle.getString("ALERT_RELOAD_ERROR_TITLE"),
+                                    bundle.getString("ALERT_RELOAD_ERROR_HEADER"),
+                                    finalReloadException.getMessage() != null
+                                            ? finalReloadException.getMessage()
+                                            : finalReloadException.toString()
+                            ).showAndWait();
+                        } else {
+                            numberOfActs.setText(String.valueOf(personalDataQueryService.getNumberOfActs()));
+                        }
+                        dialog.setResult(finalReloadException == null);
+                        dialog.close();
+                    });
                 }
-                Platform.runLater(() -> {
-                    dialog.setResult(true);
-                    dialog.close();
-                });
             });
-            dialog.setOnShown(event -> Platform.runLater(thread::start));
+            thread.setDaemon(true);
+            dialog.setOnShown(event -> thread.start());
             dialog.show();
         }
     }
-
-    private static final PersonalDataModel EMPTY_DATA = new PersonalDataModel() {
-        @Override
-        public String getSurname() {
-            return "-";
-        }
-
-        @Override
-        public String getName() {
-            return "";
-        }
-
-        @Override
-        public String getBaptismAN() {
-            return "-";
-        }
-
-        @Override
-        public String getConfirmationAN() {
-            return "-";
-        }
-
-        @Override
-        public String getMarriageAN() {
-            return "-";
-        }
-
-        @Override
-        public String getDeceaseAN() {
-            return "-";
-        }
-    };
 }

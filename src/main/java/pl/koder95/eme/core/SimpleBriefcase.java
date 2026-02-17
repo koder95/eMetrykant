@@ -1,7 +1,7 @@
 package pl.koder95.eme.core;
 
 import pl.koder95.eme.core.spi.Briefcase;
-import pl.koder95.eme.dfs.ActNumber;
+import pl.koder95.eme.domain.index.ActNumber;
 
 /**
  * Prosta implementacja interfejsu <i>{@link Briefcase aktówki}</i>,
