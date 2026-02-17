@@ -3,7 +3,7 @@ package pl.koder95.eme.core;
 import pl.koder95.eme.core.spi.DataSource;
 import pl.koder95.eme.core.spi.IndexRepository;
 import pl.koder95.eme.domain.index.ActNumber;
-import pl.koder95.eme.domain.index.IndexType;
+import pl.koder95.eme.domain.index.BookType;
 import pl.koder95.eme.io.InMemoryIndexRepository;
 
 import java.util.HashMap;
@@ -24,10 +24,10 @@ public class IndexListDataSource implements DataSource {
     }
 
     public IndexListDataSource(IndexRepository indexRepository) {
-        baptisms = new IndexContainerDataSource(indexRepository.getIndices(IndexType.LIBER_BAPTISMORUM));
-        confirmations = new IndexContainerDataSource(indexRepository.getIndices(IndexType.LIBER_CONFIRMATORUM));
-        marriages = new IndexContainerDataSource(indexRepository.getIndices(IndexType.LIBER_MATRIMONIORUM));
-        deceases = new IndexContainerDataSource(indexRepository.getIndices(IndexType.LIBER_DEFUNCTORUM));
+        baptisms = new IndexContainerDataSource(indexRepository.getIndices(BookType.LIBER_BAPTISMORUM));
+        confirmations = new IndexContainerDataSource(indexRepository.getIndices(BookType.LIBER_CONFIRMATORUM));
+        marriages = new IndexContainerDataSource(indexRepository.getIndices(BookType.LIBER_MATRIMONIORUM));
+        deceases = new IndexContainerDataSource(indexRepository.getIndices(BookType.LIBER_DEFUNCTORUM));
     }
 
     @Override

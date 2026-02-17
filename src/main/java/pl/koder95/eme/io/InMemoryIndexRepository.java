@@ -6,7 +6,7 @@ import pl.koder95.eme.core.spi.IndexFilter;
 import pl.koder95.eme.core.spi.IndexRepository;
 import pl.koder95.eme.domain.index.Book;
 import pl.koder95.eme.domain.index.Index;
-import pl.koder95.eme.domain.index.IndexType;
+import pl.koder95.eme.domain.index.BookType;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -22,7 +22,7 @@ import java.util.Map;
 public class InMemoryIndexRepository implements IndexRepository {
 
     private final IndexLoader loader;
-    private final Map<IndexType, List<Index>> loaded = new EnumMap<>(IndexType.class);
+    private final Map<BookType, List<Index>> loaded = new EnumMap<>(BookType.class);
 
     public InMemoryIndexRepository() {
         this(new IndexLoader(new FileXmlIndexDataSource(Files.INDICES_XML), IndexFilter.acceptAll()));
@@ -30,13 +30,13 @@ public class InMemoryIndexRepository implements IndexRepository {
 
     public InMemoryIndexRepository(IndexLoader loader) {
         this.loader = loader;
-        for (IndexType type : IndexType.values()) {
+        for (BookType type : BookType.values()) {
             loaded.put(type, new ArrayList<>());
         }
     }
 
     @Override
-    public synchronized List<Index> getIndices(IndexType type) {
+    public synchronized List<Index> getIndices(BookType type) {
         ensureLoaded();
         return Collections.unmodifiableList(loaded.get(type));
     }
@@ -46,7 +46,7 @@ public class InMemoryIndexRepository implements IndexRepository {
         MemoryUtils.memory();
         try {
             List<Book> books = loader.loadBooks();
-            for (IndexType type : IndexType.values()) {
+            for (BookType type : BookType.values()) {
                 List<Index> selected = new LinkedList<>();
                 books.stream()
                         .filter(book -> book.getName().equalsIgnoreCase(type.getBookName()))
@@ -63,7 +63,7 @@ public class InMemoryIndexRepository implements IndexRepository {
             }
         } catch (IOException ex) {
             ex.printStackTrace();
-            for (IndexType type : IndexType.values()) {
+            for (BookType type : BookType.values()) {
                 loaded.put(type, new ArrayList<>());
             }
         }

@@ -1,7 +1,7 @@
 package pl.koder95.eme.core.spi;
 
 import pl.koder95.eme.domain.index.Index;
-import pl.koder95.eme.domain.index.IndexType;
+import pl.koder95.eme.domain.index.BookType;
 
 import java.util.List;
 
@@ -10,7 +10,7 @@ import java.util.List;
  */
 public interface IndexRepository {
 
-    List<Index> getIndices(IndexType type);
+    List<Index> getIndices(BookType type);
 
     void reloadAll();
 }

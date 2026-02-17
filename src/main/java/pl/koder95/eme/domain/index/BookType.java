@@ -7,7 +7,7 @@ import java.util.Queue;
 /**
  * Typ księgi indeksowej.
  */
-public enum IndexType {
+public enum BookType {
     LIBER_BAPTISMORUM("Księga ochrzczonych", new LinkedList<>(Arrays.asList("name", "surname", "an"))),
     LIBER_CONFIRMATORUM("Księga bierzmowanych", new LinkedList<>(Arrays.asList("name", "surname", "an"))),
     LIBER_MATRIMONIORUM("Księga zaślubionych", new LinkedList<>(Arrays.asList("husband-surname", "husband-name", "wife-surname", "wife-name", "an"))),
@@ -16,7 +16,7 @@ public enum IndexType {
     private final String bookName;
     private final Queue<String> fieldSchema;
 
-    IndexType(String bookName, Queue<String> fieldSchema) {
+    BookType(String bookName, Queue<String> fieldSchema) {
         this.bookName = bookName;
         this.fieldSchema = fieldSchema;
     }
