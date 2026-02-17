@@ -47,18 +47,24 @@ public class App extends Application {
 
     private Parent root = null;
     private SelfUpdateTask task = null;
-    private ApplicationContext applicationContext = null;
     private AppCloseService appCloseService = null;
     
     @Override
     public void init() throws Exception {
         super.init();
         task = new SelfUpdateTask();
+        preloadIndicesWhenNoArgs();
+        root = createMainView();
+    }
+
+    private void preloadIndicesWhenNoArgs() {
         if (getParameters().getUnnamed().isEmpty()) {
             Arrays.stream(IndexList.values()).forEach(IndexList::load);
         }
+    }
 
-        applicationContext = new ApplicationContext();
+    private Parent createMainView() throws Exception {
+        ApplicationContext applicationContext = new ApplicationContext();
         applicationContext.initialize();
 
         PersonalDataQueryService personalDataQueryService = applicationContext.getPersonalDataQueryService();
@@ -76,7 +82,7 @@ public class App extends Application {
             }
             throw new IllegalArgumentException("Nieobsługiwany kontroler FXML: " + type.getName());
         });
-        root = loader.load();
+        return loader.load();
     }
 
     /**
