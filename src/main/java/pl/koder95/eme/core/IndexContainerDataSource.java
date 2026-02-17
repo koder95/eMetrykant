@@ -19,6 +19,9 @@ import java.util.stream.Collectors;
  */
 public class IndexContainerDataSource implements DataSource, Visitor<Index> {
 
+    private static final java.util.logging.Logger LOGGER =
+            java.util.logging.Logger.getLogger(IndexContainerDataSource.class.getName());
+
     private final Map<String, Map<String, Set<ActNumber>>> baptisms = new TreeMap<>();
     private final Map<String, Map<String, Set<ActNumber>>> confirmations = new TreeMap<>();
     private final Map<String, Map<String, Set<ActNumber>>> marriages = new TreeMap<>();
@@ -62,6 +65,9 @@ public class IndexContainerDataSource implements DataSource, Visitor<Index> {
     }
 
     private static ActNumber[] get(Map<String, Map<String, Set<ActNumber>>> map, String surname, String name) {
+        if (surname == null || name == null) {
+            return new ActNumber[0];
+        }
         Map<String, Set<ActNumber>> namesBySurname = map.get(surname);
         if (namesBySurname == null) {
             return new ActNumber[0];
@@ -129,6 +135,8 @@ public class IndexContainerDataSource implements DataSource, Visitor<Index> {
             setMarriage(i);
         } else if (bookName.equalsIgnoreCase(BookType.LIBER_DEFUNCTORUM.getBookName())) {
             setDecease(i);
+        } else {
+            LOGGER.warning(() -> "Unrecognized book name, index skipped: " + bookName);
         }
     }
 
