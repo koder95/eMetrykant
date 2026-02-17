@@ -3,7 +3,6 @@ package pl.koder95.eme.fx;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.DialogPane;
 import javafx.scene.control.Label;
@@ -17,28 +16,23 @@ import javafx.scene.text.FontWeight;
  */
 public class FxDialogs {
 
+    /**
+     * Tworzy dialog potwierdzenia.
+     */
     public Alert createConfirmationAlert(Scene ownerScene, String title, String header, String content) {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        if (ownerScene != null) {
-            alert.initOwner(ownerScene.getWindow());
-        }
-        alert.setTitle(title);
-        alert.setHeaderText(header);
-        alert.setContentText(content);
-        return alert;
+        return createAlert(Alert.AlertType.CONFIRMATION, ownerScene, title, header, content);
     }
 
+    /**
+     * Tworzy dialog błędu.
+     */
     public Alert createErrorAlert(Scene ownerScene, String title, String header, String content) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        if (ownerScene != null) {
-            alert.initOwner(ownerScene.getWindow());
-        }
-        alert.setTitle(title);
-        alert.setHeaderText(header);
-        alert.setContentText(content);
-        return alert;
+        return createAlert(Alert.AlertType.ERROR, ownerScene, title, header, content);
     }
 
+    /**
+     * Tworzy dialog postępu bez akcji anulowania.
+     */
     public Dialog<Boolean> createProgressDialog(Scene ownerScene, String messageText) {
         Dialog<Boolean> dialog = new Dialog<>();
         ProgressIndicator indicator = new ProgressIndicator(ProgressIndicator.INDETERMINATE_PROGRESS);
@@ -54,12 +48,21 @@ public class FxDialogs {
         DialogPane pane = new DialogPane();
         pane.setContent(root);
         dialog.setDialogPane(pane);
-        dialog.getDialogPane().getButtonTypes().add(ButtonType.CANCEL);
-        dialog.setOnCloseRequest(event -> dialog.close());
 
         if (ownerScene != null) {
             dialog.initOwner(ownerScene.getWindow());
         }
         return dialog;
+    }
+
+    private Alert createAlert(Alert.AlertType type, Scene ownerScene, String title, String header, String content) {
+        Alert alert = new Alert(type);
+        if (ownerScene != null) {
+            alert.initOwner(ownerScene.getWindow());
+        }
+        alert.setTitle(title);
+        alert.setHeaderText(header);
+        alert.setContentText(content);
+        return alert;
     }
 }

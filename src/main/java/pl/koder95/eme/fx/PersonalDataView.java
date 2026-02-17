@@ -101,10 +101,16 @@ public class PersonalDataView implements Initializable {
         this.decease.setText(viewData.getDeceaseAN());
     }
 
+    /**
+     * Obsługuje próbę zamknięcia aplikacji z potwierdzeniem.
+     */
     public void close(ActionEvent actionEvent) {
         appCloseService.closeWithConfirmation(main.getScene());
     }
 
+    /**
+     * Ponownie wczytuje dane indeksów i odświeża licznik aktów.
+     */
     public void reload(ActionEvent actionEvent) {
         Scene scene = main.getScene();
         if (scene != null) {
@@ -135,6 +141,7 @@ public class PersonalDataView implements Initializable {
                     });
                 }
             });
+            thread.setDaemon(true);
             dialog.setOnShown(event -> Platform.runLater(thread::start));
             dialog.show();
         }

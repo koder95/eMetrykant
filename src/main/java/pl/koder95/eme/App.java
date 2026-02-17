@@ -18,6 +18,7 @@ package pl.koder95.eme;
 
 import static pl.koder95.eme.Main.*;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
@@ -47,6 +48,7 @@ public class App extends Application {
     private Parent root = null;
     private SelfUpdateTask task = null;
     private ApplicationContext applicationContext = null;
+    private AppCloseService appCloseService = null;
     
     @Override
     public void init() throws Exception {
@@ -61,7 +63,7 @@ public class App extends Application {
 
         PersonalDataQueryService personalDataQueryService = applicationContext.getPersonalDataQueryService();
         IndexReloadService indexReloadService = applicationContext.getIndexReloadService();
-        AppCloseService appCloseService = applicationContext.getAppCloseService();
+        appCloseService = applicationContext.getAppCloseService();
         FxDialogs dialogs = applicationContext.getDialogs();
         AppConfig appConfig = applicationContext.getAppConfig();
 
@@ -77,6 +79,9 @@ public class App extends Application {
         root = loader.load();
     }
 
+    /**
+     * Uruchamia główne okno aplikacji i obsługuje scenariusz samoczynnej aktualizacji.
+     */
     @Override
     public void start(Stage primaryStage) {
         primaryStage.getIcons().add(new Image(FAVICON_PATH));
@@ -109,7 +114,7 @@ public class App extends Application {
             primaryStage.setScene(new Scene(root));
             primaryStage.setOnCloseRequest(event -> {
                 event.consume();
-                appCloseService.closeWithConfirmation(primaryStage.getScene(), () -> System.exit(0));
+                appCloseService.closeWithConfirmation(primaryStage.getScene(), Platform::exit);
             });
             primaryStage.show();
         }
