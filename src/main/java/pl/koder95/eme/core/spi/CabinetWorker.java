@@ -68,9 +68,9 @@ public interface CabinetWorker {
         personalData.forEach((surname, names) -> names.forEach((name) -> {
             Briefcase briefcase = cabinet.get(surname, name);
             Arrays.stream(briefcase.getBaptism()).forEach(a -> dataTarget.setBaptism(surname, name, a));
-            Arrays.stream(briefcase.getConfirmation()).forEach(a -> dataTarget.setBaptism(surname, name, a));
-            Arrays.stream(briefcase.getMarriage()).forEach(a -> dataTarget.setBaptism(surname, name, a));
-            Arrays.stream(briefcase.getDecease()).forEach(a -> dataTarget.setBaptism(surname, name, a));
+            Arrays.stream(briefcase.getConfirmation()).forEach(a -> dataTarget.setConfirmation(surname, name, a));
+            Arrays.stream(briefcase.getMarriage()).forEach(a -> dataTarget.setMarriage(surname, name, a));
+            Arrays.stream(briefcase.getDecease()).forEach(a -> dataTarget.setDecease(surname, name, a));
         }));
     }
 }

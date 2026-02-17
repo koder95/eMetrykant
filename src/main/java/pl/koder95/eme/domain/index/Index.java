@@ -4,6 +4,7 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import pl.koder95.eme.Visited;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -43,7 +44,7 @@ public class Index implements Visited {
 
     public static Index create(Book owner, Node index) {
         if (index == null) {
-            return new Index(owner);
+            return null;
         }
         if (!index.getNodeName().equalsIgnoreCase("index")) {
             return null;
@@ -64,7 +65,7 @@ public class Index implements Visited {
     }
 
     public Set<String> getDataNames() {
-        return data.keySet();
+        return Collections.unmodifiableSet(data.keySet());
     }
 
     public ActNumber getActNumber() {

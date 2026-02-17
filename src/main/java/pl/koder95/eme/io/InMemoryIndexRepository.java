@@ -12,7 +12,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.EnumMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -42,7 +41,7 @@ public class InMemoryIndexRepository implements IndexRepository {
     public synchronized List<Index> getIndices(BookType type) {
         Objects.requireNonNull(type, "type must not be null");
         ensureLoaded();
-        return Collections.unmodifiableList(loaded.get(type));
+        return Collections.unmodifiableList(loaded.computeIfAbsent(type, ignored -> new ArrayList<>()));
     }
 
     @Override
@@ -51,7 +50,7 @@ public class InMemoryIndexRepository implements IndexRepository {
         try {
             List<Book> books = loader.loadBooks();
             for (BookType type : BookType.values()) {
-                List<Index> selected = new LinkedList<>();
+                List<Index> selected = new ArrayList<>();
                 books.stream()
                         .filter(book -> book.getName().equalsIgnoreCase(type.getBookName()))
                         .forEach(book -> {
@@ -59,16 +58,16 @@ public class InMemoryIndexRepository implements IndexRepository {
                             selected.addAll(book.getIndices());
                             MemoryUtils.memory();
                         });
-                List<Index> existing = loaded.get(type);
+                List<Index> existing = loaded.computeIfAbsent(type, ignored -> new ArrayList<>());
                 existing.clear();
                 existing.addAll(selected);
             }
             loadedOnce = true;
         } catch (IOException ex) {
             for (BookType type : BookType.values()) {
-                loaded.get(type).clear();
+                loaded.computeIfAbsent(type, ignored -> new ArrayList<>()).clear();
             }
-            loadedOnce = true;
+            loadedOnce = false;
             throw new IllegalStateException("Failed to reload indices", ex);
         }
     }

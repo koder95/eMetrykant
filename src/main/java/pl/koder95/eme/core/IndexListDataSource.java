@@ -6,6 +6,7 @@ import pl.koder95.eme.domain.index.ActNumber;
 import pl.koder95.eme.domain.index.BookType;
 import pl.koder95.eme.io.InMemoryIndexRepository;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -19,6 +20,7 @@ public class IndexListDataSource implements DataSource {
     private final IndexContainerDataSource confirmations;
     private final IndexContainerDataSource marriages;
     private final IndexContainerDataSource deceases;
+    private final Map<String, Set<String>> personalData;
 
     public IndexListDataSource() {
         this(new InMemoryIndexRepository());
@@ -29,6 +31,13 @@ public class IndexListDataSource implements DataSource {
         confirmations = new IndexContainerDataSource(indexRepository.getIndices(BookType.LIBER_CONFIRMATORUM));
         marriages = new IndexContainerDataSource(indexRepository.getIndices(BookType.LIBER_MATRIMONIORUM));
         deceases = new IndexContainerDataSource(indexRepository.getIndices(BookType.LIBER_DEFUNCTORUM));
+
+        Map<String, Set<String>> merged = new HashMap<>();
+        putAll(merged, baptisms.getPersonalData());
+        putAll(merged, confirmations.getPersonalData());
+        putAll(merged, marriages.getPersonalData());
+        putAll(merged, deceases.getPersonalData());
+        this.personalData = Collections.unmodifiableMap(merged);
     }
 
     @Override
@@ -53,20 +62,10 @@ public class IndexListDataSource implements DataSource {
 
     @Override
     public Map<String, Set<String>> getPersonalData() {
-        Map<String, Set<String>> merged = new HashMap<>();
-        putAll(merged, baptisms.getPersonalData());
-        putAll(merged, confirmations.getPersonalData());
-        putAll(merged, marriages.getPersonalData());
-        putAll(merged, deceases.getPersonalData());
-        return merged;
+        return personalData;
     }
 
     private static void putAll(Map<String, Set<String>> merged, Map<String, Set<String>> source) {
-        source.forEach((surname, names) -> {
-            if (!merged.containsKey(surname)) {
-                merged.put(surname, new HashSet<>());
-            }
-            merged.get(surname).addAll(names);
-        });
+        source.forEach((surname, names) -> merged.computeIfAbsent(surname, ignored -> new HashSet<>()).addAll(names));
     }
 }

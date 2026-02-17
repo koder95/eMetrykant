@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Księga zawierająca indeksy.
@@ -14,7 +15,11 @@ public class Book {
     private final String name;
 
     public Book(String name) {
-        this.name = name;
+        String normalizedName = Objects.requireNonNull(name, "name must not be null").trim();
+        if (normalizedName.isEmpty()) {
+            throw new IllegalArgumentException("name must not be blank");
+        }
+        this.name = normalizedName;
         this.indices = new ArrayList<>();
     }
 

@@ -2,13 +2,13 @@ package pl.koder95.eme.application;
 
 import javafx.util.Callback;
 import javafx.util.StringConverter;
-import pl.koder95.eme.core.AbstractCabinetWorker;
 import pl.koder95.eme.core.IndexListDataSource;
 import pl.koder95.eme.core.spi.CabinetAnalyzer;
 import pl.koder95.eme.core.spi.IndexRepository;
 import pl.koder95.eme.core.spi.PersonalDataModel;
 
 import java.util.Collection;
+import java.util.Objects;
 
 import static org.controlsfx.control.textfield.AutoCompletionBinding.ISuggestionRequest;
 
@@ -25,8 +25,8 @@ public class PersonalDataQueryService {
     private final IndexRepository indexRepository;
 
     public PersonalDataQueryService(CabinetAnalyzer analyzer, IndexRepository indexRepository) {
-        this.analyzer = analyzer;
-        this.indexRepository = indexRepository;
+        this.analyzer = Objects.requireNonNull(analyzer, "analyzer must not be null");
+        this.indexRepository = Objects.requireNonNull(indexRepository, "indexRepository must not be null");
     }
 
     public Callback<ISuggestionRequest, Collection<PersonalDataModel>> getSuggestionProvider() {
@@ -38,9 +38,7 @@ public class PersonalDataQueryService {
     }
 
     public void reloadAnalyzer() {
-        if (analyzer instanceof AbstractCabinetWorker worker) {
-            worker.setDataSource(new IndexListDataSource(indexRepository));
-        }
+        analyzer.setDataSource(new IndexListDataSource(indexRepository));
         analyzer.load();
     }
 

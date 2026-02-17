@@ -5,7 +5,9 @@ import org.w3c.dom.Document;
 import java.io.IOException;
 
 /**
- * Źródło dokumentu indeksów niezależne od formatu i nośnika.
+ * XML-owe źródło dokumentu indeksów.
+ *
+ * <p>Kontrakt jest celowo specyficzny dla XML i zwraca {@link Document}.</p>
  */
 public interface IndexDataSource {
 

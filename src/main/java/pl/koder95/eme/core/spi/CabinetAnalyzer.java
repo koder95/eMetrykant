@@ -33,4 +33,11 @@ public interface CabinetAnalyzer extends CabinetWorker {
      * jest do prezentacji sugestii wyszukiwania
      */
     StringConverter<PersonalDataModel> getPersonalDataConverter();
+
+    /**
+     * Ustawia źródło danych wykorzystywane przy ponownym ładowaniu analizatora.
+     *
+     * @param source nowe źródło danych
+     */
+    void setDataSource(DataSource source);
 }

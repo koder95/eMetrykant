@@ -89,7 +89,7 @@ public class PersonalDataView implements Initializable {
                     }
             );
         }
-        numberOfActs.setText(personalDataQueryService.getNumberOfActs() + "");
+        numberOfActs.setText(String.valueOf(personalDataQueryService.getNumberOfActs()));
     }
 
     private void setPersonalDataModel(PersonalDataModel model) {
@@ -134,7 +134,7 @@ public class PersonalDataView implements Initializable {
                                     finalReloadException.getMessage()
                             ).showAndWait();
                         } else {
-                            numberOfActs.setText(personalDataQueryService.getNumberOfActs() + "");
+                            numberOfActs.setText(String.valueOf(personalDataQueryService.getNumberOfActs()));
                         }
                         dialog.setResult(finalReloadException == null);
                         dialog.close();

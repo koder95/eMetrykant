@@ -46,7 +46,8 @@ public class App extends Application {
     private Parent root = null;
     private SelfUpdateTask task = null;
     private AppCloseService appCloseService = null;
-    
+    private ApplicationContext applicationContext = null;
+
     @Override
     public void init() throws Exception {
         super.init();
@@ -55,7 +56,7 @@ public class App extends Application {
     }
 
     private Parent createMainView() throws Exception {
-        ApplicationContext applicationContext = new ApplicationContext();
+        applicationContext = new ApplicationContext();
         applicationContext.initialize();
 
         PersonalDataQueryService personalDataQueryService = applicationContext.getPersonalDataQueryService();
@@ -120,7 +121,9 @@ public class App extends Application {
         primaryStage.setMinWidth(400);
         primaryStage.setMinHeight(100);
         primaryStage.show();
-        new Thread(task).start();
+        Thread updateThread = new Thread(task);
+        updateThread.setDaemon(true);
+        updateThread.start();
     }
 
     private void showMainWindow(Stage primaryStage) {

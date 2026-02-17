@@ -14,11 +14,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.logging.Logger;
 
 /**
  * Loader odpowiedzialny za wczytywanie i filtrowanie rekordów indeksów.
  */
 public class IndexLoader {
+
+    private static final Logger LOGGER = Logger.getLogger(IndexLoader.class.getName());
 
     private final IndexDataSource dataSource;
     private final IndexFilter filter;
@@ -56,7 +59,7 @@ public class IndexLoader {
                 .map(String::trim)
                 .orElse(null);
         if (bookName == null || bookName.isBlank()) {
-            System.err.println("Pominięto <book> bez poprawnego atrybutu 'name'.");
+            LOGGER.warning("Pominięto <book> bez poprawnego atrybutu 'name'.");
             return null;
         }
         Book book = new Book(bookName);

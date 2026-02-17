@@ -4,6 +4,7 @@ import pl.koder95.eme.Visitor;
 import pl.koder95.eme.core.spi.DataSource;
 import pl.koder95.eme.domain.index.ActNumber;
 import pl.koder95.eme.domain.index.Book;
+import pl.koder95.eme.domain.index.BookType;
 import pl.koder95.eme.domain.index.Index;
 
 import java.util.*;
@@ -57,17 +58,15 @@ public class IndexContainerDataSource implements DataSource, Visitor<Index> {
     }
 
     private static ActNumber[] get(Map<String, Map<String, Set<ActNumber>>> map, String surname, String name) {
-        for (Map.Entry<String, Map<String, Set<ActNumber>>> entry : map.entrySet()) {
-            if (entry.getKey().equals(surname)) {
-                for (Map.Entry<String, Set<ActNumber>> e : entry.getValue().entrySet()) {
-                    if (e.getKey().equals(name)) {
-                        if (e.getValue() == null) return new ActNumber[0];
-                        return e.getValue().toArray(new ActNumber[0]);
-                    }
-                }
-            }
+        Map<String, Set<ActNumber>> namesBySurname = map.get(surname);
+        if (namesBySurname == null) {
+            return new ActNumber[0];
         }
-        return null;
+        Set<ActNumber> numbers = namesBySurname.get(name);
+        if (numbers == null) {
+            return new ActNumber[0];
+        }
+        return numbers.toArray(new ActNumber[0]);
     }
 
     private void set(Map<String, Map<String, Set<ActNumber>>> map, String surname, String name,
@@ -118,13 +117,13 @@ public class IndexContainerDataSource implements DataSource, Visitor<Index> {
             return;
         }
         String bookName = owner.getName();
-        if (bookName.equalsIgnoreCase("Księga ochrzczonych")) {
+        if (bookName.equalsIgnoreCase(BookType.LIBER_BAPTISMORUM.getBookName())) {
             setBaptism(i);
-        } else if (bookName.equalsIgnoreCase("Księga bierzmowanych")) {
+        } else if (bookName.equalsIgnoreCase(BookType.LIBER_CONFIRMATORUM.getBookName())) {
             setConfirmation(i);
-        } else if (bookName.equalsIgnoreCase("Księga zaślubionych")) {
+        } else if (bookName.equalsIgnoreCase(BookType.LIBER_MATRIMONIORUM.getBookName())) {
             setMarriage(i);
-        } else if (bookName.equalsIgnoreCase("Księga zmarłych")) {
+        } else if (bookName.equalsIgnoreCase(BookType.LIBER_DEFUNCTORUM.getBookName())) {
             setDecease(i);
         }
     }

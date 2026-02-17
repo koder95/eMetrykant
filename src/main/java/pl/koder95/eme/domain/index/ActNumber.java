@@ -3,6 +3,7 @@ package pl.koder95.eme.domain.index;
 import pl.koder95.eme.Main;
 
 import java.io.Serializable;
+import java.util.Objects;
 import java.util.regex.Matcher;
 
 import static pl.koder95.eme.Main.DIGITS_STRING_PATTERN;
@@ -18,7 +19,11 @@ public class ActNumber implements Comparable<ActNumber>, Serializable {
     private final int year;
 
     public ActNumber(String sign, int year) {
-        this.sign = sign;
+        String normalizedSign = Objects.requireNonNull(sign, "sign must not be null").trim();
+        if (normalizedSign.isEmpty()) {
+            throw new IllegalArgumentException("sign must not be blank");
+        }
+        this.sign = normalizedSign;
         this.year = year;
     }
 
@@ -64,6 +69,22 @@ public class ActNumber implements Comparable<ActNumber>, Serializable {
         return Main.DEFAULT_COLLATOR.compare(getSign(), o.getSign());
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (!(obj instanceof ActNumber other)) {
+            return false;
+        }
+        return year == other.year && sign.equals(other.sign);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(sign, year);
+    }
+
     public static ActNumber parseActNumber(String s) {
         if (s == null || !s.contains("/")) {
             return null;
@@ -77,7 +98,7 @@ public class ActNumber implements Comparable<ActNumber>, Serializable {
         try {
             int year = Integer.parseInt(yearS);
             return new ActNumber(sign, year);
-        } catch (NumberFormatException ex) {
+        } catch (NumberFormatException | IllegalArgumentException ex) {
             return null;
         }
     }

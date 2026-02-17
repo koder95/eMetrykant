@@ -32,7 +32,7 @@ public class ApplicationContext {
     private final AppConfig appConfig;
     private final FxDialogs dialogs;
     private final AppCloseService appCloseService;
-    private boolean initialized;
+    private volatile boolean initialized;
 
     public ApplicationContext() {
         this.cabinet = new TreeFilingCabinet();
@@ -63,6 +63,7 @@ public class ApplicationContext {
     }
 
     public IndexReloadService getIndexReloadService() {
+        ensureInitialized();
         return indexReloadService;
     }
 
