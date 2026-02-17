@@ -70,7 +70,7 @@ public class App extends Application {
         FXMLLoader loader = new FXMLLoader(url, appConfig.bundle());
         loader.setControllerFactory(type -> {
             if (type == PersonalDataView.class) {
-                return new PersonalDataView(personalDataQueryService, indexReloadService, appCloseService, dialogs);
+                return new PersonalDataView(personalDataQueryService, indexReloadService, appCloseService, dialogs, appConfig.bundle());
             }
             throw new IllegalArgumentException("Nieobsługiwany kontroler FXML: " + type.getName());
         });

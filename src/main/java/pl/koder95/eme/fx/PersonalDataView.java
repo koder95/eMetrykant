@@ -34,15 +34,18 @@ public class PersonalDataView implements Initializable {
     private final IndexReloadService indexReloadService;
     private final AppCloseService appCloseService;
     private final FxDialogs dialogs;
+    private final ResourceBundle bundle;
 
     public PersonalDataView(PersonalDataQueryService personalDataQueryService,
                             IndexReloadService indexReloadService,
                             AppCloseService appCloseService,
-                            FxDialogs dialogs) {
+                            FxDialogs dialogs,
+                            ResourceBundle bundle) {
         this.personalDataQueryService = personalDataQueryService;
         this.indexReloadService = indexReloadService;
         this.appCloseService = appCloseService;
         this.dialogs = dialogs;
+        this.bundle = bundle;
     }
 
     @FXML
@@ -105,7 +108,7 @@ public class PersonalDataView implements Initializable {
     public void reload(ActionEvent actionEvent) {
         Scene scene = main.getScene();
         if (scene != null) {
-            Dialog<Boolean> dialog = dialogs.createProgressDialog(scene, "Czekaj...");
+            Dialog<Boolean> dialog = dialogs.createProgressDialog(scene, bundle.getString("FX_RELOAD_PROGRESS_MESSAGE"));
             Thread thread = new Thread(() -> {
                 try {
                     indexReloadService.reloadAll();
