@@ -113,7 +113,7 @@ public class IndexContainerDataSource implements DataSource, Visitor<Index> {
             return;
         }
         Book owner = i.getOwner();
-        if (owner == null || owner.getName() == null) {
+        if (owner == null) {
             return;
         }
         String bookName = owner.getName();

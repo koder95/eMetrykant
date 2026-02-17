@@ -71,7 +71,7 @@ public class InMemoryIndexRepository implements IndexRepository {
             for (BookType type : BookType.values()) {
                 loaded.computeIfAbsent(type, ignored -> new ArrayList<>()).clear();
             }
-            loadedOnce = true;
+            loadedOnce = false;
             LOGGER.log(Level.SEVERE, "Failed to reload indices", ex);
             throw new IllegalStateException("Failed to reload indices", ex);
         }

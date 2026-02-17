@@ -136,7 +136,9 @@ public class PersonalDataView implements Initializable {
                                     scene,
                                     bundle.getString("ALERT_RELOAD_ERROR_TITLE"),
                                     bundle.getString("ALERT_RELOAD_ERROR_HEADER"),
-                                    finalReloadException.getMessage()
+                                    finalReloadException.getMessage() != null
+                                            ? finalReloadException.getMessage()
+                                            : finalReloadException.toString()
                             ).showAndWait();
                         } else {
                             numberOfActs.setText(String.valueOf(personalDataQueryService.getNumberOfActs()));

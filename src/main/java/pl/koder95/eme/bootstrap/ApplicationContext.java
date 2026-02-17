@@ -23,9 +23,8 @@ import pl.koder95.eme.io.InMemoryIndexRepository;
  */
 public class ApplicationContext {
 
-    private final FilingCabinet cabinet;
+    private static final CabinetAnalyzer DEFAULT_CABINET_ANALYZER = createCabinetAnalyzer();
     private final IndexRepository indexRepository;
-    private final SuggestionProvider suggestionProvider;
     private final CabinetAnalyzer cabinetAnalyzer;
     private final PersonalDataQueryService personalDataQueryService;
     private final IndexReloadService indexReloadService;
@@ -34,15 +33,9 @@ public class ApplicationContext {
     private final AppCloseService appCloseService;
     private volatile boolean initialized;
 
-    public ApplicationContext() {
-        this.cabinet = new TreeFilingCabinet();
-        this.indexRepository = new InMemoryIndexRepository();
-        this.suggestionProvider = new SuggestionProvider(cabinet);
-
-        SimpleCabinetAnalyzer analyzer = new SimpleCabinetAnalyzer(cabinet, suggestionProvider);
-        analyzer.setDataTarget(new NoOpDataTarget());
+    public ApplicationContext(CabinetAnalyzer analyzer) {
         this.cabinetAnalyzer = analyzer;
-
+        this.indexRepository = new InMemoryIndexRepository();
         this.personalDataQueryService = new PersonalDataQueryService(cabinetAnalyzer, indexRepository);
         this.indexReloadService = new IndexReloadService(indexRepository);
         this.appConfig = new AppConfig(Main.BUNDLE, Main.POLISH, Main.DEFAULT_COLLATOR);
@@ -51,9 +44,16 @@ public class ApplicationContext {
         this.initialized = false;
     }
 
-    public CabinetAnalyzer getCabinetAnalyzer() {
-        ensureInitialized();
-        return cabinetAnalyzer;
+    public ApplicationContext() {
+        this(DEFAULT_CABINET_ANALYZER);
+    }
+
+    private static CabinetAnalyzer createCabinetAnalyzer() {
+        FilingCabinet cabinet = new TreeFilingCabinet();
+        SuggestionProvider suggestionProvider = new SuggestionProvider(cabinet);
+        SimpleCabinetAnalyzer analyzer = new SimpleCabinetAnalyzer(cabinet, suggestionProvider);
+        analyzer.setDataTarget(new NoOpDataTarget());
+        return analyzer;
     }
 
     public PersonalDataQueryService getPersonalDataQueryService() {

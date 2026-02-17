@@ -18,7 +18,7 @@ import static org.controlsfx.control.textfield.AutoCompletionBinding.ISuggestion
 public class PersonalDataQueryService {
 
     private static final PersonalDataPresentation EMPTY_DATA = new PersonalDataPresentation(
-            "-", "", "-", "-", "-", "-"
+            null, null, null, null, null, null
     );
 
     private final CabinetAnalyzer analyzer;
