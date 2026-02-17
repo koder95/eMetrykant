@@ -4,7 +4,7 @@ import javafx.util.StringConverter;
 import pl.koder95.eme.core.spi.Briefcase;
 import pl.koder95.eme.core.spi.FilingCabinet;
 import pl.koder95.eme.core.spi.PersonalDataModel;
-import pl.koder95.eme.dfs.ActNumber;
+import pl.koder95.eme.domain.index.ActNumber;
 
 import java.util.Arrays;
 import java.util.function.Function;

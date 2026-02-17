@@ -1,4 +1,4 @@
-package pl.koder95.eme.dfs;
+package pl.koder95.eme.core.spi;
 
 import org.w3c.dom.Document;
 

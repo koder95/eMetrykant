@@ -35,13 +35,11 @@ import pl.koder95.eme.bootstrap.ApplicationContext;
 import pl.koder95.eme.application.AppCloseService;
 import pl.koder95.eme.application.IndexReloadService;
 import pl.koder95.eme.application.PersonalDataQueryService;
-import pl.koder95.eme.dfs.IndexList;
 import pl.koder95.eme.fx.FxDialogs;
 import pl.koder95.eme.fx.PersonalDataView;
 import pl.koder95.eme.git.RepositoryInfo;
 
 import java.net.URL;
-import java.util.Arrays;
 
 public class App extends Application {
 
@@ -53,14 +51,7 @@ public class App extends Application {
     public void init() throws Exception {
         super.init();
         task = new SelfUpdateTask();
-        preloadIndicesWhenNoArgs();
         root = createMainView();
-    }
-
-    private void preloadIndicesWhenNoArgs() {
-        if (getParameters().getUnnamed().isEmpty()) {
-            Arrays.stream(IndexList.values()).forEach(IndexList::load);
-        }
     }
 
     private Parent createMainView() throws Exception {

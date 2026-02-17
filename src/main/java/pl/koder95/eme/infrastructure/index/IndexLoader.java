@@ -1,9 +1,13 @@
-package pl.koder95.eme.dfs;
+package pl.koder95.eme.infrastructure.index;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import pl.koder95.eme.core.spi.IndexDataSource;
+import pl.koder95.eme.core.spi.IndexFilter;
+import pl.koder95.eme.domain.index.Book;
+import pl.koder95.eme.domain.index.Index;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -40,14 +44,10 @@ public class IndexLoader {
     }
 
     private Book parseBook(Node bookNode) {
-        if (bookNode == null || !bookNode.getNodeName().equalsIgnoreCase("book")) {
+        if (bookNode == null || !bookNode.getNodeName().equalsIgnoreCase("book") || !bookNode.hasAttributes()) {
             return null;
         }
-        if (!bookNode.hasAttributes()) {
-            return null;
-        }
-        String bookName = Optional
-                .ofNullable(bookNode.getAttributes().getNamedItem("name"))
+        String bookName = Optional.ofNullable(bookNode.getAttributes().getNamedItem("name"))
                 .map(Node::getTextContent)
                 .map(String::trim)
                 .orElse(null);

@@ -1,0 +1,71 @@
+package pl.koder95.eme.domain.index;
+
+import pl.koder95.eme.Main;
+
+import java.io.Serializable;
+import java.util.regex.Matcher;
+
+import static pl.koder95.eme.Main.DIGITS_STRING_PATTERN;
+
+/**
+ * Reprezentuje numer aktu (sygnatura/rok).
+ */
+public class ActNumber implements Comparable<ActNumber>, Serializable {
+
+    private final String sign;
+    private final int year;
+
+    public ActNumber(String sign, int year) {
+        this.sign = sign;
+        this.year = year;
+    }
+
+    public String getSign() {
+        return sign;
+    }
+
+    public int getYear() {
+        return year;
+    }
+
+    @Override
+    public String toString() {
+        return getSign() + "/" + getYear();
+    }
+
+    @Override
+    public int compareTo(ActNumber o) {
+        int compared = Integer.compare(getYear(), o.getYear());
+        if (compared != 0) {
+            return compared;
+        }
+        Matcher digit1 = DIGITS_STRING_PATTERN.matcher(getSign());
+        Matcher digit2 = DIGITS_STRING_PATTERN.matcher(o.getSign());
+        if (digit1.find() && digit2.find()) {
+            int act1 = Integer.parseInt(digit1.group(1));
+            int act2 = Integer.parseInt(digit2.group(1));
+            return Integer.compare(act1, act2);
+        }
+        String remainder1 = getSign().substring(digit1.end(1) + 1);
+        String remainder2 = getSign().substring(digit2.end(1) + 1);
+        return Main.DEFAULT_COLLATOR.compare(remainder1, remainder2);
+    }
+
+    public static ActNumber parseActNumber(String s) {
+        if (s == null || !s.contains("/")) {
+            return null;
+        }
+        int slash = s.indexOf('/');
+        if (slash == 0 || slash == s.length() - 1) {
+            return null;
+        }
+        String sign = s.substring(0, slash);
+        String yearS = s.substring(slash + 1);
+        try {
+            int year = Integer.parseInt(yearS);
+            return new ActNumber(sign, year);
+        } catch (NumberFormatException ex) {
+            return null;
+        }
+    }
+}

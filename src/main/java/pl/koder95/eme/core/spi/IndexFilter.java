@@ -1,4 +1,6 @@
-package pl.koder95.eme.dfs;
+package pl.koder95.eme.core.spi;
+
+import pl.koder95.eme.domain.index.Index;
 
 /**
  * Punkt rozszerzeń dla filtrowania rekordów indeksów.

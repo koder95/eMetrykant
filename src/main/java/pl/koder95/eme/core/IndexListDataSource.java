@@ -1,34 +1,33 @@
 package pl.koder95.eme.core;
 
 import pl.koder95.eme.core.spi.DataSource;
-import pl.koder95.eme.dfs.ActNumber;
-import pl.koder95.eme.dfs.IndexList;
+import pl.koder95.eme.core.spi.IndexRepository;
+import pl.koder95.eme.domain.index.ActNumber;
+import pl.koder95.eme.domain.index.IndexType;
+import pl.koder95.eme.infrastructure.index.InMemoryIndexRepository;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 /**
- * Źródło danych zawierające cztery pod-źródła, czyli instancje {@link IndexContainerDataSource źródeł},
- * które pobierają informacje z każdej instancji {@link IndexList listy indeksów}.
- *
- * @author Kamil Jan Mularski [@Koder95]
- * @version 0.4.0, 2020-08-26
- * @since 0.4.0
+ * Źródło danych budowane z repozytorium indeksów.
  */
 public class IndexListDataSource implements DataSource {
     private final IndexContainerDataSource baptisms;
     private final IndexContainerDataSource confirmations;
     private final IndexContainerDataSource marriages;
     private final IndexContainerDataSource deceases;
-    private Map<String, Set<String>> personalData;
 
-    /**
-     * Tworzy nową instancję wczytując do niej dane z czterech {@link IndexList list indeksów}.
-     */
     public IndexListDataSource() {
-        baptisms = new IndexContainerDataSource(IndexList.LIBER_BAPTISMORUM);
-        confirmations = new IndexContainerDataSource(IndexList.LIBER_CONFIRMATORUM);
-        marriages = new IndexContainerDataSource(IndexList.LIBER_MATRIMONIORUM);
-        deceases = new IndexContainerDataSource(IndexList.LIBER_DEFUNCTORUM);
+        this(new InMemoryIndexRepository());
+    }
+
+    public IndexListDataSource(IndexRepository indexRepository) {
+        baptisms = new IndexContainerDataSource(indexRepository.getIndices(IndexType.BAPTISMS));
+        confirmations = new IndexContainerDataSource(indexRepository.getIndices(IndexType.CONFIRMATIONS));
+        marriages = new IndexContainerDataSource(indexRepository.getIndices(IndexType.MARRIAGES));
+        deceases = new IndexContainerDataSource(indexRepository.getIndices(IndexType.DECEASES));
     }
 
     @Override
@@ -53,26 +52,20 @@ public class IndexListDataSource implements DataSource {
 
     @Override
     public Map<String, Set<String>> getPersonalData() {
-        if (personalData == null) {
-            Map<String, Set<String>> merge0 = merge(baptisms.getPersonalData(), confirmations.getPersonalData());
-            Map<String, Set<String>> merge1 = merge(marriages.getPersonalData(), deceases.getPersonalData());
-            Map<String, Set<String>> finalMerge = merge(merge0, merge1);
-            merge0.clear();
-            merge1.clear();
-            personalData = finalMerge;
-        }
-        return personalData;
+        Map<String, Set<String>> merged = new HashMap<>();
+        putAll(merged, baptisms.getPersonalData());
+        putAll(merged, confirmations.getPersonalData());
+        putAll(merged, marriages.getPersonalData());
+        putAll(merged, deceases.getPersonalData());
+        return merged;
     }
 
-    private static Map<String, Set<String>> merge(Map<String, Set<String>> pdata0,
-                                                  Map<String, Set<String>> pdata1) {
-        Map<String, Set<String>> merged = new TreeMap<>(pdata0);
-        pdata1.forEach((surname, names) -> {
+    private static void putAll(Map<String, Set<String>> merged, Map<String, Set<String>> source) {
+        source.forEach((surname, names) -> {
             if (!merged.containsKey(surname)) {
-                merged.put(surname, new HashSet<>());
+                merged.put(surname, new java.util.HashSet<>());
             }
             merged.get(surname).addAll(names);
         });
-        return merged;
     }
 }

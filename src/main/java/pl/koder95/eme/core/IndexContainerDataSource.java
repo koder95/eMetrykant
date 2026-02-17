@@ -2,12 +2,13 @@ package pl.koder95.eme.core;
 
 import pl.koder95.eme.Visitor;
 import pl.koder95.eme.core.spi.DataSource;
-import pl.koder95.eme.dfs.*;
+import pl.koder95.eme.domain.index.ActNumber;
+import pl.koder95.eme.domain.index.Index;
 
 import java.util.*;
 
 /**
- * Źródło danych, które pobiera informacje z {@link IndexContainer kontenera indeksów}.
+ * Źródło danych, które pobiera informacje z kolekcji indeksów.
  *
  * @author Kamil Jan Mularski [@Koder95]
  * @version 0.4.1, 2021-11-07
@@ -22,11 +23,11 @@ public class IndexContainerDataSource implements DataSource, Visitor<Index> {
     private final Map<String, Set<String>> personalData = new TreeMap<>();
 
     /**
-     * Tworzy źródło danych na podstawie wczytanych indeksów do {@link IndexContainer kontenera}.
-     * @param container kontener, którego indeksy zostaną przejrzane, aby pozyskać informacje
+     * Tworzy źródło danych na podstawie kolekcji indeksów.
+     * @param indexes indeksy do analizy
      */
-    public IndexContainerDataSource(IndexContainer container) {
-        if (container != null) container.getLoaded().forEach(this::visit);
+    public IndexContainerDataSource(Collection<Index> indexes) {
+        if (indexes != null) indexes.forEach(this::visit);
     }
 
     @Override
