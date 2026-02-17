@@ -28,6 +28,17 @@ public class FxDialogs {
         return alert;
     }
 
+    public Alert createErrorAlert(Scene ownerScene, String title, String header, String content) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        if (ownerScene != null) {
+            alert.initOwner(ownerScene.getWindow());
+        }
+        alert.setTitle(title);
+        alert.setHeaderText(header);
+        alert.setContentText(content);
+        return alert;
+    }
+
     public Dialog<Boolean> createProgressDialog(Scene ownerScene, String messageText) {
         Dialog<Boolean> dialog = new Dialog<>();
         ProgressIndicator indicator = new ProgressIndicator(ProgressIndicator.INDETERMINATE_PROGRESS);

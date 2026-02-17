@@ -110,13 +110,27 @@ public class PersonalDataView implements Initializable {
         if (scene != null) {
             Dialog<Boolean> dialog = dialogs.createProgressDialog(scene, bundle.getString("FX_RELOAD_PROGRESS_MESSAGE"));
             Thread thread = new Thread(() -> {
+                Exception reloadException = null;
                 try {
                     indexReloadService.reloadAll();
                     personalDataQueryService.reloadAnalyzer();
+                } catch (Exception ex) {
+                    reloadException = ex;
+                    ex.printStackTrace();
                 } finally {
+                    Exception finalReloadException = reloadException;
                     Platform.runLater(() -> {
-                        numberOfActs.setText(personalDataQueryService.getNumberOfActs() + "");
-                        dialog.setResult(true);
+                        if (finalReloadException != null) {
+                            dialogs.createErrorAlert(
+                                    scene,
+                                    bundle.getString("ALERT_RELOAD_ERROR_TITLE"),
+                                    bundle.getString("ALERT_RELOAD_ERROR_HEADER"),
+                                    finalReloadException.getMessage()
+                            ).showAndWait();
+                        } else {
+                            numberOfActs.setText(personalDataQueryService.getNumberOfActs() + "");
+                        }
+                        dialog.setResult(finalReloadException == null);
                         dialog.close();
                     });
                 }

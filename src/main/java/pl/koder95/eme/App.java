@@ -107,7 +107,10 @@ public class App extends Application {
         }
         else {
             primaryStage.setScene(new Scene(root));
-            primaryStage.setOnCloseRequest(event -> System.exit(0));
+            primaryStage.setOnCloseRequest(event -> {
+                event.consume();
+                appCloseService.closeWithConfirmation(primaryStage.getScene(), () -> System.exit(0));
+            });
             primaryStage.show();
         }
     }

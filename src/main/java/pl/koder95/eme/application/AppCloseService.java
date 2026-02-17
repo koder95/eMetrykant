@@ -21,6 +21,10 @@ public class AppCloseService {
     }
 
     public void closeWithConfirmation(Scene scene) {
+        closeWithConfirmation(scene, Platform::exit);
+    }
+
+    public void closeWithConfirmation(Scene scene, Runnable onConfirm) {
         Alert alert = dialogs.createConfirmationAlert(
                 scene,
                 appConfig.bundle().getString("ALERT_CONFIRM_CLOSE_TITLE"),
@@ -29,7 +33,7 @@ public class AppCloseService {
         );
         alert.showAndWait();
         if (alert.getResult() == ButtonType.OK) {
-            Platform.exit();
+            onConfirm.run();
         }
     }
 }
