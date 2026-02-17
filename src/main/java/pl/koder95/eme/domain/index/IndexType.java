@@ -8,10 +8,10 @@ import java.util.Queue;
  * Typ księgi indeksowej.
  */
 public enum IndexType {
-    BAPTISMS("Księga ochrzczonych", new LinkedList<>(Arrays.asList("name", "surname", "an"))),
-    CONFIRMATIONS("Księga bierzmowanych", new LinkedList<>(Arrays.asList("name", "surname", "an"))),
-    MARRIAGES("Księga zaślubionych", new LinkedList<>(Arrays.asList("husband-surname", "husband-name", "wife-surname", "wife-name", "an"))),
-    DECEASES("Księga zmarłych", new LinkedList<>(Arrays.asList("name", "surname", "an")));
+    LIBER_BAPTISMORUM("Księga ochrzczonych", new LinkedList<>(Arrays.asList("name", "surname", "an"))),
+    LIBER_CONFIRMATORUM("Księga bierzmowanych", new LinkedList<>(Arrays.asList("name", "surname", "an"))),
+    LIBER_MATRIMONIORUM("Księga zaślubionych", new LinkedList<>(Arrays.asList("husband-surname", "husband-name", "wife-surname", "wife-name", "an"))),
+    LIBER_DEFUNCTORUM("Księga zmarłych", new LinkedList<>(Arrays.asList("name", "surname", "an")));
 
     private final String bookName;
     private final Queue<String> fieldSchema;

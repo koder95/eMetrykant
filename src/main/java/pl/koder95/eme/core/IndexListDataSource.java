@@ -24,10 +24,10 @@ public class IndexListDataSource implements DataSource {
     }
 
     public IndexListDataSource(IndexRepository indexRepository) {
-        baptisms = new IndexContainerDataSource(indexRepository.getIndices(IndexType.BAPTISMS));
-        confirmations = new IndexContainerDataSource(indexRepository.getIndices(IndexType.CONFIRMATIONS));
-        marriages = new IndexContainerDataSource(indexRepository.getIndices(IndexType.MARRIAGES));
-        deceases = new IndexContainerDataSource(indexRepository.getIndices(IndexType.DECEASES));
+        baptisms = new IndexContainerDataSource(indexRepository.getIndices(IndexType.LIBER_BAPTISMORUM));
+        confirmations = new IndexContainerDataSource(indexRepository.getIndices(IndexType.LIBER_CONFIRMATORUM));
+        marriages = new IndexContainerDataSource(indexRepository.getIndices(IndexType.LIBER_MATRIMONIORUM));
+        deceases = new IndexContainerDataSource(indexRepository.getIndices(IndexType.LIBER_DEFUNCTORUM));
     }
 
     @Override
