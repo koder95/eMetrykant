@@ -1,4 +1,4 @@
-package pl.koder95.eme.infrastructure.index;
+package pl.koder95.eme.io;
 
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;

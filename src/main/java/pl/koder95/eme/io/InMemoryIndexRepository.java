@@ -1,4 +1,4 @@
-package pl.koder95.eme.infrastructure.index;
+package pl.koder95.eme.io;
 
 import pl.koder95.eme.Files;
 import pl.koder95.eme.MemoryUtils;

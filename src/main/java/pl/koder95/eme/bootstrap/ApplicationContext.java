@@ -13,7 +13,7 @@ import pl.koder95.eme.core.spi.CabinetAnalyzer;
 import pl.koder95.eme.core.spi.FilingCabinet;
 import pl.koder95.eme.core.spi.IndexRepository;
 import pl.koder95.eme.fx.FxDialogs;
-import pl.koder95.eme.infrastructure.index.InMemoryIndexRepository;
+import pl.koder95.eme.io.InMemoryIndexRepository;
 
 /**
  * Prosty kontener IoC aplikacji.

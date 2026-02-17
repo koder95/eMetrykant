@@ -4,7 +4,7 @@ import pl.koder95.eme.core.spi.DataSource;
 import pl.koder95.eme.core.spi.IndexRepository;
 import pl.koder95.eme.domain.index.ActNumber;
 import pl.koder95.eme.domain.index.IndexType;
-import pl.koder95.eme.infrastructure.index.InMemoryIndexRepository;
+import pl.koder95.eme.io.InMemoryIndexRepository;
 
 import java.util.HashMap;
 import java.util.Map;
