@@ -1,0 +1,75 @@
+package pl.koder95.eme.io;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import pl.koder95.eme.core.spi.IndexDataSource;
+import pl.koder95.eme.core.spi.IndexFilter;
+import pl.koder95.eme.domain.index.Book;
+import pl.koder95.eme.domain.index.Index;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.logging.Logger;
+
+/**
+ * Loader odpowiedzialny za wczytywanie i filtrowanie rekordów indeksów.
+ */
+public class IndexLoader {
+
+    private static final Logger LOGGER = Logger.getLogger(IndexLoader.class.getName());
+
+    private final IndexDataSource dataSource;
+    private final IndexFilter filter;
+
+    public IndexLoader(IndexDataSource dataSource, IndexFilter filter) {
+        this.dataSource = Objects.requireNonNull(dataSource, "dataSource must not be null");
+        this.filter = filter == null ? IndexFilter.acceptAll() : filter;
+    }
+
+    public List<Book> loadBooks() throws IOException {
+        Document doc = dataSource.loadDocument();
+        if (doc == null) {
+            throw new IOException("Failed to load document: data source returned null");
+        }
+        Element indices = doc.getDocumentElement();
+        List<Book> books = new ArrayList<>();
+        if (indices != null && indices.getNodeName().equalsIgnoreCase("indices")) {
+            NodeList bookNodes = indices.getElementsByTagName("book");
+            for (int i = 0; i < bookNodes.getLength(); i++) {
+                Book b = parseBook(bookNodes.item(i));
+                if (b != null) {
+                    books.add(b);
+                }
+            }
+        }
+        return books;
+    }
+
+    private Book parseBook(Node bookNode) {
+        if (bookNode == null || !bookNode.getNodeName().equalsIgnoreCase("book") || !bookNode.hasAttributes()) {
+            return null;
+        }
+        String bookName = Optional.ofNullable(bookNode.getAttributes().getNamedItem("name"))
+                .map(Node::getTextContent)
+                .map(String::trim)
+                .orElse(null);
+        if (bookName == null || bookName.isBlank()) {
+            LOGGER.warning("Pominięto <book> bez poprawnego atrybutu 'name'.");
+            return null;
+        }
+        Book book = new Book(bookName);
+        NodeList indices = bookNode.getChildNodes();
+        for (int i = 0; i < indices.getLength(); i++) {
+            Index index = Index.create(book, indices.item(i));
+            if (index != null && filter.accept(index)) {
+                book.addIndex(index);
+            }
+        }
+        return book;
+    }
+}

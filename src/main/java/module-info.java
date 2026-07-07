@@ -1,5 +1,6 @@
 module eme {
     requires java.xml;
+    requires java.logging;
     requires javafx.base;
     requires javafx.controls;
     requires javafx.fxml;

@@ -1,7 +1,7 @@
 package pl.koder95.eme.core;
 
 import pl.koder95.eme.core.spi.*;
-import pl.koder95.eme.dfs.ActNumber;
+import pl.koder95.eme.domain.index.ActNumber;
 
 /**
  * Pracownik szafy ze zdefiniowaną szafą aktową. Umożliwia także ustawienie odpowiedniego źródła danych

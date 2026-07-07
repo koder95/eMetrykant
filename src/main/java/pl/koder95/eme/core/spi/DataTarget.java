@@ -1,6 +1,6 @@
 package pl.koder95.eme.core.spi;
 
-import pl.koder95.eme.dfs.ActNumber;
+import pl.koder95.eme.domain.index.ActNumber;
 
 import java.util.Collection;
 import java.util.Set;
