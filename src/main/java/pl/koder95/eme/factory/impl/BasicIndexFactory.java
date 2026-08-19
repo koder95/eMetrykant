@@ -7,7 +7,6 @@ import java.util.function.Function;
 import pl.koder95.eme.dfs.Book;
 import pl.koder95.eme.dfs.BookType;
 import pl.koder95.eme.dfs.Index;
-import pl.koder95.eme.dfs.IndexNodeInterpreter;
 import pl.koder95.eme.factory.IndexFactory;
 
 public class BasicIndexFactory implements IndexFactory {
