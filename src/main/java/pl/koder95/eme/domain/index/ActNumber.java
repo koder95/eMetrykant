@@ -98,7 +98,7 @@ public class ActNumber implements Comparable<ActNumber>, Serializable {
         try {
             int year = Integer.parseInt(yearS);
             return new ActNumber(sign, year);
-        } catch (NumberFormatException | IllegalArgumentException ex) {
+        } catch (IllegalArgumentException ex) {
             return null;
         }
     }
