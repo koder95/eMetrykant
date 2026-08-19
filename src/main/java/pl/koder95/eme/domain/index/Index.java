@@ -20,7 +20,7 @@ public class Index implements Visited {
 
     private static final IndexNodeInterpreter NODE_INTERPRETER = new IndexNodeInterpreterImpl();
 
-    private final Map<String, String> data;
+    private final Map<String, String> data = new HashMap<>();
     private volatile ActNumber an;
     private volatile UniqueActNumber uan;
     @Getter
@@ -28,40 +28,17 @@ public class Index implements Visited {
 
     private Index(Book owner, Map<String, String> data) {
         this.owner = owner;
-        this.data = new HashMap<>(data == null ? Map.of() : data);
-    }
-
-    private Index(Book owner, Map<String, String> data) {
-        this.owner = owner;
-        data.forEach((key, value) -> {
-            if (key != null && !key.isBlank()) {
-                this.data.put(key, value == null ? "" : value);
-            }
-        });
+        if (data != null) {
+            data.forEach((key, value) -> {
+                if (key != null && !key.isBlank()) {
+                    this.data.put(key, value == null ? "" : value);
+                }
+            });
+        }
     }
 
     public static Index create(Node index) {
         return create(null, index);
-    }
-
-    /**
-     * Tworzy indeks na podstawie mapy atrybutów, np. danych wprowadzonych przez użytkownika.
-     *
-     * @param owner księga, do której należy indeks
-     * @param data atrybuty indeksu, wymagany jest niepusty atrybut {@code an}
-     * @return nowy indeks, albo {@code null} gdy brakuje numeru aktu
-     */
-    public static Index create(Book owner, Map<String, String> data) {
-        if (data == null) {
-            return null;
-        }
-        Index i = new Index(owner, data);
-        if (i.getData("an").isBlank()) {
-            String ownerName = owner == null ? "<null>" : owner.getName();
-            LOGGER.warning(() -> "Pominięto indeks bez atrybutu 'an'. owner=" + ownerName);
-            return null;
-        }
-        return i;
     }
 
     public static Index create(Book owner, Node index) {
@@ -88,13 +65,13 @@ public class Index implements Visited {
         if (data == null) {
             return null;
         }
-        String anValue = data.get("an");
-        if (anValue == null || anValue.isBlank()) {
+        Index created = new Index(owner, data);
+        if (created.getData("an").isBlank()) {
             String ownerName = owner == null ? "<null>" : owner.getName();
             log.warning(() -> "Pominięto indeks bez atrybutu 'an'. owner=" + ownerName);
             return null;
         }
-        return new Index(owner, data);
+        return created;
     }
 
     public String getData(String name) {
