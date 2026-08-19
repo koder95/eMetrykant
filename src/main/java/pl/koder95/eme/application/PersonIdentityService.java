@@ -87,11 +87,11 @@ public class PersonIdentityService {
     }
 
     public synchronized Collection<UniquePerson> getPeople() {
-        return registry.getPeople();
+        return new ArrayList<>(registry.getPeople());
     }
 
     public synchronized Set<PersonAppearance> getAppearances(UUID personId) {
-        return registry.getAppearances(personId);
+        return Set.copyOf(registry.getAppearances(personId));
     }
 
     public synchronized List<MatchSuggestion> getSuggestions() {

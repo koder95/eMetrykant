@@ -5,6 +5,7 @@ import pl.koder95.eme.domain.index.UniqueActNumber;
 import pl.koder95.eme.util.OneOrTwo;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 /**
@@ -26,7 +27,7 @@ public class PersonAppearanceExtractor {
          * @return klucz grupowania po znormalizowanych danych personalnych
          */
         public String personalDataKey() {
-            return (normalize(surname) + "|" + normalize(name)).toLowerCase();
+            return (normalize(surname) + "|" + normalize(name)).toLowerCase(Locale.ROOT);
         }
     }
 

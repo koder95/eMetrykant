@@ -54,12 +54,17 @@ public class HashMapElementRepository implements ElementRepository {
     public void removeIndex(String id) {
         ElementIndex removed = indexMap.remove(id);
         if (removed != null) {
-            removed.elementList().clear();
+            boolean stillReferenced = indexMap.values().stream().anyMatch(idx -> idx == removed);
+            if (!stillReferenced) {
+                removed.elementList().clear();
+            }
         }
     }
 
     @Override
     public List<ElementIndex> getIndices() {
-        return List.copyOf(indexMap.values());
+        return indexMap.values().stream()
+                .map(idx -> new ElementIndex(idx.id(), List.copyOf(idx.elementList())))
+                .toList();
     }
 }

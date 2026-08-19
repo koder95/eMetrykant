@@ -26,7 +26,9 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.file.AtomicMoveNotSupportedException;
 import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.UUID;
 
 /**
@@ -109,7 +111,12 @@ public class FilePersonStore {
                         + ": act=" + act + ", role=" + roleValue);
                 continue;
             }
-            registry.addAppearance(uuid, new PersonAppearance(uan, role));
+            try {
+                registry.addAppearance(uuid, new PersonAppearance(uan, role));
+            } catch (RepositoryException ex) {
+                log.warning(() -> "Pominięto niepoprawne wystąpienie osoby " + uuid
+                        + ": act=" + act + ", role=" + roleValue);
+            }
         }
     }
 
@@ -140,13 +147,29 @@ public class FilePersonStore {
             }
             root.appendChild(personElement);
         }
-        try (OutputStream out = java.nio.file.Files.newOutputStream(xmlPath)) {
-            Transformer transformer = TransformerFactory.newInstance().newTransformer();
-            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-            transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
-            transformer.transform(new DOMSource(doc), new StreamResult(out));
-        } catch (TransformerException e) {
-            throw new IOException("Failed to save people: " + xmlPath, e);
+        Path tempFile = java.nio.file.Files.createTempFile(xmlPath.getParent(), xmlPath.getFileName().toString(), ".tmp");
+        boolean moved = false;
+        try {
+            try (OutputStream out = java.nio.file.Files.newOutputStream(tempFile)) {
+                Transformer transformer = TransformerFactory.newInstance().newTransformer();
+                transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+                transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
+                transformer.transform(new DOMSource(doc), new StreamResult(out));
+            } catch (TransformerException e) {
+                throw new IOException("Failed to save people: " + xmlPath, e);
+            }
+            try {
+                java.nio.file.Files.move(tempFile, xmlPath,
+                        StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE);
+                moved = true;
+            } catch (AtomicMoveNotSupportedException ex) {
+                java.nio.file.Files.move(tempFile, xmlPath, StandardCopyOption.REPLACE_EXISTING);
+                moved = true;
+            }
+        } finally {
+            if (!moved && java.nio.file.Files.exists(tempFile)) {
+                java.nio.file.Files.delete(tempFile);
+            }
         }
     }
 

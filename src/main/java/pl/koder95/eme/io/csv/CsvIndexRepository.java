@@ -70,7 +70,7 @@ public class CsvIndexRepository implements MutableIndexRepository {
     public synchronized List<Index> getIndices(BookType type) {
         Objects.requireNonNull(type, "type must not be null");
         ensureLoaded();
-        return Collections.unmodifiableList(loaded.get(type));
+        return Collections.unmodifiableList(new ArrayList<>(loaded.get(type)));
     }
 
     @Override
@@ -240,12 +240,21 @@ public class CsvIndexRepository implements MutableIndexRepository {
                 }
                 Path file = fileOf(type);
                 Path temp = java.nio.file.Files.createTempFile(dataDir, file.getFileName().toString(), ".tmp");
-                java.nio.file.Files.writeString(temp, content, StandardCharsets.UTF_8);
+                boolean moved = false;
                 try {
-                    java.nio.file.Files.move(temp, file,
-                            StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE);
-                } catch (AtomicMoveNotSupportedException ex) {
-                    java.nio.file.Files.move(temp, file, StandardCopyOption.REPLACE_EXISTING);
+                    java.nio.file.Files.writeString(temp, content, StandardCharsets.UTF_8);
+                    try {
+                        java.nio.file.Files.move(temp, file,
+                                StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE);
+                        moved = true;
+                    } catch (AtomicMoveNotSupportedException ex) {
+                        java.nio.file.Files.move(temp, file, StandardCopyOption.REPLACE_EXISTING);
+                        moved = true;
+                    }
+                } finally {
+                    if (!moved && java.nio.file.Files.exists(temp)) {
+                        java.nio.file.Files.delete(temp);
+                    }
                 }
             }
         } catch (IOException ex) {

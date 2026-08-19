@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
@@ -160,7 +161,7 @@ public class PersonMatchAnalyzer {
             String father = index.get().getData("father-name").trim();
             String mother = index.get().getData("mother-name").trim();
             if (!father.isBlank() || !mother.isBlank()) {
-                return Optional.of((father + "|" + mother).toLowerCase());
+                return Optional.of((father + "|" + mother).toLowerCase(Locale.ROOT));
             }
         }
         return Optional.empty();

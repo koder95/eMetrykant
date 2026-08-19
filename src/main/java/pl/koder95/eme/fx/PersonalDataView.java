@@ -96,8 +96,9 @@ public class PersonalDataView implements Initializable {
         ));
         searching.textProperty().addListener(
                 (observable, oldValue, newValue) -> {
-                    if (oldValue.length() < newValue.length()) {
-                        searching.setText(newValue.toUpperCase());
+                    String uppercased = newValue.toUpperCase();
+                    if (!newValue.equals(uppercased)) {
+                        searching.setText(uppercased);
                     }
                 }
         );
