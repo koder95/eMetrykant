@@ -3,7 +3,7 @@ package pl.koder95.eme.io;
 import lombok.experimental.UtilityClass;
 import lombok.extern.java.Log;
 import pl.koder95.eme.Files;
-import pl.koder95.eme.core.spi.IndexRepository;
+import pl.koder95.eme.core.spi.MutableIndexRepository;
 import pl.koder95.eme.domain.index.BookType;
 import pl.koder95.eme.io.csv.CsvIndexRepository;
 
@@ -21,7 +21,7 @@ public class IndexRepositories {
      * są pliki CSV ksiąg, używa {@link CsvIndexRepository}; w przeciwnym razie
      * {@link InMemoryIndexRepository} (XML).
      */
-    public IndexRepository createDefault() {
+    public MutableIndexRepository createDefault() {
         if (!java.nio.file.Files.exists(Files.INDICES_XML) && anyBookCsvExists(Files.DATA_DIR)) {
             log.info(() -> "Brak indices.xml – używam danych CSV z: " + Files.DATA_DIR);
             return new CsvIndexRepository();

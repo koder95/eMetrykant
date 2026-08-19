@@ -3,7 +3,7 @@ package pl.koder95.eme.io.csv;
 import lombok.NonNull;
 import lombok.extern.java.Log;
 import pl.koder95.eme.Files;
-import pl.koder95.eme.core.spi.IndexRepository;
+import pl.koder95.eme.core.spi.MutableIndexRepository;
 import pl.koder95.eme.domain.index.Book;
 import pl.koder95.eme.domain.index.BookTemplate;
 import pl.koder95.eme.domain.index.BookType;
@@ -33,12 +33,12 @@ import java.util.logging.Level;
  * wyznacza {@code templates.xml}.
  *
  * <p>Odczyt buduje {@link UniqueActNumberRegistry rejestr unikalnych numerów};
- * modyfikacje ({@link #add(BookType, Map)}, {@link #remove(UniqueActNumber)})
- * działają w pamięci do czasu jawnego {@link #saveAll() zapisu}, który jest
- * atomowy per plik (UTF-8 bez BOM, CRLF).</p>
+ * modyfikacje ({@link #add(BookType, Map)}, {@link #replace(BookType, Index, Map)},
+ * {@link #remove(BookType, Index)}) działają w pamięci do czasu jawnego
+ * {@link #saveAll() zapisu}, który jest atomowy per plik (UTF-8 bez BOM, CRLF).</p>
  */
 @Log
-public class CsvIndexRepository implements IndexRepository {
+public class CsvIndexRepository implements MutableIndexRepository {
 
     private static final String FILE_EXTENSION = ".csv";
     private static final String LINE_SEPARATOR = "\r\n";
@@ -134,6 +134,7 @@ public class CsvIndexRepository implements IndexRepository {
      * @throws RepositoryException gdy dane są niepoprawne, brak szablonu księgi
      * albo numer aktu już istnieje
      */
+    @Override
     public synchronized Index add(BookType type, Map<String, String> data) {
         Objects.requireNonNull(type, "type must not be null");
         ensureLoaded();
@@ -155,6 +156,36 @@ public class CsvIndexRepository implements IndexRepository {
         return index;
     }
 
+    @Override
+    public synchronized Index replace(BookType type, Index index, Map<String, String> data) {
+        Objects.requireNonNull(type, "type must not be null");
+        Objects.requireNonNull(index, "index must not be null");
+        ensureLoaded();
+        if (templates.get(type) == null) {
+            throw new RepositoryException("No template for book: " + type.getBookName());
+        }
+        List<Index> indices = loaded.get(type);
+        int position = indexOf(indices, index);
+        if (position < 0) {
+            throw new IllegalStateException("Indeks nie należy do księgi: " + type.getBookName());
+        }
+        Index created = Index.create(books.get(type), data);
+        if (created == null) {
+            throw new RepositoryException("Invalid index data (missing 'an'?): " + data);
+        }
+        UniqueActNumber uan = created.getUniqueActNumber();
+        if (!UniqueActNumber.UNKNOWN.equals(uan)) {
+            Optional<Index> existing = actNumberRegistry.find(uan);
+            if ((existing.isPresent() && existing.get() != index)
+                    || actNumberRegistry.getConflicts().containsKey(uan)) {
+                throw new RepositoryException("Act number already exists: " + uan);
+            }
+        }
+        indices.set(position, created);
+        rebuildRegistry();
+        return created;
+    }
+
     /**
      * Usuwa akt jednoznacznie wskazany numerem (tylko w pamięci — patrz {@link #saveAll()}).
      *
@@ -166,36 +197,60 @@ public class CsvIndexRepository implements IndexRepository {
         Index index = actNumberRegistry.find(uan)
                 .orElseThrow(() -> new RepositoryException(
                         "Act number does not identify a single index: " + uan));
-        loaded.values().forEach(indices -> indices.remove(index));
+        for (BookType type : BookType.values()) {
+            if (remove(type, index)) {
+                return index;
+            }
+        }
+        throw new RepositoryException("Act number does not identify a single index: " + uan);
+    }
+
+    @Override
+    public synchronized boolean remove(BookType type, Index index) {
+        Objects.requireNonNull(type, "type must not be null");
+        if (index == null) {
+            return false;
+        }
+        ensureLoaded();
+        List<Index> indices = loaded.get(type);
+        int position = indexOf(indices, index);
+        if (position < 0) {
+            return false;
+        }
+        indices.remove(position);
         rebuildRegistry();
-        return index;
+        return true;
     }
 
     /**
      * Zapisuje wszystkie księgi do plików CSV (atomowo, UTF-8 bez BOM, CRLF).
-     *
-     * @throws IOException problemy z zapisem
      */
-    public synchronized void saveAll() throws IOException {
+    @Override
+    public synchronized void saveAll() {
         ensureLoaded();
-        for (BookType type : BookType.values()) {
-            BookTemplate template = templates.get(type);
-            if (template == null) {
-                continue;
+        try {
+            for (BookType type : BookType.values()) {
+                BookTemplate template = templates.get(type);
+                if (template == null) {
+                    continue;
+                }
+                StringBuilder content = new StringBuilder();
+                for (Index index : loaded.get(type)) {
+                    content.append(codec.encode(index, template)).append(LINE_SEPARATOR);
+                }
+                Path file = fileOf(type);
+                Path temp = java.nio.file.Files.createTempFile(dataDir, file.getFileName().toString(), ".tmp");
+                java.nio.file.Files.writeString(temp, content, StandardCharsets.UTF_8);
+                try {
+                    java.nio.file.Files.move(temp, file,
+                            StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE);
+                } catch (AtomicMoveNotSupportedException ex) {
+                    java.nio.file.Files.move(temp, file, StandardCopyOption.REPLACE_EXISTING);
+                }
             }
-            StringBuilder content = new StringBuilder();
-            for (Index index : loaded.get(type)) {
-                content.append(codec.encode(index, template)).append(LINE_SEPARATOR);
-            }
-            Path file = fileOf(type);
-            Path temp = java.nio.file.Files.createTempFile(dataDir, file.getFileName().toString(), ".tmp");
-            java.nio.file.Files.writeString(temp, content, StandardCharsets.UTF_8);
-            try {
-                java.nio.file.Files.move(temp, file,
-                        StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE);
-            } catch (AtomicMoveNotSupportedException ex) {
-                java.nio.file.Files.move(temp, file, StandardCopyOption.REPLACE_EXISTING);
-            }
+        } catch (IOException ex) {
+            log.log(Level.SEVERE, "Failed to save CSV indices", ex);
+            throw new IllegalStateException("Failed to save CSV indices", ex);
         }
     }
 
@@ -206,6 +261,15 @@ public class CsvIndexRepository implements IndexRepository {
                 log.warning(() -> "Konflikt unikalnego numeru aktu " + uan
                         + " – liczba indeksów: " + indices.size()));
         actNumberRegistry = registry;
+    }
+
+    private static int indexOf(List<Index> indices, Index index) {
+        for (int i = 0; i < indices.size(); i++) {
+            if (indices.get(i) == index) {
+                return i;
+            }
+        }
+        return -1;
     }
 
     private Path fileOf(BookType type) {

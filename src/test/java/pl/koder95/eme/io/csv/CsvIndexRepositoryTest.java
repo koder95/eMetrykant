@@ -81,14 +81,20 @@ class CsvIndexRepositoryTest {
     }
 
     @Test
-    void addRemoveSaveRoundTrip() throws IOException {
+    void addRemoveSaveRoundTrip() {
         repository.add(BookType.LIBER_BAPTISMORUM,
                 Map.of("surname", "Nowak", "name", "Jan", "an", "5a/1999"));
         repository.remove(UniqueActNumber.parse("eme.uan:LIBER_BAPTISMORUM/1998/999"));
         repository.saveAll();
 
-        List<String> lines = Files.readAllLines(
-                dataDir.resolve(BookType.LIBER_BAPTISMORUM.getBookName() + ".csv"), StandardCharsets.UTF_8);
+        List<String> lines;
+        try {
+            lines = Files.readAllLines(
+                    dataDir.resolve(BookType.LIBER_BAPTISMORUM.getBookName() + ".csv"), StandardCharsets.UTF_8);
+        } catch (IOException ex) {
+            fail(ex);
+            return;
+        }
         assertEquals(List.of("Indruch;Romualda;1000;1998", "Nowak;Jan;5a;1999"), lines);
 
         CsvIndexRepository reloaded = new CsvIndexRepository(dataDir, realTemplates());
@@ -98,6 +104,17 @@ class CsvIndexRepositoryTest {
                 .orElseThrow().getData("surname"));
         // księgi bez danych też zostały zapisane (zarządzamy kompletem plików)
         assertTrue(Files.exists(dataDir.resolve(BookType.LIBER_DEFUNCTORUM.getBookName() + ".csv")));
+    }
+
+    @Test
+    void replaceUpdatesActInPlace() {
+        Index original = repository.findByActNumber(
+                UniqueActNumber.parse("eme.uan:LIBER_BAPTISMORUM/1998/1000")).orElseThrow();
+        Index updated = repository.replace(BookType.LIBER_BAPTISMORUM, original,
+                Map.of("surname", "Indruchowa", "name", "Romualda", "an", "1000/1998"));
+        assertEquals("Indruchowa", updated.getData("surname"));
+        assertEquals("Indruchowa", repository.findByActNumber(
+                UniqueActNumber.parse("eme.uan:LIBER_BAPTISMORUM/1998/1000")).orElseThrow().getData("surname"));
     }
 
     @Test
