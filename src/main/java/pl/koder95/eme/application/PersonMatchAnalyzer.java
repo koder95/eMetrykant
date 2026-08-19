@@ -59,6 +59,12 @@ public class PersonMatchAnalyzer {
             if (registry.isOwned(extraction.appearance())) {
                 continue;
             }
+            if (indexRepository.findByActNumber(extraction.appearance().act()).isEmpty()) {
+                // UAN nieznany albo skonfliktowany — wystąpienie nie wskazuje jednoznacznie aktu
+                log.warning(() -> "Pominięto wystąpienie ze skonfliktowanym numerem aktu: "
+                        + extraction.appearance().act());
+                continue;
+            }
             groups.computeIfAbsent(extraction.personalDataKey(), ignored -> new ArrayList<>()).add(extraction);
         }
 
