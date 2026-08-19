@@ -6,6 +6,8 @@ import pl.koder95.eme.git.RepositoryInfo;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.FileChannel;
@@ -158,7 +160,13 @@ public class SelfUpdate implements Runnable {
         Files.deleteIfExists(forDownload);
         Files.createDirectories(forDownload.getParent());
         Files.createFile(forDownload);
-        URL url = new URL(urlSpec);
+        URI uri;
+        try {
+            uri = new URI(urlSpec);
+        } catch (URISyntaxException e) {
+            throw new IOException(e);
+        }
+        URL url = uri.toURL();
         System.out.println("Downloading: " + forDownload);
         updateProgress.accept(0, 1L);
         try (ReadableByteChannel rbc = Channels.newChannel(url.openStream());
