@@ -55,9 +55,7 @@ public class MemoryUtils {
      * Próbuje zwolnić pamięć, która nie jest używana.
      * 
      * @see System#gc()
-     * @see System#runFinalization()
      * @see Runtime#gc()
-     * @see Runtime#runFinalization()
      */
     public static void releaseMemory() {
         Runtime r = Runtime.getRuntime();

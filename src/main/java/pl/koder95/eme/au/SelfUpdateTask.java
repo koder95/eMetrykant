@@ -36,7 +36,7 @@ public class SelfUpdateTask extends Task<Void> {
      * @return zawsze {@code null}
      */
     @Override
-    protected Void call() throws Exception {
+    protected Void call() {
         su.run();
         return null;
     }
