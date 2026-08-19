@@ -2,6 +2,7 @@ package pl.koder95.eme.domain.index;
 
 import pl.koder95.eme.Main;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
 import java.util.regex.Matcher;
@@ -13,6 +14,7 @@ import static pl.koder95.eme.Main.DIGITS_STRING_PATTERN;
  */
 public class ActNumber implements Comparable<ActNumber>, Serializable {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     private final String sign;

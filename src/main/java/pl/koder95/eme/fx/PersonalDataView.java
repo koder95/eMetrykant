@@ -75,30 +75,39 @@ public class PersonalDataView implements Initializable {
     private Label numberOfActs;
 
     @FXML
-    private Object searching;
+    private TextField searching;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        if (searching instanceof TextField) {
-            TextField field = (TextField) searching;
-            AutoCompletionBinding<PersonalDataModel> autoCompletionBinding = TextFields.bindAutoCompletion(
-                    field,
-                    personalDataQueryService.getSuggestionProvider(),
-                    personalDataQueryService.getPersonalDataConverter()
-            );
-            autoCompletionBinding.setOnAutoCompleted(event -> setPersonalDataModel(event.getCompletion()));
-            field.setOnAction(event -> setPersonalDataModel(
-                    personalDataQueryService.fromText(field.getText())
-            ));
-            field.textProperty().addListener(
-                    (observable, oldValue, newValue) -> {
-                        if (oldValue.length() < newValue.length()) {
-                            field.setText(newValue.toUpperCase());
-                        }
-                    }
-            );
-        }
+        installCabinetAnalyzer();
+    }
+
+    private void installCabinetAnalyzer() {
+        setupAutoCompletion();
+        setupInputActions();
         numberOfActs.setText(String.valueOf(personalDataQueryService.getNumberOfActs()));
+    }
+
+    private void setupAutoCompletion() {
+        AutoCompletionBinding<PersonalDataModel> binding = TextFields.bindAutoCompletion(
+                searching,
+                personalDataQueryService.getSuggestionProvider(),
+                personalDataQueryService.getPersonalDataConverter()
+        );
+        binding.setOnAutoCompleted(event -> setPersonalDataModel(event.getCompletion()));
+    }
+
+    private void setupInputActions() {
+        searching.setOnAction(event -> setPersonalDataModel(
+                personalDataQueryService.getPersonalDataConverter().fromString(searching.getText())
+        ));
+        searching.textProperty().addListener(
+                (observable, oldValue, newValue) -> {
+                    if (oldValue.length() < newValue.length()) {
+                        searching.setText(newValue.toUpperCase());
+                    }
+                }
+        );
     }
 
     private void setPersonalDataModel(PersonalDataModel model) {
@@ -109,7 +118,6 @@ public class PersonalDataView implements Initializable {
         this.marriage.setText(viewData.getMarriageAN());
         this.decease.setText(viewData.getDeceaseAN());
     }
-
     /**
      * Obsługuje próbę zamknięcia aplikacji z potwierdzeniem.
      */
@@ -149,7 +157,7 @@ public class PersonalDataView implements Initializable {
     /**
      * Ponownie wczytuje dane indeksów i odświeża licznik aktów.
      */
-    public void reload(ActionEvent actionEvent) {
+    public void reload() {
         Scene scene = main.getScene();
         if (scene != null) {
             Dialog<Boolean> dialog = dialogs.createProgressDialog(scene, bundle.getString("FX_RELOAD_PROGRESS_MESSAGE"));
