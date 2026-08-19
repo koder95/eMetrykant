@@ -1,5 +1,7 @@
 package pl.koder95.eme.domain.index;
 
+import lombok.Getter;
+import lombok.extern.java.Log;
 import org.w3c.dom.Node;
 import pl.koder95.eme.Visited;
 import pl.koder95.eme.io.IndexNodeInterpreter;
@@ -9,19 +11,19 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-import java.util.logging.Logger;
 
 /**
  * Pojedynczy rekord indeksu danych osobowych.
  */
+@Log
 public class Index implements Visited {
 
-    private static final Logger LOGGER = Logger.getLogger(Index.class.getName());
     private static final IndexNodeInterpreter NODE_INTERPRETER = new IndexNodeInterpreterImpl();
 
     private final Map<String, String> data;
     private volatile ActNumber an;
     private volatile UniqueActNumber uan;
+    @Getter
     private final Book owner;
 
     private Index(Book owner, Map<String, String> data) {
@@ -89,7 +91,7 @@ public class Index implements Visited {
         String anValue = data.get("an");
         if (anValue == null || anValue.isEmpty()) {
             String ownerName = owner == null ? "<null>" : owner.getName();
-            LOGGER.warning(() -> "Pominięto indeks bez atrybutu 'an'. owner=" + ownerName);
+            log.warning(() -> "Pominięto indeks bez atrybutu 'an'. owner=" + ownerName);
             return null;
         }
         return new Index(owner, data);
@@ -127,10 +129,6 @@ public class Index implements Visited {
             uan = converted == null ? UniqueActNumber.UNKNOWN : converted;
         }
         return uan;
-    }
-
-    public Book getOwner() {
-        return owner;
     }
 
     @Override

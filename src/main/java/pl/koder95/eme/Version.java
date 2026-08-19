@@ -16,6 +16,8 @@
  */
 package pl.koder95.eme;
 
+import lombok.Getter;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
@@ -32,9 +34,33 @@ import java.util.regex.Pattern;
  */
 public class Version implements Comparable<Version> {
 
-    private final int major, minor, patch;
+    /**
+     * Główna liczba, wskazuje na ciągłość idei i podejścia, które
+     * gwarantuje kompatybilność rozszerzeń.
+     */
+    @Getter
+    private final int major;
+    /**
+     * Liczba podporządkowana, która definiuje ilość kompatybilnych rozszerzeń.
+     */
+    @Getter
+    private final int minor;
+    /**
+     * Liczba łatkowa, ile było poprawek rozszerzenia.
+     */
+    @Getter
+    private final int patch;
+    /**
+     * Czy jest to wersja niestabilna, czyli przedpremierowa.
+     */
+    @Getter
     private final boolean preRelease;
-    private final Collection<String> identifiers, buildMetadata;
+    private final Collection<String> identifiers;
+    /**
+     * Metadane build'u.
+     */
+    @Getter
+    private final Collection<String> buildMetadata;
 
     /**
      * Tworzy nowy nr wersji z podanymi wartościami.
@@ -163,13 +189,6 @@ public class Version implements Comparable<Version> {
     }
 
     /**
-     * @return metadane build'u
-     */
-    public Collection<String> getBuildMetadata() {
-        return buildMetadata;
-    }
-
-    /**
      * @return identyfikatory przedpremierowe - gdy jest to wersja
      * przedpremierowa, {@code null} - gdy wersja stabilna
      */
@@ -177,35 +196,6 @@ public class Version implements Comparable<Version> {
         return isPreRelease()? identifiers : null;
     }
 
-    /**
-     * @return główna liczba, wskazuje na ciągłość idei i podejścia, które
-     * gwarantuje kompatybilność rozszerzeń
-     */
-    public int getMajor() {
-        return major;
-    }
-
-    /**
-     * @return liczba podporządkowana, która definiuje ilość kompatybilnych
-     * rozszerzeń
-     */
-    public int getMinor() {
-        return minor;
-    }
-
-    /**
-     * @return liczba łatkowa, ile było poprawek rozszerzenia
-     */
-    public int getPatch() {
-        return patch;
-    }
-
-    /**
-     * @return czy jest to wersja niestabilna, czyli przedpremierowa
-     */
-    public boolean isPreRelease() {
-        return preRelease;
-    }
     
     @Override
     public String toString() {

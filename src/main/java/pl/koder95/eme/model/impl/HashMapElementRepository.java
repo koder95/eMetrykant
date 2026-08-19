@@ -1,5 +1,6 @@
 package pl.koder95.eme.model.impl;
 
+import lombok.Getter;
 import pl.koder95.eme.model.ElementIndex;
 import pl.koder95.eme.model.ElementRepository;
 import pl.koder95.eme.model.RepositoryException;
@@ -19,11 +20,8 @@ public class HashMapElementRepository implements ElementRepository {
             id -> new ElementIndex(id, new ArrayList<>());
 
     private final Map<String, ElementIndex> indexMap = new HashMap<>();
+    @Getter
     private Function<String, ElementIndex> indexFactory = DEFAULT_INDEX_FACTORY;
-
-    public Function<String, ElementIndex> getIndexFactory() {
-        return indexFactory;
-    }
 
     public void setIndexFactory(Function<String, ElementIndex> indexFactory) {
         this.indexFactory = indexFactory == null ? DEFAULT_INDEX_FACTORY : indexFactory;

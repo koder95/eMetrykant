@@ -1,5 +1,6 @@
 package pl.koder95.eme.factory.impl;
 
+import lombok.RequiredArgsConstructor;
 import pl.koder95.eme.domain.index.Book;
 import pl.koder95.eme.domain.index.BookType;
 import pl.koder95.eme.domain.index.Index;
@@ -12,15 +13,11 @@ import java.util.function.Function;
 /**
  * Creates an {@link Index} by matching field names to a {@link BookType} and owner {@link Book}.
  */
+@RequiredArgsConstructor
 public class BasicIndexFactory implements IndexFactory {
 
     private final Function<Set<String>, BookType> bookTypeMatcher;
     private final Map<BookType, Book> bookMap;
-
-    public BasicIndexFactory(Function<Set<String>, BookType> bookTypeMatcher, Map<BookType, Book> bookMap) {
-        this.bookTypeMatcher = bookTypeMatcher;
-        this.bookMap = bookMap;
-    }
 
     @Override
     public Index create(Map<String, String> data) {

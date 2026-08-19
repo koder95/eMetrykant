@@ -4,6 +4,7 @@ import javafx.util.Callback;
 import static org.controlsfx.control.textfield.AutoCompletionBinding.ISuggestionRequest;
 
 import javafx.util.StringConverter;
+import lombok.Getter;
 import pl.koder95.eme.core.spi.*;
 
 import java.util.Collection;
@@ -21,6 +22,7 @@ import java.util.Set;
  */
 public abstract class AbstractCabinetAnalyzer extends AbstractCabinetWorker implements CabinetAnalyzer {
 
+    @Getter
     private final Callback<ISuggestionRequest, Collection<PersonalDataModel>> suggestionProvider;
     private final StringConverter<PersonalDataModel> converter;
     private float numberOfActs;
@@ -55,11 +57,6 @@ public abstract class AbstractCabinetAnalyzer extends AbstractCabinetWorker impl
         super(cabinet);
         this.suggestionProvider = suggestionProvider;
         this.converter = converter;
-    }
-
-    @Override
-    public Callback<ISuggestionRequest, Collection<PersonalDataModel>> getSuggestionProvider() {
-        return suggestionProvider;
     }
 
     @Override

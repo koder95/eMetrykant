@@ -1,5 +1,6 @@
 package pl.koder95.eme.bootstrap;
 
+import lombok.Getter;
 import pl.koder95.eme.Main;
 import pl.koder95.eme.application.AppCloseService;
 import pl.koder95.eme.application.IndexManagementService;
@@ -31,8 +32,11 @@ public class ApplicationContext {
     private final PersonalDataQueryService personalDataQueryService;
     private final IndexReloadService indexReloadService;
     private final IndexManagementService indexManagementService;
+    @Getter
     private final AppConfig appConfig;
+    @Getter
     private final FxDialogs dialogs;
+    @Getter
     private final AppCloseService appCloseService;
     private final DataManagementViewFactory dataManagementViewFactory;
     private volatile boolean initialized;
@@ -80,18 +84,6 @@ public class ApplicationContext {
     public DataManagementViewFactory getDataManagementViewFactory() {
         ensureInitialized();
         return dataManagementViewFactory;
-    }
-
-    public AppConfig getAppConfig() {
-        return appConfig;
-    }
-
-    public FxDialogs getDialogs() {
-        return dialogs;
-    }
-
-    public AppCloseService getAppCloseService() {
-        return appCloseService;
     }
 
     /**

@@ -1,5 +1,6 @@
 package pl.koder95.eme.core;
 
+import lombok.Getter;
 import pl.koder95.eme.core.spi.*;
 import pl.koder95.eme.domain.index.ActNumber;
 
@@ -14,6 +15,7 @@ import pl.koder95.eme.domain.index.ActNumber;
  */
 public abstract class AbstractCabinetWorker implements CabinetWorker {
 
+    @Getter
     private final FilingCabinet cabinet;
 
     private DataSource source;
@@ -40,11 +42,6 @@ public abstract class AbstractCabinetWorker implements CabinetWorker {
      */
     public AbstractCabinetWorker(FilingCabinet cabinet) {
         this(cabinet, null, null);
-    }
-
-    @Override
-    public FilingCabinet getCabinet() {
-        return cabinet;
     }
 
     @Override

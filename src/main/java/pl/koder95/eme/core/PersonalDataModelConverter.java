@@ -1,6 +1,7 @@
 package pl.koder95.eme.core;
 
 import javafx.util.StringConverter;
+import lombok.Getter;
 import pl.koder95.eme.core.spi.Briefcase;
 import pl.koder95.eme.core.spi.FilingCabinet;
 import pl.koder95.eme.core.spi.PersonalDataModel;
@@ -74,18 +75,19 @@ public class PersonalDataModelConverter extends StringConverter<PersonalDataMode
         return new Model(surname, name, briefcase);
     }
 
+    @Getter
     private static class Model implements PersonalDataModel {
 
-        private final String surname, name, ban, can, man, dan;
+        private final String surname, name, baptismAN, confirmationAN, marriageAN, deceaseAN;
 
         private Model(String surname, String name, ActNumber[] ban, ActNumber[] can,
                       ActNumber[] man, ActNumber[] dan) {
             this.surname = surname;
             this.name = name;
-            this.ban = format(ban);
-            this.can = format(can);
-            this.man = format(man);
-            this.dan = format(dan);
+            this.baptismAN = format(ban);
+            this.confirmationAN = format(can);
+            this.marriageAN = format(man);
+            this.deceaseAN = format(dan);
         }
 
         private Model(String surname, String name, Briefcase briefcase) {
@@ -95,36 +97,6 @@ public class PersonalDataModelConverter extends StringConverter<PersonalDataMode
                     normalize(briefcase, Briefcase::getMarriage),
                     normalize(briefcase, Briefcase::getDecease)
             );
-        }
-
-        @Override
-        public String getSurname() {
-            return surname;
-        }
-
-        @Override
-        public String getName() {
-            return name;
-        }
-
-        @Override
-        public String getBaptismAN() {
-            return ban;
-        }
-
-        @Override
-        public String getConfirmationAN() {
-            return can;
-        }
-
-        @Override
-        public String getMarriageAN() {
-            return man;
-        }
-
-        @Override
-        public String getDeceaseAN() {
-            return dan;
         }
 
         private static ActNumber[] normalize(Briefcase briefcase, Function<Briefcase, ActNumber[]> select) {

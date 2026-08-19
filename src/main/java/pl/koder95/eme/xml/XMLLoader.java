@@ -17,6 +17,8 @@
 
 package pl.koder95.eme.xml;
 
+import lombok.experimental.UtilityClass;
+
 import java.io.File;
 import java.io.IOException;
 import javax.xml.parsers.DocumentBuilder;
@@ -36,9 +38,8 @@ import static pl.koder95.eme.Main.BUNDLE;
  * @version 0.1.6, 2018-01-30
  * @since 0.1.6
  */
+@UtilityClass
 public class XMLLoader {
-
-    private XMLLoader() {}
 
     /**
      * Wczytuje dokument z pliku XML w formie obiektowego modelu dokumentu.
@@ -49,7 +50,7 @@ public class XMLLoader {
      * @throws SAXException podstawowy błąd lub uwaga SAX
      * @throws IOException błąd wczytywania
      */
-    public static Document loadDOM(File xml)
+    public Document loadDOM(File xml)
             throws ParserConfigurationException, SAXException, IOException {
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         DocumentBuilder db = dbf.newDocumentBuilder();
@@ -62,7 +63,7 @@ public class XMLLoader {
      * @param attr nazwa atrybutu
      * @return węzeł drzewa dokumentu XML, atrybut o podanej nazwie
      */
-    public static Node getAttribute(Node tag, String attr)
+    public Node getAttribute(Node tag, String attr)
             throws IllegalArgumentException {
         if (tag.getAttributes() == null)
             throw new IllegalArgumentException(BUNDLE
@@ -75,7 +76,7 @@ public class XMLLoader {
      * @param attr nazwa atrybutu
      * @return wartość atrybutu
      */
-    public static String getAttrV(Node tag, String attr) {
+    public String getAttrV(Node tag, String attr) {
         return getAttribute(tag, attr).getTextContent();
     }
 }

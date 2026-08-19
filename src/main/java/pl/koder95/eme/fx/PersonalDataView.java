@@ -9,6 +9,9 @@ import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.java.Log;
 import org.controlsfx.control.textfield.AutoCompletionBinding;
 import org.controlsfx.control.textfield.TextFields;
 import pl.koder95.eme.application.AppCloseService;
@@ -19,10 +22,8 @@ import pl.koder95.eme.core.spi.PersonalDataModel;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 
 /**
@@ -32,30 +33,22 @@ import java.util.logging.Logger;
  * @version 0.4.2, 2020-11-18
  * @since 0.1.11
  */
+@Log
+@RequiredArgsConstructor
 public class PersonalDataView implements Initializable {
 
-    private static final Logger LOGGER = Logger.getLogger(PersonalDataView.class.getName());
-
+    @NonNull
     private final PersonalDataQueryService personalDataQueryService;
+    @NonNull
     private final IndexReloadService indexReloadService;
+    @NonNull
     private final AppCloseService appCloseService;
+    @NonNull
     private final DataManagementViewFactory dataManagementViewFactory;
+    @NonNull
     private final FxDialogs dialogs;
+    @NonNull
     private final ResourceBundle bundle;
-
-    public PersonalDataView(PersonalDataQueryService personalDataQueryService,
-                            IndexReloadService indexReloadService,
-                            AppCloseService appCloseService,
-                            DataManagementViewFactory dataManagementViewFactory,
-                            FxDialogs dialogs,
-                            ResourceBundle bundle) {
-        this.personalDataQueryService = Objects.requireNonNull(personalDataQueryService, "personalDataQueryService must not be null");
-        this.indexReloadService = Objects.requireNonNull(indexReloadService, "indexReloadService must not be null");
-        this.appCloseService = Objects.requireNonNull(appCloseService, "appCloseService must not be null");
-        this.dataManagementViewFactory = Objects.requireNonNull(dataManagementViewFactory, "dataManagementViewFactory must not be null");
-        this.dialogs = Objects.requireNonNull(dialogs, "dialogs must not be null");
-        this.bundle = Objects.requireNonNull(bundle, "bundle must not be null");
-    }
 
     @FXML
     private BorderPane main;
@@ -136,7 +129,7 @@ public class PersonalDataView implements Initializable {
                 refreshAfterDataChange();
             }
         } catch (IOException | RuntimeException ex) {
-            LOGGER.log(Level.SEVERE, "Błąd podczas zarządzania danymi", ex);
+            log.log(Level.SEVERE, "Błąd podczas zarządzania danymi", ex);
             dialogs.createErrorAlert(
                     scene,
                     bundle.getString("ALERT_MANAGE_ERROR_TITLE"),
@@ -168,7 +161,7 @@ public class PersonalDataView implements Initializable {
                     personalDataQueryService.reloadAnalyzer();
                 } catch (Exception ex) {
                     reloadException = ex;
-                    LOGGER.log(Level.SEVERE, "Błąd podczas przeładowania indeksów", ex);
+                    log.log(Level.SEVERE, "Błąd podczas przeładowania indeksów", ex);
                 } finally {
                     Exception finalReloadException = reloadException;
                     Platform.runLater(() -> {

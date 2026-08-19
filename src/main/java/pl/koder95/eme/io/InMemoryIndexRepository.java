@@ -1,5 +1,6 @@
 package pl.koder95.eme.io;
 
+import lombok.extern.java.Log;
 import pl.koder95.eme.Files;
 import pl.koder95.eme.MemoryUtils;
 import pl.koder95.eme.core.spi.IndexFilter;
@@ -16,14 +17,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Repozytorium indeksów utrzymujące cache w pamięci i odświeżanie z XML.
  */
+@Log
 public class InMemoryIndexRepository implements MutableIndexRepository {
-
-    private static final Logger LOGGER = Logger.getLogger(InMemoryIndexRepository.class.getName());
 
     private final IndexLoader loader;
     private final IndexWriter writer;
@@ -83,7 +82,7 @@ public class InMemoryIndexRepository implements MutableIndexRepository {
                 loaded.computeIfAbsent(type, ignored -> new ArrayList<>()).clear();
             }
             loadedOnce = false;
-            LOGGER.log(Level.SEVERE, "Failed to reload indices", ex);
+            log.log(Level.SEVERE, "Failed to reload indices", ex);
             throw new IllegalStateException("Failed to reload indices", ex);
         }
     }
@@ -151,7 +150,7 @@ public class InMemoryIndexRepository implements MutableIndexRepository {
         try {
             writer.saveBooks(loaded);
         } catch (IOException ex) {
-            LOGGER.log(Level.SEVERE, "Failed to save indices", ex);
+            log.log(Level.SEVERE, "Failed to save indices", ex);
             throw new IllegalStateException("Failed to save indices", ex);
         }
     }
