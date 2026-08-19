@@ -65,7 +65,11 @@ public class IndexLoader {
         Book book = new Book(bookName);
         NodeList indices = bookNode.getChildNodes();
         for (int i = 0; i < indices.getLength(); i++) {
-            Index index = Index.create(book, indices.item(i));
+            Node child = indices.item(i);
+            if (child == null || child.getNodeType() != Node.ELEMENT_NODE) {
+                continue;
+            }
+            Index index = Index.create(book, child);
             if (index != null && filter.accept(index)) {
                 book.addIndex(index);
             }

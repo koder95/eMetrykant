@@ -21,6 +21,7 @@ public class Index implements Visited {
 
     private final Map<String, String> data;
     private volatile ActNumber an;
+    private volatile UniqueActNumber uan;
     private final Book owner;
 
     private Index(Book owner, Map<String, String> data) {
@@ -114,6 +115,18 @@ public class Index implements Visited {
             an = ActNumber.parseActNumber(getData("an"));
         }
         return an;
+    }
+
+    /**
+     * Unikalny numer aktu (typ księgi + rok + sygnatura).
+     */
+    public UniqueActNumber getUniqueActNumber() {
+        if (uan == null) {
+            String bookName = owner == null ? null : owner.getName();
+            UniqueActNumber converted = UniqueActNumber.from(bookName, getActNumber());
+            uan = converted == null ? UniqueActNumber.UNKNOWN : converted;
+        }
+        return uan;
     }
 
     public Book getOwner() {
