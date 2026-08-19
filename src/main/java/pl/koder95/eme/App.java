@@ -35,6 +35,7 @@ import pl.koder95.eme.bootstrap.ApplicationContext;
 import pl.koder95.eme.application.AppCloseService;
 import pl.koder95.eme.application.IndexReloadService;
 import pl.koder95.eme.application.PersonalDataQueryService;
+import pl.koder95.eme.fx.DataManagementViewFactory;
 import pl.koder95.eme.fx.FxDialogs;
 import pl.koder95.eme.fx.PersonalDataView;
 import pl.koder95.eme.git.RepositoryInfo;
@@ -62,6 +63,7 @@ public class App extends Application {
         PersonalDataQueryService personalDataQueryService = applicationContext.getPersonalDataQueryService();
         IndexReloadService indexReloadService = applicationContext.getIndexReloadService();
         appCloseService = applicationContext.getAppCloseService();
+        DataManagementViewFactory dataManagementViewFactory = applicationContext.getDataManagementViewFactory();
         FxDialogs dialogs = applicationContext.getDialogs();
         AppConfig appConfig = applicationContext.getAppConfig();
 
@@ -70,7 +72,8 @@ public class App extends Application {
         FXMLLoader loader = new FXMLLoader(url, appConfig.bundle());
         loader.setControllerFactory(type -> {
             if (type == PersonalDataView.class) {
-                return new PersonalDataView(personalDataQueryService, indexReloadService, appCloseService, dialogs, appConfig.bundle());
+                return new PersonalDataView(personalDataQueryService, indexReloadService, appCloseService,
+                        dataManagementViewFactory, dialogs, appConfig.bundle());
             }
             throw new IllegalArgumentException("Nieobsługiwany kontroler FXML: " + type.getName());
         });

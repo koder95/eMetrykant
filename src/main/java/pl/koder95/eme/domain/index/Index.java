@@ -38,8 +38,37 @@ public class Index implements Visited {
         this.owner = owner;
     }
 
+    private Index(Book owner, Map<String, String> data) {
+        this.owner = owner;
+        data.forEach((key, value) -> {
+            if (key != null && !key.isBlank()) {
+                this.data.put(key, value == null ? "" : value);
+            }
+        });
+    }
+
     public static Index create(Node index) {
         return create(null, index);
+    }
+
+    /**
+     * Tworzy indeks na podstawie mapy atrybutów, np. danych wprowadzonych przez użytkownika.
+     *
+     * @param owner księga, do której należy indeks
+     * @param data atrybuty indeksu, wymagany jest niepusty atrybut {@code an}
+     * @return nowy indeks, albo {@code null} gdy brakuje numeru aktu
+     */
+    public static Index create(Book owner, Map<String, String> data) {
+        if (data == null) {
+            return null;
+        }
+        Index i = new Index(owner, data);
+        if (i.getData("an").isBlank()) {
+            String ownerName = owner == null ? "<null>" : owner.getName();
+            LOGGER.warning(() -> "Pominięto indeks bez atrybutu 'an'. owner=" + ownerName);
+            return null;
+        }
+        return i;
     }
 
     public static Index create(Book owner, Node index) {
@@ -66,6 +95,13 @@ public class Index implements Visited {
 
     public Set<String> getDataNames() {
         return Collections.unmodifiableSet(data.keySet());
+    }
+
+    /**
+     * @return wszystkie atrybuty indeksu w formie niemodyfikowalnej mapy
+     */
+    public Map<String, String> getAllData() {
+        return Collections.unmodifiableMap(new HashMap<>(data));
     }
 
     public ActNumber getActNumber() {

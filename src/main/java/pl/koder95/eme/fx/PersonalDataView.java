@@ -17,6 +17,7 @@ import pl.koder95.eme.application.PersonalDataPresentation;
 import pl.koder95.eme.application.PersonalDataQueryService;
 import pl.koder95.eme.core.spi.PersonalDataModel;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.Objects;
 import java.util.ResourceBundle;
@@ -38,17 +39,20 @@ public class PersonalDataView implements Initializable {
     private final PersonalDataQueryService personalDataQueryService;
     private final IndexReloadService indexReloadService;
     private final AppCloseService appCloseService;
+    private final DataManagementViewFactory dataManagementViewFactory;
     private final FxDialogs dialogs;
     private final ResourceBundle bundle;
 
     public PersonalDataView(PersonalDataQueryService personalDataQueryService,
                             IndexReloadService indexReloadService,
                             AppCloseService appCloseService,
+                            DataManagementViewFactory dataManagementViewFactory,
                             FxDialogs dialogs,
                             ResourceBundle bundle) {
         this.personalDataQueryService = Objects.requireNonNull(personalDataQueryService, "personalDataQueryService must not be null");
         this.indexReloadService = Objects.requireNonNull(indexReloadService, "indexReloadService must not be null");
         this.appCloseService = Objects.requireNonNull(appCloseService, "appCloseService must not be null");
+        this.dataManagementViewFactory = Objects.requireNonNull(dataManagementViewFactory, "dataManagementViewFactory must not be null");
         this.dialogs = Objects.requireNonNull(dialogs, "dialogs must not be null");
         this.bundle = Objects.requireNonNull(bundle, "bundle must not be null");
     }
@@ -111,6 +115,35 @@ public class PersonalDataView implements Initializable {
      */
     public void close(ActionEvent actionEvent) {
         appCloseService.closeWithConfirmation(main.getScene());
+    }
+
+    /**
+     * Otwiera okno zarządzania danymi, a po jego zamknięciu odświeża widok,
+     * jeżeli dane zostały zmienione.
+     */
+    public void manage(ActionEvent actionEvent) {
+        Scene scene = main.getScene();
+        try {
+            if (dataManagementViewFactory.showAndWait(scene == null ? null : scene.getWindow())) {
+                refreshAfterDataChange();
+            }
+        } catch (IOException | RuntimeException ex) {
+            LOGGER.log(Level.SEVERE, "Błąd podczas zarządzania danymi", ex);
+            dialogs.createErrorAlert(
+                    scene,
+                    bundle.getString("ALERT_MANAGE_ERROR_TITLE"),
+                    bundle.getString("ALERT_MANAGE_ERROR_HEADER"),
+                    ex.getMessage() == null ? ex.toString() : ex.getMessage()
+            ).showAndWait();
+        }
+    }
+
+    private void refreshAfterDataChange() {
+        personalDataQueryService.reloadAnalyzer();
+        numberOfActs.setText(String.valueOf(personalDataQueryService.getNumberOfActs()));
+        if (searching instanceof TextField field) {
+            setPersonalDataModel(personalDataQueryService.fromText(field.getText()));
+        }
     }
 
     /**

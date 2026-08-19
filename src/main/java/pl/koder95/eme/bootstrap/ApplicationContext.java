@@ -2,6 +2,7 @@ package pl.koder95.eme.bootstrap;
 
 import pl.koder95.eme.Main;
 import pl.koder95.eme.application.AppCloseService;
+import pl.koder95.eme.application.IndexManagementService;
 import pl.koder95.eme.application.IndexReloadService;
 import pl.koder95.eme.application.PersonalDataQueryService;
 import pl.koder95.eme.core.IndexListDataSource;
@@ -11,7 +12,8 @@ import pl.koder95.eme.core.SuggestionProvider;
 import pl.koder95.eme.core.TreeFilingCabinet;
 import pl.koder95.eme.core.spi.CabinetAnalyzer;
 import pl.koder95.eme.core.spi.FilingCabinet;
-import pl.koder95.eme.core.spi.IndexRepository;
+import pl.koder95.eme.core.spi.MutableIndexRepository;
+import pl.koder95.eme.fx.DataManagementViewFactory;
 import pl.koder95.eme.fx.FxDialogs;
 import pl.koder95.eme.io.InMemoryIndexRepository;
 
@@ -24,13 +26,15 @@ import pl.koder95.eme.io.InMemoryIndexRepository;
 public class ApplicationContext {
 
     private static final CabinetAnalyzer DEFAULT_CABINET_ANALYZER = createCabinetAnalyzer();
-    private final IndexRepository indexRepository;
+    private final MutableIndexRepository indexRepository;
     private final CabinetAnalyzer cabinetAnalyzer;
     private final PersonalDataQueryService personalDataQueryService;
     private final IndexReloadService indexReloadService;
+    private final IndexManagementService indexManagementService;
     private final AppConfig appConfig;
     private final FxDialogs dialogs;
     private final AppCloseService appCloseService;
+    private final DataManagementViewFactory dataManagementViewFactory;
     private volatile boolean initialized;
 
     public ApplicationContext(CabinetAnalyzer analyzer) {
@@ -38,9 +42,11 @@ public class ApplicationContext {
         this.indexRepository = new InMemoryIndexRepository();
         this.personalDataQueryService = new PersonalDataQueryService(cabinetAnalyzer, indexRepository);
         this.indexReloadService = new IndexReloadService(indexRepository);
+        this.indexManagementService = new IndexManagementService(indexRepository);
         this.appConfig = new AppConfig(Main.BUNDLE, Main.POLISH, Main.DEFAULT_COLLATOR);
         this.dialogs = new FxDialogs();
         this.appCloseService = new AppCloseService(appConfig, dialogs);
+        this.dataManagementViewFactory = new DataManagementViewFactory(indexManagementService, dialogs, appConfig.bundle());
         this.initialized = false;
     }
 
@@ -64,6 +70,16 @@ public class ApplicationContext {
     public IndexReloadService getIndexReloadService() {
         ensureInitialized();
         return indexReloadService;
+    }
+
+    public IndexManagementService getIndexManagementService() {
+        ensureInitialized();
+        return indexManagementService;
+    }
+
+    public DataManagementViewFactory getDataManagementViewFactory() {
+        ensureInitialized();
+        return dataManagementViewFactory;
     }
 
     public AppConfig getAppConfig() {
