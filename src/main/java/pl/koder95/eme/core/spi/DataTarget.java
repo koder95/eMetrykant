@@ -2,9 +2,6 @@ package pl.koder95.eme.core.spi;
 
 import pl.koder95.eme.domain.index.ActNumber;
 
-import java.util.Collection;
-import java.util.Set;
-
 /**
  * Interfejs dostarcza metod, które pozwalają przechować dane w sposób
  * zależny od implementacji.

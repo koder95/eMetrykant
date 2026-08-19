@@ -17,6 +17,8 @@
 
 package pl.koder95.eme;
 
+import lombok.experimental.UtilityClass;
+
 /**
  * Klasa udostępnia metody do oszczędniejszego zarządzania pamięcią.
  * 
@@ -24,29 +26,30 @@ package pl.koder95.eme;
  * @version 0.0.203, 2017-08-26
  * @since 0.0.203
  */
+@UtilityClass
 public class MemoryUtils {
     
-    private static final double KB = 1d/        1_024;
-    private static final double MB = 1d/    1_048_576;
-    private static final double GB = 1d/1_073_741_824;
+    private final double KB = 1d/        1_024;
+    private final double MB = 1d/    1_048_576;
+    private final double GB = 1d/1_073_741_824;
     
-    private static String toBLabel(long memory) {
+    private String toBLabel(long memory) {
         return memory + "B";
     }
     
-    private static String toKBLabel(long memory) {
+    private String toKBLabel(long memory) {
         return Math.round(memory*KB) + "kB";
     }
     
-    private static String toMBLabel(long memory) {
+    private String toMBLabel(long memory) {
         return Math.round(memory*MB) + "MB";
     }
     
-    private static String toGBLabel(long memory) {
+    private String toGBLabel(long memory) {
         return Math.round(memory*GB) + "GB";
     }
     
-    private static String toLabel(long memory) {
+    private String toLabel(long memory) {
         return toBLabel(memory) + " = ok." + toKBLabel(memory)
                 + " = ok." + toMBLabel(memory) + " = ok." + toGBLabel(memory);
     }
@@ -55,11 +58,9 @@ public class MemoryUtils {
      * Próbuje zwolnić pamięć, która nie jest używana.
      * 
      * @see System#gc()
-     * @see System#runFinalization()
      * @see Runtime#gc()
-     * @see Runtime#runFinalization()
      */
-    public static void releaseMemory() {
+    public void releaseMemory() {
         Runtime r = Runtime.getRuntime();
         
         long preRuntimeMemory = r.totalMemory() - r.freeMemory();
@@ -76,7 +77,7 @@ public class MemoryUtils {
         System.out.println("Zwolniono " + toLabel(releaseMemory));
     }
     
-    public static void memory() {
+    public void memory() {
         Runtime r = Runtime.getRuntime();
         long preRuntimeMemory = r.totalMemory() - r.freeMemory();
         System.out.println("Stan pamięci: " + toLabel(preRuntimeMemory));

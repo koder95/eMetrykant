@@ -1,7 +1,10 @@
 package pl.koder95.eme.domain.index;
 
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import pl.koder95.eme.Main;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
 import java.util.regex.Matcher;
@@ -11,8 +14,11 @@ import static pl.koder95.eme.Main.DIGITS_STRING_PATTERN;
 /**
  * Reprezentuje numer aktu (sygnatura/rok).
  */
+@Getter
+@EqualsAndHashCode
 public class ActNumber implements Comparable<ActNumber>, Serializable {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     private final String sign;
@@ -25,14 +31,6 @@ public class ActNumber implements Comparable<ActNumber>, Serializable {
         }
         this.sign = normalizedSign;
         this.year = year;
-    }
-
-    public String getSign() {
-        return sign;
-    }
-
-    public int getYear() {
-        return year;
     }
 
     @Override
@@ -67,22 +65,6 @@ public class ActNumber implements Comparable<ActNumber>, Serializable {
         }
 
         return Main.DEFAULT_COLLATOR.compare(getSign(), o.getSign());
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (!(obj instanceof ActNumber other)) {
-            return false;
-        }
-        return year == other.year && sign.equals(other.sign);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(sign, year);
     }
 
     public static ActNumber parseActNumber(String s) {
