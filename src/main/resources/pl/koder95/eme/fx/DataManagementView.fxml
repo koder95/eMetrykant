@@ -29,7 +29,7 @@
                   <Insets left="10.0" />
                </HBox.margin>
             </Label>
-            <Button defaultButton="true" mnemonicParsing="false" onAction="#save" text="%FX_BUTTON_SAVE" />
+            <Button mnemonicParsing="false" onAction="#save" text="%FX_BUTTON_SAVE" />
             <Button cancelButton="true" mnemonicParsing="false" onAction="#close" text="%FX_BUTTON_CLOSE" />
          </children>
          <padding>
