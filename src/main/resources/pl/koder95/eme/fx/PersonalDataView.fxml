@@ -99,6 +99,11 @@
                 <MenuItem mnemonicParsing="false" onAction="#close" text="%FX_MENUITEM_CLOSE" />
             </items>
           </Menu>
+          <Menu mnemonicParsing="false" text="%FX_MENU_DATA">
+            <items>
+                <MenuItem mnemonicParsing="false" onAction="#manage" text="%FX_MENUITEM_MANAGE" />
+            </items>
+          </Menu>
         </menus>
       </MenuBar>
    </top>

@@ -37,6 +37,10 @@ public class Book {
         }
     }
 
+    public boolean removeIndex(Index index) {
+        return index != null && indices.remove(index);
+    }
+
     public void addIndices(Collection<Index> records) {
         if (records != null) {
             for (Index record : records) {

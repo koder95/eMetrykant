@@ -3,7 +3,7 @@ package pl.koder95.eme.io;
 import pl.koder95.eme.Files;
 import pl.koder95.eme.MemoryUtils;
 import pl.koder95.eme.core.spi.IndexFilter;
-import pl.koder95.eme.core.spi.IndexRepository;
+import pl.koder95.eme.core.spi.MutableIndexRepository;
 import pl.koder95.eme.domain.index.Book;
 import pl.koder95.eme.domain.index.BookType;
 import pl.koder95.eme.domain.index.Index;
@@ -21,20 +21,30 @@ import java.util.logging.Logger;
 /**
  * Repozytorium indeksów utrzymujące cache w pamięci i odświeżanie z XML.
  */
-public class InMemoryIndexRepository implements IndexRepository {
+public class InMemoryIndexRepository implements MutableIndexRepository {
 
     private static final Logger LOGGER = Logger.getLogger(InMemoryIndexRepository.class.getName());
 
     private final IndexLoader loader;
+    private final IndexWriter writer;
     private final Map<BookType, List<Index>> loaded = new EnumMap<>(BookType.class);
+    private final Map<BookType, Book> booksForNewIndices = new EnumMap<>(BookType.class);
     private volatile boolean loadedOnce;
 
     public InMemoryIndexRepository() {
-        this(new IndexLoader(new FileXmlIndexDataSource(Files.INDICES_XML), IndexFilter.acceptAll()));
+        this(
+                new IndexLoader(new FileXmlIndexDataSource(Files.INDICES_XML), IndexFilter.acceptAll()),
+                new IndexWriter(new FileXmlIndexDataTarget(Files.INDICES_XML))
+        );
     }
 
     public InMemoryIndexRepository(IndexLoader loader) {
+        this(loader, new IndexWriter(new FileXmlIndexDataTarget(Files.INDICES_XML)));
+    }
+
+    public InMemoryIndexRepository(IndexLoader loader, IndexWriter writer) {
         this.loader = Objects.requireNonNull(loader, "loader must not be null");
+        this.writer = Objects.requireNonNull(writer, "writer must not be null");
         for (BookType type : BookType.values()) {
             loaded.put(type, new ArrayList<>());
         }
@@ -66,6 +76,7 @@ public class InMemoryIndexRepository implements IndexRepository {
                 existing.clear();
                 existing.addAll(selected);
             }
+            booksForNewIndices.clear();
             loadedOnce = true;
         } catch (IOException ex) {
             for (BookType type : BookType.values()) {
@@ -75,6 +86,90 @@ public class InMemoryIndexRepository implements IndexRepository {
             LOGGER.log(Level.SEVERE, "Failed to reload indices", ex);
             throw new IllegalStateException("Failed to reload indices", ex);
         }
+    }
+
+    @Override
+    public synchronized Index add(BookType type, Map<String, String> data) {
+        Objects.requireNonNull(type, "type must not be null");
+        ensureLoaded();
+        Index created = Index.create(bookFor(type), data);
+        if (created == null) {
+            throw new IllegalArgumentException("Nie można utworzyć indeksu z podanych danych: " + data);
+        }
+        Book owner = created.getOwner();
+        if (owner != null) {
+            owner.addIndex(created);
+        }
+        loaded.computeIfAbsent(type, ignored -> new ArrayList<>()).add(created);
+        return created;
+    }
+
+    @Override
+    public synchronized Index replace(BookType type, Index index, Map<String, String> data) {
+        Objects.requireNonNull(type, "type must not be null");
+        Objects.requireNonNull(index, "index must not be null");
+        ensureLoaded();
+        List<Index> indices = loaded.computeIfAbsent(type, ignored -> new ArrayList<>());
+        int position = indexOf(indices, index);
+        if (position < 0) {
+            throw new IllegalStateException("Indeks nie należy do księgi: " + type.getBookName());
+        }
+        Book owner = index.getOwner() == null ? bookFor(type) : index.getOwner();
+        Index created = Index.create(owner, data);
+        if (created == null) {
+            throw new IllegalArgumentException("Nie można utworzyć indeksu z podanych danych: " + data);
+        }
+        owner.removeIndex(index);
+        owner.addIndex(created);
+        indices.set(position, created);
+        return created;
+    }
+
+    @Override
+    public synchronized boolean remove(BookType type, Index index) {
+        Objects.requireNonNull(type, "type must not be null");
+        if (index == null) {
+            return false;
+        }
+        ensureLoaded();
+        List<Index> indices = loaded.computeIfAbsent(type, ignored -> new ArrayList<>());
+        int position = indexOf(indices, index);
+        if (position < 0) {
+            return false;
+        }
+        indices.remove(position);
+        Book owner = index.getOwner();
+        if (owner != null) {
+            owner.removeIndex(index);
+        }
+        return true;
+    }
+
+    @Override
+    public synchronized void saveAll() {
+        ensureLoaded();
+        try {
+            writer.saveBooks(loaded);
+        } catch (IOException ex) {
+            LOGGER.log(Level.SEVERE, "Failed to save indices", ex);
+            throw new IllegalStateException("Failed to save indices", ex);
+        }
+    }
+
+    private Book bookFor(BookType type) {
+        return booksForNewIndices.computeIfAbsent(type, key -> new Book(key.getBookName()));
+    }
+
+    /**
+     * Indeksy nie mają tożsamości opartej o wartość, dlatego poszukiwane są po referencji.
+     */
+    private static int indexOf(List<Index> indices, Index index) {
+        for (int i = 0; i < indices.size(); i++) {
+            if (indices.get(i) == index) {
+                return i;
+            }
+        }
+        return -1;
     }
 
     private void ensureLoaded() {

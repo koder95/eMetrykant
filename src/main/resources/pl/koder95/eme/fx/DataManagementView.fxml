@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<BorderPane fx:id="root" prefHeight="520.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pl.koder95.eme.fx.DataManagementView">
+   <top>
+      <ToolBar BorderPane.alignment="CENTER">
+         <items>
+            <Button mnemonicParsing="false" onAction="#addRecord" text="%FX_BUTTON_ADD" />
+            <Button fx:id="editButton" disable="true" mnemonicParsing="false" onAction="#editRecord" text="%FX_BUTTON_EDIT" />
+            <Button fx:id="removeButton" disable="true" mnemonicParsing="false" onAction="#removeRecord" text="%FX_BUTTON_REMOVE" />
+            <Separator orientation="VERTICAL" />
+            <Label text="%FX_LABEL_FILTER" />
+            <TextField fx:id="filter" prefColumnCount="20" promptText="%FX_PROMPT_FILTER" />
+         </items>
+      </ToolBar>
+   </top>
+   <center>
+      <TabPane fx:id="books" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER" />
+   </center>
+   <bottom>
+      <HBox alignment="CENTER_LEFT" spacing="5.0" BorderPane.alignment="CENTER">
+         <children>
+            <Label text="%FX_LABEL_NUMBER_OF_RECORDS" />
+            <Label fx:id="numberOfRecords" text="0" />
+            <Label fx:id="unsavedChanges" HBox.hgrow="ALWAYS" maxWidth="1.7976931348623157E308">
+               <HBox.margin>
+                  <Insets left="10.0" />
+               </HBox.margin>
+            </Label>
+            <Button defaultButton="true" mnemonicParsing="false" onAction="#save" text="%FX_BUTTON_SAVE" />
+            <Button cancelButton="true" mnemonicParsing="false" onAction="#close" text="%FX_BUTTON_CLOSE" />
+         </children>
+         <padding>
+            <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+         </padding>
+      </HBox>
+   </bottom>
+</BorderPane>
