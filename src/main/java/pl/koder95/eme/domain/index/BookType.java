@@ -3,7 +3,9 @@ package pl.koder95.eme.domain.index;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Typ księgi indeksowej.
@@ -18,4 +20,20 @@ public enum BookType {
 
     private final String bookName;
     private final List<String> fieldSchema;
+
+    /**
+     * Odnajduje typ księgi po nazwie wyświetlanej (bez rozróżniania wielkości liter).
+     *
+     * @param bookName nazwa wyświetlana księgi
+     * @return typ księgi albo {@link Optional#empty()}
+     */
+    public static Optional<BookType> ofBookName(String bookName) {
+        if (bookName == null || bookName.isBlank()) {
+            return Optional.empty();
+        }
+        String normalized = bookName.trim();
+        return Arrays.stream(values())
+                .filter(type -> type.getBookName().equalsIgnoreCase(normalized))
+                .findFirst();
+    }
 }

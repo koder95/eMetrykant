@@ -90,6 +90,10 @@ public class Files {
      */
     public static final Path INDICES_XML = XML_DIR.resolve("indices.xml");
     /**
+     * Plik, który przechowuje szablony ksiąg.
+     */
+    public static final Path TEMPLATES_XML = XML_DIR.resolve("templates.xml");
+    /**
      * Folder tymczasowy eMetrykant, gdzie zapisywane są pliki pobrane z repozytorium.
      */
     public static final Path TEMP_DIR = Paths.get(System.getProperty("java.io.tmpdir"), "eMetrykant");

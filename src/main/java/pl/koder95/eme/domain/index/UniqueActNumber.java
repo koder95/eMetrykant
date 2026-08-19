@@ -64,19 +64,7 @@ public record UniqueActNumber(BookType bookType, int year, int signNumber, Strin
      * Rozpoznaje typ księgi po nazwie wyświetlanej i buduje unikalny numer.
      */
     public static UniqueActNumber from(String bookName, ActNumber actNumber) {
-        return from(resolveBookType(bookName), actNumber);
-    }
-
-    private static BookType resolveBookType(String bookName) {
-        if (bookName == null || bookName.isBlank()) {
-            return null;
-        }
-        for (BookType type : BookType.values()) {
-            if (type.getBookName().equalsIgnoreCase(bookName.trim())) {
-                return type;
-            }
-        }
-        return null;
+        return from(BookType.ofBookName(bookName).orElse(null), actNumber);
     }
 
     private static ActNumberSign splitSign(String sign) {
