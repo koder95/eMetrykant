@@ -18,7 +18,6 @@ package pl.koder95.eme;
 
 import javafx.application.Application;
 import pl.koder95.eme.au.SelfUpdate;
-import pl.koder95.eme.core.*;
 
 import java.text.Collator;
 import java.util.Locale;
