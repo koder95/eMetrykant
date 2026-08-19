@@ -18,7 +18,10 @@ public interface ElementRepository {
     List<ElementIndex> getIndices();
 
     default void addElement(String indexId, String element) {
-        getIndex(indexId).elementList().add(element);
+        List<String> elementList = getIndex(indexId).elementList();
+        if (!elementList.contains(element)) {
+            elementList.add(element);
+        }
     }
 
     default String getElement(String indexId, int elementIndex) {

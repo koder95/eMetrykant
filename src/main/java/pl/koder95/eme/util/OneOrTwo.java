@@ -14,4 +14,12 @@ import java.util.Optional;
  * @since 0.5.0
  */
 public record OneOrTwo<T>(T first, Optional<T> second) {
+    public OneOrTwo {
+        if (first == null) {
+            throw new IllegalArgumentException("first cannot be null");
+        }
+        if (second == null) {
+            throw new IllegalArgumentException("second Optional cannot be null");
+        }
+    }
 }

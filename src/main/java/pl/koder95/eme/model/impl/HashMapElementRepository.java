@@ -35,7 +35,14 @@ public class HashMapElementRepository implements ElementRepository {
                     new IllegalArgumentException("Index already exists: " + id)
             );
         }
-        indexMap.put(id, indexFactory.apply(id));
+        ElementIndex index = indexFactory.apply(id);
+        if (index == null) {
+            throw new RepositoryException(
+                    "Cannot create an index with id: " + id,
+                    new IllegalArgumentException("Index factory returned null for id: " + id)
+            );
+        }
+        indexMap.put(id, index);
     }
 
     @Override

@@ -126,9 +126,13 @@ public record UniqueActNumber(BookType bookType, int year, int signNumber, Strin
         if (lastDigitIndex < 0) {
             return null;
         }
-        int number = Integer.parseInt(sign.substring(0, lastDigitIndex + 1));
-        String suffix = lastDigitIndex == sign.length() - 1 ? "" : sign.substring(lastDigitIndex + 1);
-        return new ActNumberSign(number, suffix);
+        try {
+            int number = Integer.parseInt(sign.substring(0, lastDigitIndex + 1));
+            String suffix = lastDigitIndex == sign.length() - 1 ? "" : sign.substring(lastDigitIndex + 1);
+            return new ActNumberSign(number, suffix);
+        } catch (NumberFormatException ex) {
+            return null;
+        }
     }
 
     @Override

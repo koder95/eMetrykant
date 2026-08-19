@@ -89,7 +89,7 @@ public class Index implements Visited {
             return null;
         }
         String anValue = data.get("an");
-        if (anValue == null || anValue.isEmpty()) {
+        if (anValue == null || anValue.isBlank()) {
             String ownerName = owner == null ? "<null>" : owner.getName();
             log.warning(() -> "Pominięto indeks bez atrybutu 'an'. owner=" + ownerName);
             return null;
