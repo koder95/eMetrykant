@@ -1,11 +1,15 @@
 package pl.koder95.eme.bootstrap;
 
 import lombok.Getter;
+import lombok.extern.java.Log;
 import pl.koder95.eme.Main;
 import pl.koder95.eme.application.AppCloseService;
 import pl.koder95.eme.application.IndexManagementService;
 import pl.koder95.eme.application.IndexReloadService;
+import pl.koder95.eme.application.PersonIdentityService;
 import pl.koder95.eme.application.PersonalDataQueryService;
+import pl.koder95.eme.domain.person.PersonRegistry;
+import pl.koder95.eme.io.FilePersonStore;
 import pl.koder95.eme.core.IndexListDataSource;
 import pl.koder95.eme.core.NoOpDataTarget;
 import pl.koder95.eme.core.SimpleCabinetAnalyzer;
@@ -24,6 +28,7 @@ import pl.koder95.eme.io.InMemoryIndexRepository;
  * <p>Skupia tworzenie i utrzymywanie zależności w jednym miejscu,
  * aby ograniczyć tworzenie obiektów w warstwie UI.</p>
  */
+@Log
 public class ApplicationContext {
 
     private static final CabinetAnalyzer DEFAULT_CABINET_ANALYZER = createCabinetAnalyzer();
@@ -32,6 +37,7 @@ public class ApplicationContext {
     private final PersonalDataQueryService personalDataQueryService;
     private final IndexReloadService indexReloadService;
     private final IndexManagementService indexManagementService;
+    private final PersonIdentityService personIdentityService;
     @Getter
     private final AppConfig appConfig;
     @Getter
@@ -47,6 +53,7 @@ public class ApplicationContext {
         this.personalDataQueryService = new PersonalDataQueryService(cabinetAnalyzer, indexRepository);
         this.indexReloadService = new IndexReloadService(indexRepository);
         this.indexManagementService = new IndexManagementService(indexRepository);
+        this.personIdentityService = new PersonIdentityService(indexRepository, new PersonRegistry(), new FilePersonStore());
         this.appConfig = new AppConfig(Main.BUNDLE, Main.POLISH, Main.DEFAULT_COLLATOR);
         this.dialogs = new FxDialogs();
         this.appCloseService = new AppCloseService(appConfig, dialogs);
@@ -86,6 +93,11 @@ public class ApplicationContext {
         return dataManagementViewFactory;
     }
 
+    public PersonIdentityService getPersonIdentityService() {
+        ensureInitialized();
+        return personIdentityService;
+    }
+
     /**
      * Inicjalizuje kontekst po konstrukcji (wywoływane np. z {@code App.init()}).
      * Metoda musi zostać wywołana po utworzeniu kontekstu i przed użyciem beanów zależnych od danych.
@@ -99,6 +111,11 @@ public class ApplicationContext {
         indexRepository.reloadAll();
         cabinetAnalyzer.setDataSource(new IndexListDataSource(indexRepository));
         cabinetAnalyzer.load();
+        try {
+            personIdentityService.rebuild();
+        } catch (RuntimeException ex) {
+            log.log(java.util.logging.Level.WARNING, "Nie udało się przebudować rejestru osób", ex);
+        }
         initialized = true;
     }
 

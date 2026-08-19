@@ -67,6 +67,50 @@ public record UniqueActNumber(BookType bookType, int year, int signNumber, Strin
         return from(BookType.ofBookName(bookName).orElse(null), actNumber);
     }
 
+    /**
+     * Odczytuje numer z postaci tekstowej zgodnej z {@link #toString()}
+     * (np. {@code eme.uan:LIBER_BAPTISMORUM/1900/12a}).
+     *
+     * @param s tekst do odczytania
+     * @return numer aktu, {@link #UNKNOWN} dla {@code eme.uan:unknown},
+     * {@code null} dla tekstu w nieznanym formacie
+     */
+    public static UniqueActNumber parse(String s) {
+        if (s == null) {
+            return null;
+        }
+        String value = s.trim();
+        String prefix = "eme.uan:";
+        if (!value.startsWith(prefix)) {
+            return null;
+        }
+        value = value.substring(prefix.length());
+        if (value.equals("unknown")) {
+            return UNKNOWN;
+        }
+        String[] parts = value.split("/", 3);
+        if (parts.length != 3) {
+            return null;
+        }
+        try {
+            BookType bookType = BookType.valueOf(parts[0]);
+            int year = Integer.parseInt(parts[1]);
+            String signPart = parts[2];
+            int digitEnd = 0;
+            while (digitEnd < signPart.length() && Character.isDigit(signPart.charAt(digitEnd))) {
+                digitEnd++;
+            }
+            if (digitEnd == 0) {
+                return null;
+            }
+            int signNumber = Integer.parseInt(signPart.substring(0, digitEnd));
+            String signSuffix = signPart.substring(digitEnd);
+            return new UniqueActNumber(bookType, year, signNumber, signSuffix);
+        } catch (IllegalArgumentException ex) {
+            return null;
+        }
+    }
+
     private static ActNumberSign splitSign(String sign) {
         if (sign == null || sign.isBlank()) {
             return null;

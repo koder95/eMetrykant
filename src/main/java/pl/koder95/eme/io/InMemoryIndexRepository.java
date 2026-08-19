@@ -8,6 +8,8 @@ import pl.koder95.eme.core.spi.MutableIndexRepository;
 import pl.koder95.eme.domain.index.Book;
 import pl.koder95.eme.domain.index.BookType;
 import pl.koder95.eme.domain.index.Index;
+import pl.koder95.eme.domain.index.UniqueActNumber;
+import pl.koder95.eme.domain.index.UniqueActNumberRegistry;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -16,6 +18,7 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.logging.Level;
 
 /**
@@ -28,6 +31,7 @@ public class InMemoryIndexRepository implements MutableIndexRepository {
     private final IndexWriter writer;
     private final Map<BookType, List<Index>> loaded = new EnumMap<>(BookType.class);
     private final Map<BookType, Book> booksForNewIndices = new EnumMap<>(BookType.class);
+    private volatile UniqueActNumberRegistry actNumberRegistry = new UniqueActNumberRegistry();
     private volatile boolean loadedOnce;
 
     public InMemoryIndexRepository() {
@@ -58,6 +62,20 @@ public class InMemoryIndexRepository implements MutableIndexRepository {
     }
 
     @Override
+    public synchronized Optional<Index> findByActNumber(UniqueActNumber uan) {
+        ensureLoaded();
+        return actNumberRegistry.find(uan);
+    }
+
+    /**
+     * @return rejestr unikalnych numerów aktów zbudowany przy ostatnim przeładowaniu
+     */
+    public synchronized UniqueActNumberRegistry getActNumberRegistry() {
+        ensureLoaded();
+        return actNumberRegistry;
+    }
+
+    @Override
     public synchronized void reloadAll() {
         MemoryUtils.memory();
         try {
@@ -76,6 +94,14 @@ public class InMemoryIndexRepository implements MutableIndexRepository {
                 existing.addAll(selected);
             }
             booksForNewIndices.clear();
+            UniqueActNumberRegistry registry = new UniqueActNumberRegistry();
+            loaded.values().forEach(indices -> indices.forEach(registry::register));
+            if (!registry.getConflicts().isEmpty()) {
+                registry.getConflicts().forEach((uan, indices) ->
+                        log.warning(() -> "Konflikt unikalnego numeru aktu " + uan
+                                + " – liczba indeksów: " + indices.size()));
+            }
+            actNumberRegistry = registry;
             loadedOnce = true;
         } catch (IOException ex) {
             for (BookType type : BookType.values()) {
@@ -100,6 +126,7 @@ public class InMemoryIndexRepository implements MutableIndexRepository {
             owner.addIndex(created);
         }
         loaded.computeIfAbsent(type, ignored -> new ArrayList<>()).add(created);
+        actNumberRegistry.register(created);
         return created;
     }
 
@@ -121,6 +148,7 @@ public class InMemoryIndexRepository implements MutableIndexRepository {
         owner.removeIndex(index);
         owner.addIndex(created);
         indices.set(position, created);
+        rebuildActNumberRegistry();
         return created;
     }
 
@@ -141,6 +169,7 @@ public class InMemoryIndexRepository implements MutableIndexRepository {
         if (owner != null) {
             owner.removeIndex(index);
         }
+        rebuildActNumberRegistry();
         return true;
     }
 
@@ -157,6 +186,12 @@ public class InMemoryIndexRepository implements MutableIndexRepository {
 
     private Book bookFor(BookType type) {
         return booksForNewIndices.computeIfAbsent(type, key -> new Book(key.getBookName()));
+    }
+
+    private void rebuildActNumberRegistry() {
+        UniqueActNumberRegistry registry = new UniqueActNumberRegistry();
+        loaded.values().forEach(indices -> indices.forEach(registry::register));
+        actNumberRegistry = registry;
     }
 
     /**

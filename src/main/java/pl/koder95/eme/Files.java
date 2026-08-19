@@ -94,6 +94,10 @@ public class Files {
      */
     public static final Path TEMPLATES_XML = XML_DIR.resolve("templates.xml");
     /**
+     * Plik, który przechowuje tożsamości osób i ich wystąpienia w aktach.
+     */
+    public static final Path PEOPLE_XML = XML_DIR.resolve("people.xml");
+    /**
      * Folder tymczasowy eMetrykant, gdzie zapisywane są pliki pobrane z repozytorium.
      */
     public static final Path TEMP_DIR = Paths.get(System.getProperty("java.io.tmpdir"), "eMetrykant");

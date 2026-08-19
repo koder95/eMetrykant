@@ -1,4 +1,4 @@
-package pl.koder95.eme.domain.index;
+package pl.koder95.eme.domain.person;
 
 import java.util.UUID;
 
