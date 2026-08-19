@@ -1,8 +1,9 @@
 package pl.koder95.eme.domain.index;
 
-import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import pl.koder95.eme.Visited;
+import pl.koder95.eme.io.IndexNodeInterpreter;
+import pl.koder95.eme.io.IndexNodeInterpreterImpl;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -16,26 +17,15 @@ import java.util.logging.Logger;
 public class Index implements Visited {
 
     private static final Logger LOGGER = Logger.getLogger(Index.class.getName());
+    private static final IndexNodeInterpreter NODE_INTERPRETER = new IndexNodeInterpreterImpl();
 
-    private final Map<String, String> data = new HashMap<>();
+    private final Map<String, String> data;
     private volatile ActNumber an;
     private final Book owner;
 
-    private Index(Book owner, Node index) {
+    private Index(Book owner, Map<String, String> data) {
         this.owner = owner;
-        NamedNodeMap attrs = index.getAttributes();
-        for (int i = 0; i < attrs.getLength(); i++) {
-            Node attr = attrs.item(i);
-            if (attr != null) {
-                String key = attr.getNodeName();
-                String value = attr.getTextContent();
-                data.put(key, value);
-            }
-        }
-    }
-
-    private Index(Book owner) {
-        this.owner = owner;
+        this.data = new HashMap<>(data == null ? Map.of() : data);
     }
 
     private Index(Book owner, Map<String, String> data) {
@@ -78,15 +68,30 @@ public class Index implements Visited {
         if (!index.getNodeName().equalsIgnoreCase("index")) {
             return null;
         }
-        Index i = index.hasAttributes() ? new Index(owner, index) : new Index(owner);
-        if (i.getDataNames().contains("an") && !i.getData("an").isEmpty()) {
-            return i;
-        }
+        Map<String, String> interpreted = index.hasAttributes()
+                ? NODE_INTERPRETER.interpret(index)
+                : Map.of();
+        return create(owner, interpreted);
+    }
 
-        String ownerName = owner == null ? "<null>" : owner.getName();
-        LOGGER.warning(() -> "Pominięto indeks bez atrybutu 'an'. owner=" + ownerName
-                + ", nodeName=" + index.getNodeName());
-        return null;
+    /**
+     * Tworzy indeks z mapy pól.
+     *
+     * @param owner księga właściciela
+     * @param data  mapa atrybutów; wymaga niepustego {@code an}
+     * @return nowy indeks albo {@code null}
+     */
+    public static Index create(Book owner, Map<String, String> data) {
+        if (data == null) {
+            return null;
+        }
+        String anValue = data.get("an");
+        if (anValue == null || anValue.isEmpty()) {
+            String ownerName = owner == null ? "<null>" : owner.getName();
+            LOGGER.warning(() -> "Pominięto indeks bez atrybutu 'an'. owner=" + ownerName);
+            return null;
+        }
+        return new Index(owner, data);
     }
 
     public String getData(String name) {
