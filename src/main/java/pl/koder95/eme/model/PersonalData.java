@@ -2,6 +2,17 @@ package pl.koder95.eme.model;
 
 import pl.koder95.eme.core.spi.PersonalDataModel;
 
+/**
+ * Rekord zawiera dane personalne. Implementuje interfejs {@link PersonalDataModel}, dlatego
+ * może być użyty w widoku aplikacji.
+ *
+ * @param surname nazwisko
+ * @param name    imię
+ * @param ban     numer aktu chrztu
+ * @param can     numer aktu bierzmowania
+ * @param man     numer aktu małżeństwa
+ * @param dan     numer aktu zmarłych
+ */
 public record PersonalData(String surname, String name,
                            String ban, String can, String man, String dan)
         implements PersonalDataModel {
