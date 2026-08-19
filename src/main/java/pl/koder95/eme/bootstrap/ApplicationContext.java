@@ -20,7 +20,7 @@ import pl.koder95.eme.core.spi.FilingCabinet;
 import pl.koder95.eme.core.spi.MutableIndexRepository;
 import pl.koder95.eme.fx.DataManagementViewFactory;
 import pl.koder95.eme.fx.FxDialogs;
-import pl.koder95.eme.io.InMemoryIndexRepository;
+import pl.koder95.eme.io.IndexRepositories;
 
 /**
  * Prosty kontener IoC aplikacji.
@@ -49,7 +49,7 @@ public class ApplicationContext {
 
     public ApplicationContext(CabinetAnalyzer analyzer) {
         this.cabinetAnalyzer = analyzer;
-        this.indexRepository = new InMemoryIndexRepository();
+        this.indexRepository = IndexRepositories.createDefault();
         this.personalDataQueryService = new PersonalDataQueryService(cabinetAnalyzer, indexRepository);
         this.indexReloadService = new IndexReloadService(indexRepository);
         this.indexManagementService = new IndexManagementService(indexRepository);
