@@ -1,5 +1,7 @@
 package pl.koder95.eme.domain.index;
 
+import lombok.Getter;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -12,6 +14,7 @@ import java.util.Objects;
 public class Book {
 
     private final List<Index> indices;
+    @Getter
     private final String name;
 
     public Book(String name) {
@@ -21,10 +24,6 @@ public class Book {
         }
         this.name = normalizedName;
         this.indices = new ArrayList<>();
-    }
-
-    public String getName() {
-        return name;
     }
 
     public List<Index> getIndices() {

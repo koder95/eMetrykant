@@ -6,6 +6,8 @@ import pl.koder95.eme.git.RepositoryInfo;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.FileChannel;
@@ -14,15 +16,22 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.text.NumberFormat;
-import java.util.*;
+import java.util.Comparator;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-import static pl.koder95.eme.Files.*;
+import static pl.koder95.eme.Files.SELF;
 import static pl.koder95.eme.Files.TEMP_DIR;
+import static pl.koder95.eme.Files.UPDATE_SCRIPT;
+import static pl.koder95.eme.Files.WORKDIR;
 
 /**
  * Klasa odpowiedzialna za aktualizowanie własnej wersji do najnowszej.
@@ -151,7 +160,13 @@ public class SelfUpdate implements Runnable {
         Files.deleteIfExists(forDownload);
         Files.createDirectories(forDownload.getParent());
         Files.createFile(forDownload);
-        URL url = new URL(urlSpec);
+        URI uri;
+        try {
+            uri = new URI(urlSpec);
+        } catch (URISyntaxException e) {
+            throw new IOException(e);
+        }
+        URL url = uri.toURL();
         System.out.println("Downloading: " + forDownload);
         updateProgress.accept(0, 1L);
         try (ReadableByteChannel rbc = Channels.newChannel(url.openStream());

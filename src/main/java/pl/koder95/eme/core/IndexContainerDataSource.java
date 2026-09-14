@@ -1,5 +1,6 @@
 package pl.koder95.eme.core;
 
+import lombok.extern.java.Log;
 import pl.koder95.eme.Visitor;
 import pl.koder95.eme.core.spi.DataSource;
 import pl.koder95.eme.domain.index.ActNumber;
@@ -17,10 +18,8 @@ import java.util.stream.Collectors;
  * @version 0.4.1, 2021-11-07
  * @since 0.4.0
  */
+@Log
 public class IndexContainerDataSource implements DataSource, Visitor<Index> {
-
-    private static final java.util.logging.Logger LOGGER =
-            java.util.logging.Logger.getLogger(IndexContainerDataSource.class.getName());
 
     private final Map<String, Map<String, Set<ActNumber>>> baptisms = new TreeMap<>();
     private final Map<String, Map<String, Set<ActNumber>>> confirmations = new TreeMap<>();
@@ -136,7 +135,7 @@ public class IndexContainerDataSource implements DataSource, Visitor<Index> {
         } else if (bookName.equalsIgnoreCase(BookType.LIBER_DEFUNCTORUM.getBookName())) {
             setDecease(i);
         } else {
-            LOGGER.warning(() -> "Unrecognized book name, index skipped: " + bookName);
+            log.warning(() -> "Unrecognized book name, index skipped: " + bookName);
         }
     }
 

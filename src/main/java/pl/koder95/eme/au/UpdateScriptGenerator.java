@@ -16,6 +16,8 @@
  */
 package pl.koder95.eme.au;
 
+import lombok.Getter;
+
 import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -39,17 +41,15 @@ import static pl.koder95.eme.Main.IS_WINDOWS_OS;
 public class UpdateScriptGenerator {
 
     private static final String WIN_EXT = ".bat";
+
+    /**
+     * Ścieżka do skryptu.
+     */
+    @Getter
     private final Path path;
 
     private UpdateScriptGenerator(Path out) {
         this.path = out;
-    }
-
-    /**
-     * @return ścieżka do skryptu
-     */
-    public Path getPath() {
-        return path;
     }
 
     /**

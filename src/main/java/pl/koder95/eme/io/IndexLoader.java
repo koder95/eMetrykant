@@ -1,5 +1,6 @@
 package pl.koder95.eme.io;
 
+import lombok.extern.java.Log;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -14,14 +15,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.logging.Logger;
 
 /**
  * Loader odpowiedzialny za wczytywanie i filtrowanie rekordów indeksów.
  */
+@Log
 public class IndexLoader {
-
-    private static final Logger LOGGER = Logger.getLogger(IndexLoader.class.getName());
 
     private final IndexDataSource dataSource;
     private final IndexFilter filter;
@@ -59,13 +58,17 @@ public class IndexLoader {
                 .map(String::trim)
                 .orElse(null);
         if (bookName == null || bookName.isBlank()) {
-            LOGGER.warning("Pominięto <book> bez poprawnego atrybutu 'name'.");
+            log.warning("Pominięto <book> bez poprawnego atrybutu 'name'.");
             return null;
         }
         Book book = new Book(bookName);
         NodeList indices = bookNode.getChildNodes();
         for (int i = 0; i < indices.getLength(); i++) {
-            Index index = Index.create(book, indices.item(i));
+            Node child = indices.item(i);
+            if (child == null || child.getNodeType() != Node.ELEMENT_NODE) {
+                continue;
+            }
+            Index index = Index.create(book, child);
             if (index != null && filter.accept(index)) {
                 book.addIndex(index);
             }

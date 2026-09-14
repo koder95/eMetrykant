@@ -2,32 +2,31 @@ package pl.koder95.eme.application;
 
 import javafx.util.Callback;
 import javafx.util.StringConverter;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import pl.koder95.eme.core.IndexListDataSource;
 import pl.koder95.eme.core.spi.CabinetAnalyzer;
 import pl.koder95.eme.core.spi.IndexRepository;
 import pl.koder95.eme.core.spi.PersonalDataModel;
 
 import java.util.Collection;
-import java.util.Objects;
 
 import static org.controlsfx.control.textfield.AutoCompletionBinding.ISuggestionRequest;
 
 /**
  * Serwis aplikacyjny odpowiedzialny za wyszukiwanie i mapowanie danych osobowych.
  */
+@RequiredArgsConstructor
 public class PersonalDataQueryService {
 
     private static final PersonalDataPresentation EMPTY_DATA = new PersonalDataPresentation(
             null, null, null, null, null, null
     );
 
+    @NonNull
     private final CabinetAnalyzer analyzer;
+    @NonNull
     private final IndexRepository indexRepository;
-
-    public PersonalDataQueryService(CabinetAnalyzer analyzer, IndexRepository indexRepository) {
-        this.analyzer = Objects.requireNonNull(analyzer, "analyzer must not be null");
-        this.indexRepository = Objects.requireNonNull(indexRepository, "indexRepository must not be null");
-    }
 
     public Callback<ISuggestionRequest, Collection<PersonalDataModel>> getSuggestionProvider() {
         return analyzer.getSuggestionProvider();

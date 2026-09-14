@@ -16,6 +16,7 @@
  */
 package pl.koder95.eme.git;
 
+import lombok.Getter;
 import org.kohsuke.github.*;
 import org.kohsuke.github.connector.GitHubConnectorResponse;
 
@@ -82,11 +83,15 @@ public class GitHubRepositoryController {
         }
     }
 
-    private GHRepository repo = null;
+    /**
+     * Repozytorium GitHub.
+     */
+    @Getter
+    private GHRepository repository = null;
 
     private void selectRepository() throws IOException {
         if (user == null) throw new IllegalStateException(BUNDLE.getString("THR_USER_NOT_SELECTED"));
-        else repo = user.getRepository(repositoryName);
+        else repository = user.getRepository(repositoryName);
     }
 
     /**
@@ -95,12 +100,5 @@ public class GitHubRepositoryController {
     public void init() throws IOException {
         selectUser();
         selectRepository();
-    }
-
-    /**
-     * @return repozytorium GitHub
-     */
-    public GHRepository getRepository() {
-        return repo;
     }
 }

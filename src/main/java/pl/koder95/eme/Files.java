@@ -17,6 +17,8 @@
 
 package pl.koder95.eme;
 
+import lombok.experimental.UtilityClass;
+
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -27,7 +29,8 @@ import java.nio.file.Paths;
  * @version 0.2.0, 2018-10-07
  * @since 0.1.5
  */
-public final class Files {
+@UtilityClass
+public class Files {
 
     /**
      * Folder, gdzie znajdują się pliki konfiguracyjne użytkownika.
@@ -87,6 +90,14 @@ public final class Files {
      */
     public static final Path INDICES_XML = XML_DIR.resolve("indices.xml");
     /**
+     * Plik, który przechowuje szablony ksiąg.
+     */
+    public static final Path TEMPLATES_XML = XML_DIR.resolve("templates.xml");
+    /**
+     * Plik, który przechowuje tożsamości osób i ich wystąpienia w aktach.
+     */
+    public static final Path PEOPLE_XML = XML_DIR.resolve("people.xml");
+    /**
      * Folder tymczasowy eMetrykant, gdzie zapisywane są pliki pobrane z repozytorium.
      */
     public static final Path TEMP_DIR = Paths.get(System.getProperty("java.io.tmpdir"), "eMetrykant");
@@ -99,6 +110,4 @@ public final class Files {
      * uruchamiające.
      */
     public static final Path SELF = WORKDIR.resolve("eMetrykant.jar");
-
-    private Files() {}
 }

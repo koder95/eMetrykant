@@ -4,21 +4,18 @@ import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import lombok.RequiredArgsConstructor;
 import pl.koder95.eme.bootstrap.AppConfig;
 import pl.koder95.eme.fx.FxDialogs;
 
 /**
  * Serwis aplikacyjny odpowiedzialny za scenariusz zamykania aplikacji.
  */
+@RequiredArgsConstructor
 public class AppCloseService {
 
     private final AppConfig appConfig;
     private final FxDialogs dialogs;
-
-    public AppCloseService(AppConfig appConfig, FxDialogs dialogs) {
-        this.appConfig = appConfig;
-        this.dialogs = dialogs;
-    }
 
     public void closeWithConfirmation(Scene scene) {
         closeWithConfirmation(scene, Platform::exit);

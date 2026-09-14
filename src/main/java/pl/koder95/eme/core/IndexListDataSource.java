@@ -1,5 +1,6 @@
 package pl.koder95.eme.core;
 
+import lombok.Getter;
 import pl.koder95.eme.core.spi.DataSource;
 import pl.koder95.eme.core.spi.IndexRepository;
 import pl.koder95.eme.domain.index.ActNumber;
@@ -20,6 +21,7 @@ public class IndexListDataSource implements DataSource {
     private final IndexContainerDataSource confirmations;
     private final IndexContainerDataSource marriages;
     private final IndexContainerDataSource deceases;
+    @Getter
     private final Map<String, Set<String>> personalData;
 
     public IndexListDataSource() {
@@ -58,11 +60,6 @@ public class IndexListDataSource implements DataSource {
     @Override
     public ActNumber[] getDecease(String surname, String name) {
         return deceases.getDecease(surname, name);
-    }
-
-    @Override
-    public Map<String, Set<String>> getPersonalData() {
-        return personalData;
     }
 
     private static void putAll(Map<String, Set<String>> merged, Map<String, Set<String>> source) {

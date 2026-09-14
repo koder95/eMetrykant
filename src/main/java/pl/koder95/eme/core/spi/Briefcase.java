@@ -2,8 +2,6 @@ package pl.koder95.eme.core.spi;
 
 import pl.koder95.eme.domain.index.ActNumber;
 
-import java.util.Set;
-
 /**
  * Interfejs <i>aktówka</i> dostarcza paczkę danych, która zawiera listę numerów aktów.
  * Za pomocą interfejsu numery akt są rozpoznawane i kategoryzowane.
