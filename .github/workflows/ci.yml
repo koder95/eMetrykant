@@ -1,0 +1,44 @@
+name: Build ZIP
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: "21"
+          cache: maven
+
+      - name: Build with Maven
+        run: mvn -B -DskipTests package
+
+      - name: Set version for artifact name
+        id: dist
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = "Stop"
+          $version = ([xml](Get-Content -Raw pom.xml)).project.version.Trim()
+          if (-not $version) { throw "Nie udało się odczytać wersji z pom.xml" }
+          "version=$version" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8NoBOM
+
+      - name: Upload ZIP artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: eMetrykant-${{ steps.dist.outputs.version }}
+          path: |
+            target/*.jar
+            target/lib
+          include-hidden-files: true
